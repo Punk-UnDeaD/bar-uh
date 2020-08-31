@@ -1,0 +1,10 @@
+.foo {
+  .bar {
+    color: red;
+  }
+
+  &::before {
+    content: url('Check_green_icon.svg');
+  }
+}
+

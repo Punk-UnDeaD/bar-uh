@@ -1,0 +1,266 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+
+$line-height: 1.5;
+$gap: $line-height * 1rem;
+$v-grid: $gap / 3;
+
+:root {
+  --col-count: 4;
+  --ui-main-color: #ff5100;
+
+  @media (min-width: 600px) {
+    --col-count: 8;
+  }
+  @media (min-width: 840px) {
+    --col-count: 12;
+    --padding: 2rem;
+  }
+}
+
+html {
+  //font-size: 87.5%;
+  @media (min-width: 600px) {
+    font-size: 16px;
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans', sans-serif;
+  color: #333;
+  line-height: 1.5rem;
+}
+
+body.grid {
+  background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, .2) 0, rgba(0, 0, 0, .2) 1px, transparent 1px, transparent $v-grid);
+
+  &::before {
+    --col-size: calc((100% + #{$gap}) / var(--col-count) - #{$gap});
+    --col-color: rgba(255, 0, 0, .1);
+    position: fixed;
+    pointer-events: none;
+    content: '';
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    border-width: 0 $gap;
+    border-style: solid;
+    border-color: transparent;
+    box-sizing: border-box;
+    //background: repeating-linear-gradient(to right, var(--col-color) 0, var(--col-size), transparent var(--col-size), transparent calc(#{$gap} + var(--col-size)))
+    //,repeating-linear-gradient(to bottom, black 0, black 1px, transparent 1px, transparent .5rem)
+  ;
+    background-repeat: no-repeat;
+    background-position: left;
+  }
+}
+
+.example-wrapper {
+  margin: var(--padding);
+  padding-top: .4rem;
+}
+
+p {
+  @media (min-width: 600px) {
+    &::after {
+      width: 80ex;
+    }
+  }
+  margin: 0 0 1rem;
+}
+
+$compensator: (6:0, 5:-2px, 4:0px, 3:-1px, 2:1px, 1:0);
+
+@for $i from 1 to 7 {
+  h#{$i} {
+    font-size: 1rem + $v-grid * (6 - $i)/2;
+    line-height: 1rem + $v-grid * round((7 - $i)/2);
+    margin: 0 0 1rem;
+    //transform: translateY(map_get($compensator, $i));
+  }
+}
+
+
+@for $i from 12 to 25 {
+  .fs-#{$i} {
+    font-size: $i*1px;
+  }
+}
+
+.fs {
+  --fs-compensator: calc((1rem - 1em) / 4);
+  transform: translateY(var(--fs-compensator));
+}
+
+.fs-compact {
+  line-height: 1rem;
+  --fs-compensator: calc((1em - 1rem) / 2);
+  padding-top: calc(#{$v-grid /2} - var(--fs-compensator));
+  padding-bottom: calc(#{$v-grid /2} + var(--fs-compensator));
+}
+
+span.fs {
+  line-height: .3;
+}
+
+input {
+  font: inherit;
+
+  &[type=radio], &[type=checkbox] {
+    margin: 0;
+    vertical-align: middle;
+    display: inline-block;
+    appearance: none;
+    width: 1em;
+    height: 1em;
+    border: 1px solid;
+    position: relative;
+    background: #FFFFFF;
+
+    &:checked {
+      &::before {
+        background: var(--ui-main-color);
+        content: '';
+        position: absolute;
+        display: block;
+        top: 2px;
+        left: 2px;
+        bottom: 2px;
+        right: 2px;
+      }
+    }
+  }
+
+  &[type=radio] {
+    &, &::before {
+      border-radius: 50%;
+    }
+  }
+}
+
+select, input[type=submit], button {
+  background-color: transparent;
+  font: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+  border: 1px solid;
+  height: $v-grid*5;
+  line-height: 1;
+  box-sizing: border-box;
+  vertical-align: baseline;
+  color: inherit;
+}
+
+select {
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M8 11 4 7h2l2 2 2-2h2z' style='fill:%23333333'/%3E%3C/svg%3E%0A");
+  background-position: right $v-grid center;
+  background-repeat: no-repeat;
+  min-width: 16ex;
+  max-width: 32ex;
+  padding-right: $v-grid*2;
+  padding-left: $v-grid;
+  position: relative;
+}
+
+input[type=submit], button {
+  padding: 0 1ex;
+
+  &.compact {
+    height: 1.5em;
+  }
+
+  &.icon {
+    height: 1em;
+    padding: 0;
+    border: none;
+    outline: 1px solid;
+    vertical-align: middle;
+  }
+
+  &.big {
+    padding: 0 1.5rem 6px;
+    font-size: $v-grid*3;
+    height: $v-grid*5;
+    position: relative;
+  }
+}
+
+select, input, button, a {
+  &:focus {
+    box-shadow: 0 0 2px 2px var(--ui-main-color);
+    outline: none;
+    position: relative;
+    z-index: 5;
+  }
+}
+
+.container {
+  box-shadow: 0 0 0 1px inset currentColor;
+  padding: $v-grid $v-grid*2;
+  margin-bottom: $v-grid;
+
+  > *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.container.fs {
+  transform: none;
+  padding-top: calc(#{$v-grid} + var(--fs-compensator));
+  padding-bottom: calc(#{$v-grid} - var(--fs-compensator));
+}
+
+.table {
+  --padding: #{$v-grid};
+
+  &.compact, .compact {
+    --padding: #{$v-grid/2};
+    line-height: 1rem;
+  }
+
+  border-collapse: collapse;
+
+  &.border {
+    td, th {
+      border: 1px solid;
+      padding: calc(var(--padding) - 1px) calc(var(--padding) * 2) var(--padding);
+    }
+
+    tbody tr:last-of-type {
+      td, th {
+        padding-bottom: calc(var(--padding) - 1px);
+      }
+    }
+  }
+
+  &.stripes {
+    td, th {
+      background: rgba(#000, .3);
+      padding: var(--padding) calc(var(--padding) * 2);
+    }
+
+    tbody {
+      tr:nth-child(2n) {
+        td, th {
+          background: rgba(#000, .2);
+        }
+      }
+
+      tr:nth-child(2n+1) {
+        td, th {
+          background: rgba(#000, .1);
+        }
+      }
+    }
+  }
+
+  margin-bottom: $v-grid;
+}
+
+ul, ol {
+  margin: 0 0 $v-grid;
+  padding: 0 0 0 $v-grid*3;
+}

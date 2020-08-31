@@ -1,0 +1,84 @@
+FROM php:8.0-fpm-alpine
+
+USER root
+
+RUN apk update ;\
+    apk add -t .run-deps \
+        bash \
+        curl \
+        git \
+        gzip \
+        icu-libs \
+        libzip \
+        libuuid \
+        nano \
+        openssh \
+        openssh-client \
+        patch \
+        postgresql-client \
+        rabbitmq-c \
+        rsync \
+        tar \
+        unzip \
+        wget \
+        yaml \
+        ;\
+    apk add imagemagick; \
+    apk add -t .build-deps \
+        autoconf build-base pkgconfig m4 perl autoconf dpkg-dev dpkg re2c util-linux-dev \
+        icu-dev \
+        libzip-dev \
+        postgresql-dev \
+        rabbitmq-c-dev \
+        yaml-dev; \
+    docker-php-ext-install \
+            intl \
+            opcache \
+            pdo_pgsql \
+            pgsql \
+            zip ;\
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet;\
+    wget https://github.com/FriendsOfPHP/pickle/releases/download/v0.6.0/pickle.phar && mv pickle.phar /usr/local/bin/pickle;\
+    chmod +x /usr/local/bin/pickle ;\
+    git clone https://github.com/php-amqp/php-amqp.git /tmp/amqp; \
+        cd /tmp/amqp ; \
+        phpize --clean ;\
+        phpize;\
+        ./configure;\
+        make;\
+        make install; \
+    pickle install apcu ;\
+    pickle install igbinary ;\
+    pickle install redis ;\
+    pickle install uuid-1.2.0 ;\
+    pickle install yaml ;\
+    git clone https://github.com/xdebug/xdebug.git --branch 3.0.1 /tmp/xdebug; \
+        cd /tmp/xdebug; \
+        phpize --clean;\
+        phpize;\
+        ./configure;\
+        make;\
+        make install;\
+    echo "extension=apcu.so" > /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini ; \
+    echo "extension=amqp.so" > /usr/local/etc/php/conf.d/docker-php-ext-amqp.ini ; \
+    echo "extension=igbinary.so" > /usr/local/etc/php/conf.d/docker-php-ext-igbinary.ini ; \
+    echo "extension=redis.so" > /usr/local/etc/php/conf.d/docker-php-ext-redis.ini ; \
+    echo "zend_extension=xdebug.so" > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini ;\
+    echo "extension=uuid.so" > /usr/local/etc/php/conf.d/docker-php-ext-uuid.ini ; \
+    echo "extension=yaml.so" > /usr/local/etc/php/conf.d/docker-php-ext-yaml.ini ; \
+    cd / ;\
+    rm -rf /tmp/* ;\
+    rm -rf /var/cache/apk/* ;\
+    docker-php-source delete;\
+    apk del --purge .build-deps
+
+RUN apk add --update --no-cache exiftool pngquant
+
+USER www-data
+
+ENV MESSAGES_LIMIT=3600\
+    MEMORY_LIMIT=128M\
+    TIME_LIMIT=3600\
+    STOP=0
+copy ./worker.sh ./stop.sh /
+CMD /worker.sh

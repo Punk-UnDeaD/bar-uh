@@ -1,0 +1,9 @@
+{% extends 'admin/base.html.twig' %}
+{% import 'admin/_partials/breadcrumb.html.twig' as breadcrumb %}
+
+{%- block breadcrumb -%}
+{{- parent() -}}
+{{- breadcrumb.item('Media', 'front') -}}
+{%- endblock -%}
+
+{% block title %}Media{% endblock %}

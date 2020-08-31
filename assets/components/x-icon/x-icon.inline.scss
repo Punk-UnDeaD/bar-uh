@@ -1,0 +1,19 @@
+:host {
+  fill: currentcolor;
+  stroke: none;
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+
+}
+
+:host([icon~="file"]) {
+  mask {
+    text {
+      font-size: 32px;
+      font-family: 'Open Sans', sans-serif;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+  }
+}

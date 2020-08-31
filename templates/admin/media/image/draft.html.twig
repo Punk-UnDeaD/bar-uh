@@ -1,0 +1,51 @@
+{% extends 'admin/media/image/show.html.twig' %}
+{% import 'admin/_partials/breadcrumb.html.twig' as breadcrumb %}
+{% block title %}{{ image.info.name }} - Draft{% endblock %}
+{%- block breadcrumb -%}
+  {{- parent() -}}
+  {{- breadcrumb.item('Draft', 'admin.media.image.draft') -}}
+{%- endblock -%}
+
+{% block content %}
+
+  {# <ul class="actions"> #}
+  {# <li> #}
+  {# <button #}
+  {# is="x-js-button" #}
+  {# class="button theme--danger compact" #}
+  {# data-value="all" #}
+  {# data-url="{{ path('admin.media.image.exif.clean',{image: image.id()}) }}" #}
+  {# data-csrf="{{ csrf_token("admin.media.image.exif.clean") }}">Clean All #}
+  {# </button> #}
+  {# <button #}
+  {# is="x-js-button" #}
+  {# class="button theme--warning compact" #}
+  {# data-value="thumbnailimage" #}
+  {# data-url="{{ path('admin.media.image.exif.clean',{image: image.id()}) }}" #}
+  {# data-csrf="{{ csrf_token("admin.media.image.exif.clean") }}">Clean Thumbnail #}
+  {# </button> #}
+  {# </li> #}
+  {# </ul> #}
+
+  <table class="bordered">
+    <tr>
+      <th>Draft</th>
+      <td>{{ draft }}</td>
+    <tr>
+      <th>Size</th>
+      <td>{{ localStorage.size(image.info.path ~ '-draft') }}</td>
+      {# {% for key, val in exif %} #}
+      {# {% set id = 'id-'~random() %} #}
+      {# <tr> #}
+      {# <th><label for="{{ id }}">{{ key }}</label></th> #}
+      {# <td> #}
+      {# <input id="{{ id }}" name="{{ key }}" type="text" value="{{ val|default('') }}" size="60"> #}
+      {# <button class="theme--dark narrow" data-for="{{ id }}" is="x-auto-save-button" #}
+      {# data-save="{{ path('admin.media.image.exif.setValue', { image: image.id }) }}" #}
+      {# data-csrf="{{ csrf_token("admin.media.image.exif.setValue") }}"> #}
+      {# <x-icon icon="save"></x-icon> #}
+      {# </button> #}
+      {# </td> #}
+      {# {% endfor %} #}
+  </table>
+{% endblock %}

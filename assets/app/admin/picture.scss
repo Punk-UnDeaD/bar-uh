@@ -1,0 +1,33 @@
+picture {
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  background-size: var(--bg-width, auto) var(--bg-height, 100%);
+  background-position: center;
+  background-repeat: no-repeat;
+  display: inline-block;
+  outline: 1px solid gray;
+
+  img {
+    image-rendering: unset;
+    display: block;
+  }
+
+  //max-width: 10%;
+
+  &[data-adaptive] {
+    display: block;
+    img {
+      margin: auto;
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  &[data-typography-height] {
+    img {
+      height: var(--height, auto);
+      object-fit: contain;
+    }
+  }
+
+}

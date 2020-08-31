@@ -1,0 +1,56 @@
+{% import 'admin/_partials/breadcrumb.html.twig' as breadcrumb %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  {% set title %}{% block title %}Dashboard{% endblock %}{% endset %}
+  <title>{% block head_title %}{{ title }} | Admin | Bar-Uh{% endblock %}</title>
+  <meta content="initial-scale=1, width=device-width" name="viewport"/>
+  {% block stylesheets %}
+    {{ encore_entry_link_tags('admin') }}
+  {% endblock %}
+</head>
+<body>
+{% block header %}
+  <header>
+    <a href="/" class="logo"> <img src="/logo.svg" alt="Бар Ух" width="120" height="40"></a>
+    <button class="icon sidebar-toggler" data-toggle="sidebar-hidden" is="x-class-toggler" data-persist=1>
+      <x-icon icon="hamburger"></x-icon>
+    </button>
+  </header>
+{% endblock %}
+<main>
+  {% block main %}
+    <div class="typography">
+    <ul class="breadcrumb">{% block breadcrumb %}
+        {{- breadcrumb.item('Home', 'front') -}}
+        {{- breadcrumb.item('Dashboard', 'front') -}}
+      {% endblock %}
+    </ul>
+      {% include 'admin/_partials/_flashes.html.twig' %}
+
+      {% block body_main_title %}<h1 class="title">{{ title }}</h1>{% endblock %}
+      {% block local_menu %}{% endblock %}
+      {% block content %}{% endblock %}
+    </div>
+  {% endblock %}
+</main>
+<aside>
+  <div class="container">
+    {% block sidebar %}
+      {% include 'admin/_partials/main-menu.html.twig' %}
+    {% endblock %}
+  </div>
+  <button class="sidebar-minimizer icon" data-toggle="sidebar-short" is="x-class-toggler" data-persist=1>
+    <x-icon icon="chevron-left"></x-icon>
+  </button>
+</aside>
+<footer>
+  {% block footer %}
+    <span>© {{ "now"|date("Y") }} All rights reserved</span>
+  {% endblock %}
+</footer>
+
+{% block javascripts %}{{ encore_entry_script_tags('admin') }}{% endblock %}
+</body>
+</html>

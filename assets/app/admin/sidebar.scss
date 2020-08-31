@@ -1,0 +1,35 @@
+.sidebar-menu {
+
+  .menu_level_1 {
+    margin-left: 1.5rem;
+    transition: margin-left .3s ease;
+
+    .sidebar-short & {
+      margin-left: 0;
+    }
+  }
+
+  a {
+    color: rgba(255, 255, 255, .8);
+    white-space: nowrap;
+    text-decoration: none;
+    display: block;
+    padding: .5rem 0;
+
+    x-icon {
+      margin-right: .5rem;
+    }
+
+    &:hover {
+      color: #fff;
+    }
+
+    .sidebar-short & {
+      visibility: hidden;
+    }
+
+    .sidebar-short & x-icon {
+      visibility: visible;
+    }
+  }
+}

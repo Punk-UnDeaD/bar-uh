@@ -1,0 +1,21 @@
+{% macro picture(image) %}
+  <picture is="x-picture" data-pixel=1 data-adaptive=1 data-typography-height=1
+           data-width="{{ image.imageInfo.width }}"
+           data-height="{{ image.imageInfo.height }}"
+           data-ratio="{{ image.imageInfo.width/image.imageInfo.height }}"
+           data-src="{{ image.info.path|image_main_url }}"
+  >
+    <source srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==">
+    <img
+        decoding="async"
+        width="{{ image.imageInfo.width }}" height="{{ image.imageInfo.height }}"
+        src="{{ image.info.path|image_main_url }}" alt="{{ image.imageInfo.alt }}" loading=lazy>
+  </picture>
+{% endmacro %}
+
+
+{% macro link_picture(image) %}
+  <a href="{{ image.info.path|image_main_url }}" download="{{ image.info.name }}">
+    {{ _self.picture(image) }}
+  </a>
+{% endmacro %}

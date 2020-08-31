@@ -1,0 +1,21 @@
+{% macro link(title, order_by, opt=null) %}
+  {% if opt is null %}
+    {% set opt = app.request.query.all %}
+  {% endif %}
+  {% set opt = opt|filter((v,k) => k!='page') %}
+  {% if opt.order_by is defined and opt.order_by == order_by %}
+    {% if opt.direction is not defined %}
+      {% set icon='sort-by-attributes' %}
+      {% set opt = opt|merge({direction:'DESC'}) %}
+    {% else %}
+      {% set opt = opt|filter((v,k) => k!='direction') %}
+      {% set icon ='sort-by-attributes-alt' %}
+    {% endif %}
+  {% else %}
+    {% set icon = 'sort' %}
+  {% endif %}
+  <a class="sortable"
+     href="{{ path(app.request.attributes.get('_route'), opt|merge({order_by:order_by})) }}">{{ title }}
+    <x-icon icon="{{ icon }}"></x-icon>
+  </a>
+{% endmacro %}

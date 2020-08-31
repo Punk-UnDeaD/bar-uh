@@ -1,0 +1,9 @@
+{% macro item(label, route, params) %}
+  <li>
+    {% if route is null or route is same as(app.request.attributes.get('_route')) %}
+      <span>{{ label }}</span>
+    {% else %}
+      <a href="{{ path(route, params|default({})) }}" class="breadcrumb_link">{{ label }}</a>
+    {% endif %}
+  </li>
+{% endmacro %}

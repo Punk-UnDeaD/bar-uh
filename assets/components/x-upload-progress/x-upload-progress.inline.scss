@@ -1,0 +1,56 @@
+:host {
+  display: grid;
+  grid-template-areas: 'img' 'name' 'progress';
+  grid-template-rows: 8rem 1.5rem 1.5rem;
+}
+
+img {
+  object-fit: contain;
+  display: block;
+  grid-area: img;
+  width: 100%;
+  height: 100%;
+
+  + .mime {
+    visibility: hidden;
+  }
+
+  &:not([src]) {
+    visibility: hidden;
+    + .mime {
+      visibility: visible;
+    }
+  }
+}
+
+.mime {
+  background: #9996;
+  grid-area: img;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 6rem;
+}
+
+.name {
+  grid-area: name;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.progress {
+  grid-area: progress;
+  text-align: center;
+  z-index: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: .8rem;
+}
+
+progress {
+  grid-area: progress;
+  width: 100%;
+}

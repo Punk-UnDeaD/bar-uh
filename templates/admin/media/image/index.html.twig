@@ -1,0 +1,56 @@
+{% extends 'admin/media/index.html.twig' %}
+{% import 'admin/_partials/sortable-link.html.twig' as sortable %}
+{% import 'admin/_partials/pager.html.twig' as pager %}
+
+{% import 'admin/_partials/breadcrumb.html.twig' as breadcrumb %}
+
+{%- block breadcrumb -%}
+  {{- parent() -}}
+  {{- breadcrumb.item('Images', 'admin.media.image' ) -}}
+{%- endblock -%}
+
+{% block title -%}Images{%- endblock %}
+{% block local_menu %}
+  <ul class="actions">
+    <li>
+      <a class="button theme--success" href="{{ path('admin.media.image.upload') }}">Upload</a>
+    </li>
+  </ul>
+{%- endblock %}
+{% block content %}
+  {{ form_start(form, {attr: {class: 'filter'}}) }}
+  {{ form_widget(form.mime) }}
+  {{ form_widget(form.tag) }}
+  <button type="submit" class="theme--primary">Filter</button>
+  <a href="{{ path('admin.media.image') }}" class="button">Reset</a>
+  {{ form_end(form) }}
+
+  <table class="bordered">
+    <thead>
+    <tr>
+      <th>{{ sortable.link('Date', 'date') }}
+      <th>Name
+      <th>Mime
+      <th>{{ sortable.link('Size', 'info_size') }}
+      <th>Dimensions
+      <th>Tags
+      <th>Actions
+    </tr>
+    </thead>
+    <tbody>
+    {% for image in images %}
+      <tr>
+        <td>{{ image.date }}
+        <td title="{{ image.infoPath }}"><a
+              href="{{ path('admin.media.image.show', {image: image.id}) }}">{{ image.infoName }}</a>
+        <td>{{ image.infoMime }}
+        <td title="{{ image.infoSize }} bytes">{{ image.infoSize|file_size }}
+        <td>{{ image.imageInfo.width }}*{{ image.imageInfo.height }}
+        <td>{{ image.tags|default([])|join(', ') }}
+        <td>---
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {{ pager.pager(images) }}
+{% endblock %}

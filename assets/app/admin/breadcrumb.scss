@@ -1,0 +1,19 @@
+.breadcrumb {
+  margin-left: -1rem;
+  margin-right: -1rem;
+  padding: .5rem 1rem calc(.5rem - 1px);
+  border-bottom: 1px solid var(--border-color, #ccc);
+  background: var(--white, #fff);
+  display: flex;
+
+  li {
+    + li {
+      margin-left: .5rem;
+
+      &::before {
+        content: '/';
+        margin-right: .5rem;
+      }
+    }
+  }
+}

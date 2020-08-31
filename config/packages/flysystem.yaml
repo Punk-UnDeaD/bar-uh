@@ -1,0 +1,78 @@
+services:
+    Aws\S3\S3Client:
+        arguments:
+            - version: '2006-03-01'
+              region: 'eu-central-1'
+              credentials:
+                  key: '%env(AWSAccessKeyId)%'
+                  secret: '%env(AWSSecretKey)%'
+    y.cloud:
+        class: Aws\S3\S3Client
+        arguments:
+            - version: 'latest'
+              region: 'ru-central1'
+              endpoint: "https://storage.yandexcloud.net"
+              credentials:
+                  key: '9BqPSkFfEPxjHG_vz9VM'
+                  secret: 'Fin55qEQHeofheuV5naggZ7QK9rcyr17Tl5tOSjQ'
+
+
+
+# Read the documentation at https://github.com/thephpleague/flysystem-bundle/blob/master/docs/1-getting-started.md
+flysystem:
+    storages:
+        image.main.storage.loc:
+            adapter: 'local'
+            options:
+                directory: '/public/assets/image'
+                lock: 0
+                skip_links: false
+                permissions:
+                    file:
+                        public: 0744
+                        private: 0700
+                    dir:
+                        public: 0755
+                        private: 0700
+
+        image.main.storage:
+            adapter: 'aws'
+            options:
+                client: 'y.cloud'
+                bucket: 'bar-uh-dev'
+                prefix: '/assets/image'
+
+        image.local.cache.storage:
+            adapter: 'local'
+            options:
+                directory: '%kernel.project_dir%/var/cache/assets/image'
+                lock: 0
+                skip_links: false
+                permissions:
+                    file:
+                        public: 0777
+                        private: 0700
+                    dir:
+                        public: 0777
+                        private: 0700
+
+        image.style.storage:
+            adapter: 'aws'
+            options:
+                client: 'y.cloud'
+                bucket: 'bar-uh-dev'
+                prefix: '/assets/style'
+
+        image.style.storage.loc:
+            adapter: 'local'
+            options:
+                directory: '%kernel.project_dir%/public/assets/style'
+                lock: 0
+                skip_links: false
+                permissions:
+                    file:
+                        public: 0744
+                        private: 0700
+                    dir:
+                        public: 0755
+                        private: 0700

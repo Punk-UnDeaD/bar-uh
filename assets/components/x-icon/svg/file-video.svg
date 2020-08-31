@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+    <mask id="clip-path">
+        <rect style="fill:#fff;" width="100%" height="100%"/>
+        <text x="71" y="94" dominant-baseline="middle"
+              style="fill:#000;text-anchor:middle">${ext}
+        </text>
+    </mask>
+    <path mask="url(#clip-path)"
+          d="m 56.8125,32 a 20,20 0 0 1 -20,20 20,20 0 0 1 -20,-20 20,20 0 0 1 20,-20 20,20 0 0 1 20,20 z M 10,0 C 7,0 4,3 4,6 v 116 c 0,3 3,6 6,6 h 90 c 3,0 6,-3 6,-6 v -8 h 10 c 4,-1 8,-4 8,-8 V 74 c 0,-4 -4,-8 -8,-8 H 106 V 36 c 0,-2 0,-2 -2,-4 L 74,2 C 72,0 71,0 70,0 Z m 2,6 h 58 v 26 c 0,4 2,6 6,6 h 24 V 66 H 28 c -4,0 -8,4 -8,8 v 32 c 0,5 4,8 8,8 h 72 v 6 c 0,2 0,2 -2,2 H 12 c -2,0 -2,0 -2,-2 V 8 c 0,-2 2,-2 2,-2 z m 16,14 c 0,8 0,16 0,24 L 48,32 Z"/>
+</svg>

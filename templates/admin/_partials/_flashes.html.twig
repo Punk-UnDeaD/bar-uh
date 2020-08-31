@@ -1,0 +1,10 @@
+{% for type in ['danger', 'warning', 'success'] %}
+  {% set messages = app.flashes(type) %}
+  {% if messages|length %}
+    <ul class="alert theme--{{ type }}">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endfor %}

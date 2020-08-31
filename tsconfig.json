@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "ES2020",
+      "DOM"
+    ],
+    "target": "es2020",
+    "strict": true
+  }
+}

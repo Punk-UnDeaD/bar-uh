@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+
+body::before {
+  content: none;
+  pointer-events: none;
+
+  background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, .2) 0, rgba(0, 0, 0, .2) 1px, transparent 1px, transparent .5rem);
+  top: 2px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+}
+
+html {
+  font-family: 'Open Sans', sans-serif;
+  color: #333;
+  line-height: 1.5rem;
+  font-size: 16px;
+}
+
+a {
+  color: var(--link-color);
+
+  &[class] {
+    text-decoration: none;
+  }
+
+  &:hover {
+    color: var(--link-hover-color);
+  }
+}
+
+.typography {
+  h1, h2, h3, h4, h5, h6, p, ul, ol, table, form {
+    margin-bottom: 1rem;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+    transform: translateY(var(--Ycompensator));
+  }
+
+  $compensator: (6:0, 5:-2px, 4:0px, 3:-1px, 2:1px, 1:0);
+  @for $i from 1 to 7 {
+    h#{$i} {
+      font-size: 1rem + .5rem * (6 - $i)/2;
+      line-height: 1rem + .5rem * round((7 - $i)/2);
+      --Ycompensator: #{map_get($compensator, $i)};
+    }
+  }
+
+  table {
+    width: 100%;
+    --padding: .5rem;
+    border-collapse: collapse;
+
+    &, tr, td, th {
+      &.compact {
+        --padding: .25rem;
+        line-height: 1rem;
+      }
+    }
+
+    th {
+      text-align: left;
+    }
+
+    &.bordered {
+      td, th {
+        border: 1px solid var(--border-color);
+        padding: calc(var(--padding) - 1px) calc(var(--padding) * 2) var(--padding);
+      }
+
+      thead th {
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: calc(var(--padding) - 1px);
+      }
+
+      th + td {
+        border-left-width: 2px;
+      }
+
+      tbody tr:last-of-type {
+        td, th {
+          padding-bottom: calc(var(--padding) - 1px);
+        }
+      }
+    }
+
+    &.stripes {
+      td, th {
+        background: rgba(#000, .3);
+        padding: var(--padding) calc(var(--padding) * 2);
+      }
+
+      tbody {
+        tr:nth-child(2n) {
+          td, th {
+            background: rgba(#000, .2);
+          }
+        }
+
+        tr:nth-child(2n+1) {
+          td, th {
+            background: rgba(#000, .1);
+          }
+        }
+      }
+    }
+  }
+}

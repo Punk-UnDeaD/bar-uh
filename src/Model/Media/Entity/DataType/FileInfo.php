@@ -60,4 +60,11 @@ class FileInfo
         return $this->size;
     }
 
+    public function setSize(int $size): self
+    {
+        $clone = clone $this;
+        $clone->size = $size;
+
+        return $clone;
+    }
 }

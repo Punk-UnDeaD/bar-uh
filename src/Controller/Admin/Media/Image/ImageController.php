@@ -131,6 +131,7 @@ class ImageController extends AbstractController
         );
     }
 
+
     #[Route(path: '/{image}/draft', name: '.draft')]
     public function draft(
         Image $image,
@@ -149,7 +150,24 @@ class ImageController extends AbstractController
         );
     }
 
+    #[Route(path: '/{image}/draft-delete', name: '.draft-delete', format: 'json')]
+    #[RequiresCsrf()]
+    public function draftDelete(
+        Image $image,
+        Storage $storage,
+        FilesystemInterface $imageMainStorage
+    ): Response {
+        $draft = $storage->getDraft($image->getInfo()->getPath(), $imageMainStorage);
 
+        return $this->render(
+            'admin/media/image/draft.html.twig',
+            [
+                'image'        => $image,
+                'draft'        => $draft,
+                'localStorage' => $storage,
+            ]
+        );
+    }
     #[Route(path: '/{id}/exif/clean', name: '.exif.clean', format: 'json')]
     #[RequiresCsrf()]
     public function exifClean(

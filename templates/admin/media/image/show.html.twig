@@ -23,11 +23,19 @@
     <tr>
       <th>Draft
       <td>{% if localStorage.hasDraft(image.info.path) %}
-          <button class="theme--danger compact">Upload</button>
-          <button class="theme--warning compact">Delete</button>
+          <button class="theme--danger compact" is="x-js-button"
+                  data-csrf="{{ csrf_token('admin.media.image.draftUpload') }}"
+                  data-url="{{ path('admin.media.image.draftUpload', {id: image.id}) }}"
+          >Upload</button>
+          <button class="theme--warning compact" is="x-js-button" data-method="DELETE"
+                  data-csrf="{{ csrf_token('admin.media.image.draftDelete') }}"
+                  data-url="{{ path('admin.media.image.draftDelete', {id: image.id}) }}">Delete</button>
         {% else %}
-          <a class="button theme--primary compact" href="{{ path('admin.media.image.draft', {image:image.id}) }}">Create
-            draft</a>
+          <button class="theme--primary compact" is="x-js-button" data-method="CREATE"
+                  data-csrf="{{ csrf_token('admin.media.image.draftCreate') }}"
+                  data-url="{{ path('admin.media.image.draftCreate', {id: image.id}) }}">Create
+            draft</button>
+
         {% endif %}
     <tr>
       <th>Path</th>

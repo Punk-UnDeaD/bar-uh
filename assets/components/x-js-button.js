@@ -13,7 +13,7 @@ customElements.define('x-js-button', class extends HTMLButtonElement {
 
   onClick() {
     const request = {
-      method: 'POST',
+      method: this.dataset.method || 'POST',
       headers: {
         'Csrf-token': this.dataset.csrf,
       }

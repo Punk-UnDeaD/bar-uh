@@ -49,7 +49,7 @@ class CommandValueResolver implements ArgumentValueResolverInterface
 
         if ((count($commandArguments) === (count($parameters) - 1)) && $lastArgument === 'value') {
             $commandArguments[$lastArgument] = $data;
-        } else {
+        } elseif($data) {
             $commandArguments = array_merge($commandArguments, array_intersect_key($data, array_flip($parameters)));
         }
 

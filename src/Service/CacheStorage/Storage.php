@@ -78,6 +78,11 @@ class Storage extends Filesystem implements EventSubscriberInterface
         return $this->has($path.'-draft');
     }
 
+    public function deleteDraft($path): bool
+    {
+        return $this->delete($path.'-draft');
+    }
+    
     public function getDraft(string $path, FilesystemInterface $mainStorage): string
     {
         return $this->getLocalCopy($path, $mainStorage, true);

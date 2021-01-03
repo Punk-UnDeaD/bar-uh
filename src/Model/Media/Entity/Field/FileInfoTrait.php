@@ -18,4 +18,9 @@ trait FileInfoTrait
     {
         return $this->info;
     }
+
+    public function setInfo(FileInfo $info): void
+    {
+        $this->info = $info;
+    }
 }

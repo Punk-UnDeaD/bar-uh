@@ -49,7 +49,7 @@ class ExifEditor
         $props = json_decode(implode($output), true)[0];
         unset($props['SourceFile']);
 
-        return $props + array_fill_keys($this::EDITED_PROPS, '');
+        return array_merge(array_fill_keys($this::EDITED_PROPS, ''), $props);
     }
 
     private function getDraft(string $path): string

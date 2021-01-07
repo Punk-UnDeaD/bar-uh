@@ -13,6 +13,17 @@
     {% if localStorage.hasDraft(image.info.path) %}
       <li><a class="button theme--info" href="{{ path('admin.media.image.draft', {image:image.id}) }}">Draft</a></li>
     {% endif %}
+    <li><button class="theme--warning"
+           is="x-js-button"
+                data-csrf="{{ csrf_token('admin.media.image.cleanStyles') }}"
+                data-url="{{ path('admin.media.image.cleanStyles', {id: image.id}) }}"
+      >Clean styles</button></li>
+    <li><button class="theme--danger" is="x-js-button" data-method="DELETE"
+                data-csrf="{{ csrf_token('admin.media.image.delete') }}"
+                data-url="{{ path('admin.media.image.delete', {id: image.id}) }}"
+                data-goto="{{ path('admin.media.image') }}"
+      >Delete</button></li>
+
   </ul>
 {%- endblock %}
 {% block content %}
@@ -35,7 +46,6 @@
                   data-csrf="{{ csrf_token('admin.media.image.draftCreate') }}"
                   data-url="{{ path('admin.media.image.draftCreate', {id: image.id}) }}">Create
             draft</button>
-
         {% endif %}
     <tr>
       <th>Path</th>

@@ -11,8 +11,10 @@ use App\Model\Media\UseCase\Image\CreateFromUploaded;
 use App\Model\Media\UseCase\Image\CreateFromUrl;
 use App\Model\Media\UseCase\Image\ExifClean;
 use App\Model\Media\UseCase\Image\ExifSetValue;
+use App\Model\Media\UseCase\Image\Delete;
 use App\Model\Media\UseCase\Image\SetAlt;
 use App\Model\Media\UseCase\Image\SetTags;
+use App\Model\Media\UseCase\Image\CleanStyles;
 use App\ReadModel\Media\Filter;
 use App\ReadModel\Media\ImageFetcher;
 use App\Service\CacheStorage\Storage;
@@ -55,7 +57,7 @@ class ImageController extends AbstractController
         );
     }
 
-    #[Route(path: '/{image}', name: '.show', requirements: ['image' => Guid::PATTERN])]
+    #[Route(path: '/{image}', name: '.show', requirements: ['image' => Guid::PATTERN], methods: ['GET'])]
     public function show(
         Image $image,
         Storage $storage
@@ -67,6 +69,16 @@ class ImageController extends AbstractController
                 'localStorage' => $storage,
             ]
         );
+    }
+
+    #[Route(path: '/{id}', name: '.delete', requirements: ['image' => Guid::PATTERN], methods: ['DELETE'])]
+    #[RequiresCsrf()]
+    public function delete(
+        Delete\Command $command
+    ): JsonResponse {
+        $this->dispatchMessage($command);
+
+        return $this->json(['status' => 'ok']);
     }
 
     #[Route(path: '/upload', name: '.upload', methods: ['POST'])]
@@ -114,6 +126,17 @@ class ImageController extends AbstractController
 
         return $this->json(['status' => 'ok', 'value' => $command->alt]);
     }
+
+    #[Route(path: '/{id}/cleanStyles', name: '.cleanStyles', format: 'json')]
+    #[RequiresCsrf()]
+    public function cleanStyles(
+        CleanStyles\Command $command
+    ): JsonResponse {
+        $this->dispatchMessage($command);
+
+        return $this->json(['status' => 'ok']);
+    }
+
 
     #[Route(path: '/{image}/exif', name: '.exif')]
     public function exif(

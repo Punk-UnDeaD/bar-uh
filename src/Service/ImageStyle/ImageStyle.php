@@ -19,7 +19,7 @@ class ImageStyle
 
     private FilesystemInterface $mainStorage;
 
-    private FilesystemInterface $localCache;
+    private CacheStorage\Storage $localCache;
 
     public function __construct(
         FilesystemInterface $imageStyleStorage,
@@ -79,8 +79,9 @@ class ImageStyle
                     },
                     $this->{$style}($dimensions, ...$params),
                     '-strip',
-                    $this->localCache->getRealPath($style_path),
+                    $this->localCache->touch($style_path),
                 ];
+
                 exec(implode(' ', $command), $out, $return);
             }
 
@@ -99,6 +100,14 @@ class ImageStyle
     #[Pure] private function canSkip(string $path, string $style, string $ext): bool
     {
         return 'self' === $style && 'jpeg' !== $ext && $ext === pathinfo($path, PATHINFO_EXTENSION);
+    }
+
+    public function clean(string $path)
+    {
+        $path = pathinfo($path);
+        $path = "{$path['dirname']}/{$path['filename']}";
+        $this->localCache->deleteDir($path);
+        $this->styleStorage->deleteDir($path);
     }
 
     private function self(): string

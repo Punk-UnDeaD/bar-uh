@@ -32,6 +32,13 @@ customElements.define('x-js-button', class extends HTMLButtonElement {
           if (data.reload) {
             window.location.reload();
           }
+          if (this.dataset.reload) {
+            window.location.reload();
+          }
+          if (this.dataset.goto) {
+            window.location = this.dataset.goto;
+          }
+
         })
   }
 }, {extends: 'button'});

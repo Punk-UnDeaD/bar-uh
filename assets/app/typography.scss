@@ -41,7 +41,8 @@ a {
     transform: translateY(var(--Ycompensator));
   }
 
-  $compensator: (6:0, 5:-2px, 4:0px, 3:-1px, 2:1px, 1:0);
+  $compensator: (6:0, 5:-2px, 4:1px, 3:-1px, 2:2px, 1:0);
+
   @for $i from 1 to 7 {
     h#{$i} {
       font-size: 1rem + .5rem * (6 - $i)/2;

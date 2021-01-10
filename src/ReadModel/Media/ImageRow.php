@@ -4,13 +4,9 @@ declare(strict_types=1);
 
 namespace App\ReadModel\Media;
 
-use App\Model\Media\Entity\DataType\ImageInfo;
-use App\ReadModel\FromAssocInterface;
-use App\ReadModel\FromAssocTrait;
-
 class ImageRow
 {
-    public ImageInfo $imageInfo;
+    public object $imageInfo;
 
     public array $tags;
 

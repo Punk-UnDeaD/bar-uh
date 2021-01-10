@@ -35,23 +35,23 @@ class ImageController extends AbstractController
     #[Route(path: '', name: '')]
     public function index(
         Request $request,
-        ImageFetcher $images
+        ImageFetcher $fetcher
     ): Response {
         $filter = new Filter\Filter();
         $form = $this->createForm(Filter\Form::class, $filter);
         $form->handleRequest($request);
-        $i = $images->all(
+        $images = $fetcher->all(
             $filter,
             (int)$request->query->getInt('page', 1),
             self::PER_PAGE,
-            (string)$request->query->getAlpha('order_by', ''),
+            (string)$request->query->get('order_by', ''),
             (string)$request->query->getAlpha('direction', 'ASC')
         );
 
         return $this->render(
             'admin/media/image/index.html.twig',
             [
-                'images' => $i,
+                'images' => $images,
                 'form'   => $form->createView(),
             ]
         );

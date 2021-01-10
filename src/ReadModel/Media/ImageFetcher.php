@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\ReadModel\Media;
 
 use App\ReadModel\Paginator;
+use App\Service\Denormalizer;
 use Doctrine\DBAL\Connection;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -14,7 +15,10 @@ class ImageFetcher
     #[Required]
     public Connection $connection;
 
-     /**
+    #[Required]
+    public Denormalizer $denormalizer;
+
+    /**
      * @return ImageRow[]|Paginator
      */
     public function all(
@@ -51,7 +55,9 @@ class ImageFetcher
             $qb->setParameter(':tag', $filter->tag);
         }
 
-        return (new Paginator($qb, $page, $size))->fetchAs(ImageRow::class);
+        return (new Paginator($qb, $page, $size))->setCallback(
+            fn ($row) => $this->denormalizer->denormalize($row, ImageRow::class)
+        );
     }
-
+    
 }

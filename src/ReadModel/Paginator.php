@@ -27,13 +27,7 @@ class Paginator implements \Countable, \Iterator
      * @var callable|null
      */
     private $callback = null;
-
-    private ?string $fetchAs = null;
-
-    private ?array $ctorargs = null;
-
-    private bool $camelize = true;
-
+    
     public function __construct(QueryBuilder $queryBuilder, int $page = 1, int $pageSize = 10)
     {
         $this->query = (clone $queryBuilder)->setMaxResults($pageSize)
@@ -79,32 +73,11 @@ class Paginator implements \Countable, \Iterator
 
     private function getProcessedData(array $rows): array
     {
-        if ($this->camelize) {
-            $rows = array_map(
-                function ($row) {
-                    return array_merge(
-                        ...
-                        array_map(fn ($k, $v) => [$this->toCamel($k) => $v], array_keys($row), array_values($row))
-                    );
-                },
-                $rows
-            );
-        }
-
-        if ($this->fetchAs) {
-            $rows = array_map(fn ($row) => new $this->fetchAs(...$row), $rows);
-        }
-
         if ($this->callback) {
             $rows = array_map($this->callback, $rows);
         }
 
         return $rows;
-    }
-
-    private function toCamel(string $snake): string
-    {
-        return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $snake))));
     }
 
     private function execute(): ResultStatement
@@ -143,12 +116,5 @@ class Paginator implements \Countable, \Iterator
 
         return $this;
     }
-
-    public function fetchAs(?string $fetchAs, array $ctorargs = []): self
-    {
-        $this->fetchAs = $fetchAs;
-        $this->ctorargs = $ctorargs;
-
-        return $this;
-    }
+    
 }

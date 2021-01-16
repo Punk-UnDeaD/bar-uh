@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\ReadModel;
 
-use Doctrine\DBAL\Driver\ResultStatement;
+use Doctrine\DBAL\Driver\Result;
 use Doctrine\DBAL\Query\QueryBuilder;
 
+/**
+ * @implements \Iterator<mixed>
+ */
 class Paginator implements \Countable, \Iterator
 {
     private QueryBuilder $query;
@@ -15,6 +18,7 @@ class Paginator implements \Countable, \Iterator
 
     private ?int $count = null;
 
+    /** @var array<mixed>|null */
     private ?array $data = null;
 
     private int $pageSize;
@@ -27,14 +31,14 @@ class Paginator implements \Countable, \Iterator
      * @var callable|null
      */
     private $callback = null;
-    
+
     public function __construct(QueryBuilder $queryBuilder, int $page = 1, int $pageSize = 10)
     {
         $this->query = (clone $queryBuilder)->setMaxResults($pageSize)
             ->setFirstResult(($page - 1) * $pageSize);
         $this->countQuery = (clone $queryBuilder)
             ->setMaxResults(null)
-            ->setFirstResult(null)
+            ->setFirstResult(0)
             ->resetQueryPart('orderBy')
             ->select('count(*)');
         $this->pageSize = $pageSize;
@@ -48,7 +52,15 @@ class Paginator implements \Countable, \Iterator
 
     public function count(): int
     {
-        return $this->count ?? $this->count = $this->countQuery->execute()->fetchColumn();
+        return $this->count ?? $this->count = $this->queryExecute($this->countQuery)->fetchOne();
+    }
+
+    private function queryExecute(QueryBuilder $query): Result
+    {
+        /** @var Result $result */
+        $result = $query->execute();
+
+        return $result;
     }
 
     public function getPageSize(): int
@@ -66,11 +78,20 @@ class Paginator implements \Countable, \Iterator
         return $this->getData()[$this->index];
     }
 
+    /**
+     * @return array<mixed>
+     */
     private function getData(): array
     {
-        return $this->data ?? $this->data = $this->getProcessedData($this->execute()->fetchAllAssociative());
+        return $this->data ??
+            $this->data = $this->getProcessedData($this->queryExecute($this->query)->fetchAllAssociative());
     }
 
+    /**
+     * @param array<mixed> $rows
+     *
+     * @return array<mixed>
+     */
     private function getProcessedData(array $rows): array
     {
         if ($this->callback) {
@@ -78,11 +99,6 @@ class Paginator implements \Countable, \Iterator
         }
 
         return $rows;
-    }
-
-    private function execute(): ResultStatement
-    {
-        return $this->query->execute();
     }
 
     public function next(): void
@@ -116,5 +132,5 @@ class Paginator implements \Countable, \Iterator
 
         return $this;
     }
-    
+
 }

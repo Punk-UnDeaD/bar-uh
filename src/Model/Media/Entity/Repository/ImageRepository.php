@@ -17,6 +17,9 @@ class ImageRepository extends ServiceEntityRepository implements GetOneRepositor
         parent::__construct($registry, Image::class);
     }
 
+    /**
+     * @param string $id
+     */
     public function get($id): Image
     {
         if (!$image = $this->find($id)) {

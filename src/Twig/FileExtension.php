@@ -16,7 +16,7 @@ class FileExtension extends AbstractExtension
         ];
     }
 
-    public function fileSize(int $size, $precision = 2, $space = ' '): string
+    public function fileSize(int $size, int $precision = 2, string $space = ' '): string
     {
         if ($size <= 0) {
             return '0'.$space.'KB';

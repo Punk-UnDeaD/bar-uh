@@ -16,7 +16,7 @@ class Handler implements MessageHandlerInterface
         $this->dispatcher = $dispatcher;
     }
 
-    public function __invoke(Message $message)
+    public function __invoke(Message $message): void
     {
         $this->dispatcher->dispatch($message->getEvent());
     }

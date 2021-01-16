@@ -6,5 +6,8 @@ namespace App\Model;
 
 interface EventDispatcher
 {
+    /**
+     * @param array<object> $events
+     */
     public function dispatch(array $events): void;
 }

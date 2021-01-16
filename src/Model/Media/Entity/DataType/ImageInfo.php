@@ -44,6 +44,10 @@ class ImageInfo implements \JsonSerializable
         return $clone;
     }
 
+
+    /**
+     * @return array<string, int|string>
+     */
     public function jsonSerialize(): array
     {
         return ['width' => $this->width, 'height' => $this->height] + ($this->alt ? ['alt' => $this->alt] : []);

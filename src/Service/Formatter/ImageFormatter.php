@@ -20,6 +20,6 @@ class ImageFormatter
         $path = str_replace('public://', '', $path);
         $path = pathinfo($path);
 
-        return self::STYLE_PREFIX."{$path['dirname']}/{$path['filename']}/$style.{$path['extension']}";
+        return self::STYLE_PREFIX."{$path['dirname']}/{$path['filename']}/$style.".($path['extension'] ?? '');
     }
 }

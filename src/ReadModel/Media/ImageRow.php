@@ -8,6 +8,7 @@ class ImageRow
 {
     public object $imageInfo;
 
+    /** @var array<string> */
     public array $tags;
 
     public function __construct(

@@ -84,7 +84,7 @@ class ImageController extends AbstractController
     #[Route(path: '/upload', name: '.upload', methods: ['POST'])]
     public function upload(
         Request $request,
-    ) {
+    ): JsonResponse {
         $file = $request->files->get('file');
         if ($file instanceof UploadedFile) {
             try {
@@ -191,6 +191,7 @@ class ImageController extends AbstractController
             ]
         );
     }
+
     #[Route(path: '/{id}/exif/clean', name: '.exif.clean', format: 'json')]
     #[RequiresCsrf()]
     public function exifClean(

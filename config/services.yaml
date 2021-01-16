@@ -60,3 +60,16 @@ services:
     App\Controller\CommandValueResolver:
         tags:
             - { name: controller.argument_value_resolver }
+
+    transliterator.any_to_latin:
+        class: Transliterator
+        factory: [\Transliterator, create]
+        arguments: ['Any-Latin']
+
+    transliterator.latin_to_ascii:
+        class: Transliterator
+        factory: [\Transliterator, create]
+        arguments: ['Latin-ASCII']
+
+    App\Service\Transliterator:
+        arguments: ['@transliterator.any_to_latin', '@transliterator.latin_to_ascii']

@@ -8,5 +8,6 @@ use DomainException;
 
 class EntityNotFoundException extends DomainException
 {
+    /** @var int */
     protected $code = 404;
 }

@@ -13,11 +13,11 @@ class Handler implements MessageHandlerInterface
 {
     #[Required]
     public ExifEditor $exifEditor;
-    
+
     #[Required]
     public ImageRepository $repository;
 
-    public function __invoke(Command $command)
+    public function __invoke(Command $command): void
     {
         $image = $this->repository->get($command->id);
 

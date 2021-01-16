@@ -6,10 +6,17 @@ namespace App\Service;
 
 class Denormalizer
 {
-    public function denormalize(array $row, string $class)
+
+    /**
+     * @param array<string, mixed> $row
+     * @template T of object
+     * @param class-string<T> $class
+     * @return T
+     */
+    public function denormalize(array $row, string $class): object
     {
         $row = array_merge(
-            ...array_map(fn ($k, $v) => [$this->toCamel($k) => $v], array_keys($row), array_values($row))
+            ...array_map(fn (string $k, mixed $v) => [$this->toCamel($k) => $v], array_keys($row), array_values($row))
         );
 
         return new $class(...$row);

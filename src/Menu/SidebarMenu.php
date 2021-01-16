@@ -20,6 +20,9 @@ class SidebarMenu implements ContainerAwareInterface
         $this->factory = $factory;
     }
 
+    /** @param array<mixed> $options
+     * @return \Knp\Menu\ItemInterface<?ItemInterface>
+     */
     public function build(array $options): ItemInterface
     {
         $menu = $this->factory->createItem('root')

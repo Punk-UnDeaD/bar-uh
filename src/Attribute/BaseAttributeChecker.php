@@ -39,7 +39,7 @@ abstract class BaseAttributeChecker implements EventSubscriberInterface
     /**
      * @throws \ReflectionException
      */
-    private function getAttribute($controller, string $method): ?object
+    private function getAttribute(object $controller, string $method): ?object
     {
         $reflection = new \ReflectionClass($controller);
 
@@ -52,5 +52,5 @@ abstract class BaseAttributeChecker implements EventSubscriberInterface
         return null;
     }
 
-    abstract protected function checkAttribute(ControllerArgumentsEvent $event, object $annotation);
+    abstract protected function checkAttribute(ControllerArgumentsEvent $event, object $annotation):void;
 }

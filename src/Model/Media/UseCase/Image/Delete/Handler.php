@@ -24,7 +24,7 @@ class Handler implements MessageHandlerInterface
 
     #[Required] public FilesystemInterface $imageMainStorage;
 
-    public function __invoke(Command $command)
+    public function __invoke(Command $command): void
     {
         $image = $this->repository->get($command->id);
         $path = $image->getInfo()->getPath();

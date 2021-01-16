@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\ReadModel\ReadModelNotFoundException;
 use App\Model\EntityNotFoundException;
+use http\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -15,7 +16,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ExceptionListener
 {
-    public function onKernelException(ExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
 
@@ -27,7 +28,7 @@ class ExceptionListener
                 case $exception instanceof EntityNotFoundException:
                     $code = 404;
                     break;
-                    
+
                 case $exception instanceof ValidationFailedException:
                 case $exception instanceof MessengerValidationFailedException:
                     $code = 400;

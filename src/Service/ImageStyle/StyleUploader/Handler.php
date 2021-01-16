@@ -23,7 +23,10 @@ class Handler implements MessageHandlerInterface
     public function __invoke(Message $message): void
     {
         if ($this->cacheStorage->has($path = $message->path)) {
-            $this->styleStorage->putStream($path, $this->cacheStorage->readStream($path));
+            $this->styleStorage->putStream(
+                $path,
+                $this->cacheStorage->readStream($path)
+            );
         }
     }
 }

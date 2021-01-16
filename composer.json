@@ -46,10 +46,14 @@
     "friendsofphp/php-cs-fixer": "^2.16",
     "jetbrains/phpstorm-attributes": "^1.0",
     "ocramius/proxy-manager": "^2.8",
-    "phpstan/phpstan": "^0.12.62",
+    "phpstan/phpstan": "^0.12.67",
+    "phpstan/phpstan-symfony": "^0.12.14",
+    "psalm/plugin-symfony": "^2.1",
     "symfony/maker-bundle": "*",
     "symfony/profiler-pack": "*",
-    "symfony/test-pack": "*"
+    "symfony/test-pack": "*",
+    "vimeo/psalm": "^4.4",
+    "weirdan/doctrine-psalm-plugin": "^1.0"
   },
   "config": {
     "optimize-autoloader": true,

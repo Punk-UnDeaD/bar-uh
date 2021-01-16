@@ -17,13 +17,19 @@ class MessengerEventDispatcher implements EventDispatcher
     {
     }
 
+    /**
+     * @param array<object> $events
+     */
     public function dispatch(array $events): void
     {
         foreach ($events as $event) {
             $this->bus->dispatch(new Message($event));
         }
     }
-
+    
+    /**
+     * @param array<object> $events
+     */
     public function dispatchDelay(array $events, int $delay = 1): void
     {
         foreach ($events as $event) {
@@ -34,10 +40,10 @@ class MessengerEventDispatcher implements EventDispatcher
         }
     }
 
-    public function dispatchDebounce(object $event, $id, int $delay = 1, $name = null): void
+    public function dispatchDebounce(object $event, string $id, int $delay = 1, ?string $name = null): void
     {
         $this->bus->dispatch(
-            new DebounceMessage($event, $id, $name ?? get_class($event)),
+            new DebounceMessage($event, $id, $name),
             [new DelayStamp($delay * 1000)]
         );
     }

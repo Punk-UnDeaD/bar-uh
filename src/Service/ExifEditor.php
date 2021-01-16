@@ -34,13 +34,16 @@ class ExifEditor
 
     public function cleanExif(string $path, string $tag = 'all'): void
     {
-        $props = [$tag => null];
+        $props = [$tag => ''];
         if ('all' === $tag) {
             $props += array_filter($this->getExif($path));
         }
         $this->setExifProperties($path, $props);
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getExif(string $path): array
     {
         $file = $this->localCache->hasDraft($path) ? $this->getDraft($path) : $this->getOriginal($path);
@@ -62,15 +65,18 @@ class ExifEditor
         return $this->localCache->getLocalCopy($path, $this->mainStorage);
     }
 
+    /**
+     * @param array<string, string> $properties
+     */
     public function setExifProperties(string $path, array $properties): void
     {
         $params = array_map(
-            function (string $k, ?string $v): string {
+            function (string $k, string $v): string {
                 if ($v) {
                     if ('UserComment' !== $k) {
                         $v = $this->transliterator->transliterate($v);
                     }
-                    $v = '"'.addcslashes($v, '"').'"';
+                    $v = '"'.addcslashes($v?:'', '"').'"';
                 }
 
                 return "-{$k}={$v}";

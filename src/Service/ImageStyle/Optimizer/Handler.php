@@ -14,7 +14,7 @@ class Handler implements MessageHandlerInterface
     {
     }
 
-    public function __invoke(Message $message)
+    public function __invoke(Message $message):void
     {
         if (!$this->storage->has($message->path)) {
             return;

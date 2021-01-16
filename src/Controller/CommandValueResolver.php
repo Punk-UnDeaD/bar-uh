@@ -20,13 +20,22 @@ class CommandValueResolver implements ArgumentValueResolverInterface
         return 'command' === $argument->getName();
     }
 
+    /**
+     * @template T
+     * @return \Generator<T>
+     */
     public function resolve(Request $request, ArgumentMetadata $argument): \Generator
     {
+        /** @var class-string<T> $class */
         $class = $argument->getType();
+        if (!$class) {
+            return;
+        }
+
         $reflection = new \ReflectionClass($class);
         $parameters = array_map(
             fn ($parameter) => $parameter->getName(),
-            $reflection->getConstructor()->getParameters()
+            $reflection->getConstructor()?->getParameters()??[]
         );
         $data = $this->extractData($request);
 
@@ -49,7 +58,7 @@ class CommandValueResolver implements ArgumentValueResolverInterface
 
         if ((count($commandArguments) === (count($parameters) - 1)) && $lastArgument === 'value') {
             $commandArguments[$lastArgument] = $data;
-        } elseif($data) {
+        } elseif ($data && is_array($data)) {
             $commandArguments = array_merge($commandArguments, array_intersect_key($data, array_flip($parameters)));
         }
 
@@ -57,7 +66,10 @@ class CommandValueResolver implements ArgumentValueResolverInterface
         yield new $class(...$commandArguments);
     }
 
-    private function extractData(Request $request)
+    /**
+     * @return array<mixed>|bool|int|float|string|null
+     */
+    private function extractData(Request $request): array|bool|int|float|string|null
     {
         return match (true) {
             ('json' === $request->getContentType()) => json_decode($request->getContent(), true),

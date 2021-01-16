@@ -45,12 +45,12 @@ class ImageStyle
     public function stylePath(string $path, string $style, ?string $ext = null): string
     {
         $path = pathinfo($path);
-        $ext ??= $path['extension'];
+        $ext ??= $path['extension'] ?? '';
 
         return "{$path['dirname']}/{$path['filename']}/$style.{$ext}";
     }
 
-    public function styleFile(string $path, string $style, string $ext, ...$params): string
+    public function styleFile(string $path, string $style, string $ext, string|int ...$params): string
     {
         $style_path = match ($style) {
             'width' => $this->stylePath($path, (string)$params[0], $ext),
@@ -62,7 +62,10 @@ class ImageStyle
             $dimensions = getimagesize($local);
 
             if ($this->canSkip($path, $style, $ext)) {
-                $this->localCache->putStream($style_path, $this->localCache->readStream($path));
+                $this->localCache->putStream(
+                    $style_path,
+                    $this->localCache->readStream($path)
+                );
             } else {
                 $this->localCache->prepareDir(dirname($style_path));
 
@@ -102,7 +105,7 @@ class ImageStyle
         return 'self' === $style && 'jpeg' !== $ext && $ext === pathinfo($path, PATHINFO_EXTENSION);
     }
 
-    public function clean(string $path)
+    public function clean(string $path): void
     {
         $path = pathinfo($path);
         $path = "{$path['dirname']}/{$path['filename']}";
@@ -115,12 +118,18 @@ class ImageStyle
         return '';
     }
 
+    /**
+     * @param list<int> $dimensions
+     */
     private function pixel(array $dimensions): string
     {
         return $this->width($dimensions, 8);
     }
 
-    private function width($dimensions, int $width): string
+    /**
+     * @param list<int> $dimensions
+     */
+    private function width(array $dimensions, int $width): string
     {
         return '-resize '.(100 * $width / $dimensions[0]).'%';
     }

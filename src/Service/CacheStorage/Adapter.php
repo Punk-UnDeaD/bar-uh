@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\File\File;
 class Adapter extends Local
 {
 
+    /** @var array<array<int>> */
     protected static $permissions
         = [
             'file' => [
@@ -22,7 +23,7 @@ class Adapter extends Local
             ],
         ];
 
-    public function moveUploaded(File $file, $path): File
+    public function moveUploaded(File $file, string $path): File
     {
         $dir = dirname($this->applyPathPrefix($path));
         $this->ensureDirectory($dir);
@@ -32,7 +33,7 @@ class Adapter extends Local
         return $file;
     }
 
-    public function prepareDir($dir)
+    public function prepareDir(string $dir): void
     {
         $this->ensureDirectory($this->applyPathPrefix($dir));
     }

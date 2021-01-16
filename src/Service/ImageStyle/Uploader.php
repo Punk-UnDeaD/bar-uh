@@ -20,8 +20,10 @@ class Uploader
     {
         $ext = $file->guessExtension();
         $path = date('Y/m/d').'/'.$id.($ext ? '.'.$ext : '');
-        $file = $this->cacheStorage->moveUploaded($file, $path);
-        $stream = fopen($file->getRealPath(), 'rb+');
+        /** @var string $realPath */
+        $realPath = $this->cacheStorage->moveUploaded($file, $path)->getRealPath();
+        /** @var resource $stream */
+        $stream = fopen($realPath, 'rb+');
         $this->imageMainStorage->writeStream($path, $stream);
         fclose($stream);
 

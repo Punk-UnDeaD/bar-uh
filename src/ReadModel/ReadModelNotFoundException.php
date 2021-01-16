@@ -8,5 +8,6 @@ use DomainException;
 
 class ReadModelNotFoundException extends DomainException
 {
+    /** @var int */
     protected $code = 404;
 }

@@ -9,6 +9,9 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class DebounceHandler implements MessageHandlerInterface
 {
+    /**
+     * @var array<string, int>
+     */
     private array $log = [];
 
     private EventDispatcherInterface $dispatcher;
@@ -18,7 +21,7 @@ class DebounceHandler implements MessageHandlerInterface
         $this->dispatcher = $dispatcher;
     }
 
-    public function __invoke(DebounceMessage $message)
+    public function __invoke(DebounceMessage $message):void
     {
         $id = "{$message->getName()}:{$message->getId()}";
         $last = $this->log[$id] ?? 0;

@@ -21,9 +21,9 @@ class RequiresCsrfSubscriber extends BaseAttributeChecker
     }
 
     /**
-     * @param object|RequiresCsrf $annotation
+     * @param RequiresCsrf $annotation
      */
-    protected function checkAttribute(ControllerArgumentsEvent $event, object $annotation)
+    protected function checkAttribute(ControllerArgumentsEvent $event, object $annotation): void
     {
         $request = $event->getRequest();
         $token = $request->headers->get('csrf-token') ?? $request->get('_csrf_token');

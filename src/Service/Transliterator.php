@@ -4,23 +4,30 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use Transliterator as Translitera;
+use JetBrains\PhpStorm\Pure;
 
 class Transliterator
 {
 
-    private ?Translitera $transliterator;
+    /**
+     * @var array<\Transliterator>
+     */
+    private array $transliterators;
 
-    private ?Translitera $transliteratorToASCII;
-
-    public function __construct()
+    public function __construct(\Transliterator ...$transliterators)
     {
-        $this->transliterator = Translitera::create('Any-Latin');
-        $this->transliteratorToASCII = Translitera::create('Latin-ASCII');
+        $this->transliterators = $transliterators;
     }
 
-    public function transliterate(string $s): string
+    #[Pure] public function transliterate(string $s): string|false
     {
-        return $this->transliteratorToASCII->transliterate($this->transliterator->transliterate($s));
+        foreach ($this->transliterators as $transliterator) {
+            $s = $transliterator->transliterate($s);
+            if (false === $s) {
+                break;
+            }
+        }
+
+        return $s;
     }
 }

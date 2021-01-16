@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Container\AutoInjectorCompilerPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -39,9 +38,4 @@ class Kernel extends BaseKernel
         }
     }
 
-    protected function build(ContainerBuilder $container)
-    {
-        parent::build($container);
-        $container->addCompilerPass(new AutoInjectorCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 200);
-    }
 }

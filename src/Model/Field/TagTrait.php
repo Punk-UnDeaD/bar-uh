@@ -8,11 +8,17 @@ trait TagTrait
 {
     use DataTrait;
 
+    /**
+     * @return list<string>
+     */
     public function getTags(): array
     {
         return $this->data['tags'] ?? [];
     }
 
+    /**
+     * @param list<string> $tags
+     */
     public function setTags(array $tags = []): self
     {
         if ($tags) {

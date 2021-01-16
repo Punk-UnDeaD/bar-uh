@@ -12,19 +12,25 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Contracts\Service\Attribute\Required;
 
-abstract class BaseCreateHandler 
+abstract class BaseCreateHandler
 {
     #[Required] public EntityManagerInterface $em;
+
     #[Required] public Flusher $flusher;
+
     #[Required] public Uploader $uploader;
 
-    protected function persist(File $uploadedFile, string $name, ?string $mimeType): Image
+    protected function persist(File $uploadedFile, string $name, string $mimeType): Image
     {
-        $dimensions = getimagesize($uploadedFile->getRealPath());
+        /** @var string $realPath */
+        $realPath = $uploadedFile->getRealPath();
+        /** @var array<int> $dimensions */
+        $dimensions = getimagesize($realPath);
         $size = $uploadedFile->getSize();
         $id = Id::next();
-        $this->em->persist($image = 
-            new Image(
+        $this->em->persist(
+            $image
+                = new Image(
                 $id,
                 new FileInfo(
                     $this->uploader->saveUploaded($id->getValue(), $uploadedFile),
@@ -35,6 +41,7 @@ abstract class BaseCreateHandler
                 new ImageInfo($dimensions[0], $dimensions[1])
             )
         );
+
         return $image;
     }
 }

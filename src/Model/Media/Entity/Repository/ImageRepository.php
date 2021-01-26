@@ -18,11 +18,14 @@ class ImageRepository extends ServiceEntityRepository implements GetOneRepositor
     }
 
     /**
+     * @psalm-suppress MoreSpecificImplementedParamType
      * @param string $id
      */
     public function get($id): Image
     {
-        if (!$image = $this->find($id)) {
+        /** @var ?Image $image */
+        $image = $this->find($id);
+        if (!$image) {
             throw EntityNotFoundException::fromClassNameAndIdentifier('Image', [$id]);
         }
 

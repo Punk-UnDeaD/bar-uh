@@ -42,10 +42,10 @@ class ImageController extends AbstractController
         $form->handleRequest($request);
         $images = $fetcher->all(
             $filter,
-            (int)$request->query->getInt('page', 1),
+            $request->query->getInt('page', 1),
             self::PER_PAGE,
-            (string)$request->query->get('order_by', ''),
-            (string)$request->query->getAlpha('direction', 'ASC')
+            $request->query->get('order_by', ''),
+            $request->query->getAlpha('direction', 'ASC')
         );
 
         return $this->render(
@@ -85,6 +85,7 @@ class ImageController extends AbstractController
     public function upload(
         Request $request,
     ): JsonResponse {
+        /** @var UploadedFile|mixed $file */
         $file = $request->files->get('file');
         if ($file instanceof UploadedFile) {
             try {

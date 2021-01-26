@@ -47,12 +47,16 @@ class ExifEditor
     public function getExif(string $path): array
     {
         $file = $this->localCache->hasDraft($path) ? $this->getDraft($path) : $this->getOriginal($path);
-        $command = ['exiftool', ...array_map(fn ($prop) => '-'.$prop, $this::EDITED_PROPS), '-j', $file];
+        $command = ['exiftool', ...array_map(fn (string $prop) => '-'.$prop, self::EDITED_PROPS), '-j', $file];
         exec(implode(' ', $command), $output);
-        $props = json_decode(implode($output), true)[0];
+
+        /** @var array<array<string, string>> $output */
+        $output = json_decode(implode($output), true);
+        /** @var array<string, string> $props */
+        $props = $output[0];
         unset($props['SourceFile']);
 
-        return array_merge(array_fill_keys($this::EDITED_PROPS, ''), $props);
+        return array_merge(array_fill_keys(self::EDITED_PROPS, ''), $props);
     }
 
     private function getDraft(string $path): string

@@ -19,6 +19,7 @@ class Denormalizer
             ...array_map(fn (string $k, mixed $v) => [$this->toCamel($k) => $v], array_keys($row), array_values($row))
         );
 
+        /** @psalm-suppress MixedMethodCall */
         return new $class(...$row);
     }
 

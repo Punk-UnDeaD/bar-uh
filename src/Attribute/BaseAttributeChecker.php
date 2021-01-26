@@ -10,8 +10,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 abstract class BaseAttributeChecker implements EventSubscriberInterface
 {
-    const ATTRIBUTE = '';
-
     public static function getSubscribedEvents(): array
     {
         return [
@@ -25,12 +23,13 @@ abstract class BaseAttributeChecker implements EventSubscriberInterface
             return;
         }
 
+        /** @var array{object, string}|callable $target */
         $target = $event->getController();
 
-        if (!is_array($target)) {
+        if (!is_array($target) || !is_object($target[0])) {
             return;
         }
-
+        /** @psalm-suppress MixedArgument */
         if ($attribute = $this->getAttribute(...$target)) {
             $this->checkAttribute($event, $attribute);
         }
@@ -41,10 +40,10 @@ abstract class BaseAttributeChecker implements EventSubscriberInterface
      */
     private function getAttribute(object $controller, string $method): ?object
     {
-        $reflection = new \ReflectionClass($controller);
-
-        if ($attributes = $reflection->getMethod($method)->getAttributes(static::ATTRIBUTE)
-            ?: $reflection->getAttributes(static::ATTRIBUTE)
+        $controllerReflection = new \ReflectionClass($controller);
+        $attributeClass = $this->getAttributeClass();
+        if ($attributes = $controllerReflection->getMethod($method)->getAttributes($attributeClass)
+            ?: $controllerReflection->getAttributes($attributeClass)
         ) {
             return $attributes[0]->newInstance();
         }
@@ -52,5 +51,10 @@ abstract class BaseAttributeChecker implements EventSubscriberInterface
         return null;
     }
 
-    abstract protected function checkAttribute(ControllerArgumentsEvent $event, object $annotation):void;
+    /**
+     * @return class-string
+     */
+    abstract protected function getAttributeClass(): string;
+
+    abstract protected function checkAttribute(ControllerArgumentsEvent $event, object $annotation): void;
 }

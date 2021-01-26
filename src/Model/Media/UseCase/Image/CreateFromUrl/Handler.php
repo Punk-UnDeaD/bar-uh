@@ -18,21 +18,21 @@ class Handler extends BaseCreateHandler implements MessageHandlerInterface
 
     #[Required] public HttpClientInterface $client;
 
-    #[Required] public Filesystem $fileSystem;
-
     public function __invoke(Command $command): Image
     {
         $response = $this->client->request('GET', $command->url);
         $content = $response->getContent();
-        $temp = $this->fileSystem->tempnam(sys_get_temp_dir(), 'uploaded');
-        $this->fileSystem->dumpFile($temp, $content);
-        $uploadedFile = new File($temp);
+        /** @var resource $temp */
+        $temp = tmpfile();
+        fwrite($temp, $content);
+        $uploadedFile = new File(stream_get_meta_data($temp)['uri']);
         $mimeType = $uploadedFile->getMimeType() ?? '';
         Assert::regex($mimeType, '/^image/', "{$command->url} not image");
+        /** @var string $ext */
+        $ext = $uploadedFile->guessExtension();
         $name = urldecode(
                 pathinfo(basename(parse_url($command->url, PHP_URL_PATH) ?: md5($command->url)), PATHINFO_FILENAME)
-            ).
-            '.'.$uploadedFile->guessExtension();
+            ).'.'.$ext;
 
         return $this->persist($uploadedFile, $name, $mimeType);
     }

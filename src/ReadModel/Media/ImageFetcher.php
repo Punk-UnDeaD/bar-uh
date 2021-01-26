@@ -19,7 +19,8 @@ class ImageFetcher
     public Denormalizer $denormalizer;
 
     /**
-     * @return ImageRow[]|Paginator
+     * @return Paginator<ImageRow>
+     * @psalm-return Paginator
      */
     public function all(
         Filter\Filter $filter,
@@ -56,8 +57,9 @@ class ImageFetcher
         }
 
         return (new Paginator($qb, $page, $size))->setCallback(
-            fn ($row) => $this->denormalizer->denormalize($row, ImageRow::class)
+        /** @param array<string, mixed> $row */
+            fn (array $row): ImageRow => $this->denormalizer->denormalize($row, ImageRow::class)
         );
     }
-    
+
 }

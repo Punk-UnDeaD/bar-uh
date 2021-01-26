@@ -6,17 +6,27 @@ namespace App\Model\Media\Entity\DataType;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\JsonType;
+use JetBrains\PhpStorm\Pure;
 
 class ImageInfoType extends JsonType
 {
     public const NAME = 'media_image_info';
 
+    /**
+     * @param string $value
+     *
+     * @psalm-suppress MoreSpecificImplementedParamType
+     * @return ImageInfo
+     */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
+        /** @var array{height: int, width: int, alt?: ?string} $value */
         $value = parent::convertToPHPValue($value, $platform);
 
-        return !empty($value) ? new ImageInfo($value['width'], $value['height'], $value['alt'] ?? null) : null;
+        /** @psalm-suppress InvalidArgument false-positive */
+        return new ImageInfo(...$value);
     }
+
 
     public function getName(): string
     {

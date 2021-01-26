@@ -48,11 +48,11 @@ RUN apk update ;\
         make;\
         make install; \
     pickle install apcu ;\
-    pickle install igbinary ;\
+    pickle install igbinary-3.1.5 ;\
     pickle install redis ;\
     pickle install uuid-1.2.0 ;\
     pickle install yaml ;\
-    git clone https://github.com/xdebug/xdebug.git --branch 3.0.1 /tmp/xdebug; \
+    git clone https://github.com/xdebug/xdebug.git --branch 3.0.2 /tmp/xdebug; \
         cd /tmp/xdebug; \
         phpize --clean;\
         phpize;\

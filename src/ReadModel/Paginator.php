@@ -52,7 +52,7 @@ class Paginator implements \Countable, \Iterator
 
     public function count(): int
     {
-        return $this->count ?? $this->count = $this->queryExecute($this->countQuery)->fetchOne();
+        return $this->count ?? $this->count = (int)$this->queryExecute($this->countQuery)->fetchOne();
     }
 
     private function queryExecute(QueryBuilder $query): Result
@@ -73,7 +73,7 @@ class Paginator implements \Countable, \Iterator
         return $this->page;
     }
 
-    public function current()
+    public function current(): mixed
     {
         return $this->getData()[$this->index];
     }

@@ -42,7 +42,7 @@ services:
       - .:/var/www/html
       - ./etc/php/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
       - ./etc/php/docker-php-ext-opcache.ini:/usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
-      - ./etc/php/php.ini:/usr/local/etc/php/php.ini
+#      - ./etc/php/php.ini:/usr/local/etc/php/php.ini
   node:
     image: wodby/node:$NODE_TAG
     volumes:

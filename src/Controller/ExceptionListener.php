@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Messenger\Exception\ValidationFailedException as MessengerValidationFailedException;
+use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -33,14 +34,15 @@ class ExceptionListener
                 case $exception instanceof MessengerValidationFailedException:
                     $code = 400;
                     $data['message'] = 'Validation error.';
-                    $violations = $exception->getViolations();
-                    foreach ($violations as $violation) {
-                        $data['errors'][] = [
+
+                    $data['errors'] = array_map(
+                        fn (ConstraintViolationInterface $violation) => [
                             'propertyPath' => $violation->getPropertyPath(),
                             'message'      => $violation->getMessageTemplate(),
                             'parameters'   => $violation->getParameters(),
-                        ];
-                    }
+                        ],
+                        iterator_to_array($exception->getViolations())
+                    );
                     break;
                 case $exception instanceof AccessDeniedException:
                     $code = 403;

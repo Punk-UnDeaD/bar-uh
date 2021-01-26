@@ -15,10 +15,11 @@ use Faker\Factory;
 
 class ImageFixtures extends Fixture
 {
-    public function load(ObjectManager $manager):void
+    public function load(ObjectManager $manager): void
     {
         $faker = Factory::create();
         for ($i = 0; $i < 1000000; ++$i) {
+            /** @var string $ext */
             $ext = $faker->randomElement(['jpeg', 'png', 'gif']);
             $image = new Image(
                 Id::next(),
@@ -31,7 +32,10 @@ class ImageFixtures extends Fixture
                 new ImageInfo($faker->numberBetween(800, 1200), $faker->numberBetween(600, 1000), $faker->text(80)),
                 DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-5 weeks'))
             );
-            $image->setTags(array_unique(array_filter(preg_split('/[^\w]+/', $faker->text(20))?:[])));
+
+            /** @var list<string> $tags */
+            $tags = array_unique(array_filter(preg_split('/[^\w]+/', $faker->text(20)) ?: []));
+            $image->setTags($tags);
 
             $manager->persist($image);
         }

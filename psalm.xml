@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
 <psalm
-        errorLevel="2"
+        errorLevel="1"
         resolveFromConfigFile="true"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="https://getpsalm.org/schema/config"
         xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+        cacheDirectory="var/psalm-cache"
 >
     <projectFiles>
         <directory name="src"/>
@@ -17,7 +18,18 @@
         <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin"/>
         <pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin"/>
     </plugins>
-    <stubs>
-        <file name="stubs/EntityRepository.phpstub" />
-    </stubs>
+    <issueHandlers>
+        <MissingConstructor errorLevel="suppress" />
+        <PropertyNotSetInConstructor errorLevel="suppress" />
+        <UnresolvableInclude>
+            <errorLevel type="suppress">
+                <file name="src/Kernel.php" />
+            </errorLevel>
+        </UnresolvableInclude>
+    </issueHandlers>
+
+
+<!--    <stubs>-->
+<!--        <file name="stubs/EntityRepository.phpstub" />-->
+<!--    </stubs>-->
 </psalm>

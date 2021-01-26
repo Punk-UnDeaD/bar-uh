@@ -17,7 +17,7 @@ class Handler extends BaseCreateHandler implements MessageHandlerInterface
         $mimeType = $uploadedFile->getMimeType()?:'';
         Assert::regex($mimeType, '/^image/', "{$uploadedFile->getClientOriginalName()} not image");
         $name = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME).
-            '.'.$uploadedFile->guessExtension();
+            '.'.($uploadedFile->guessExtension()??'');
         return $this->persist($uploadedFile, $name, $mimeType);
     }
 }

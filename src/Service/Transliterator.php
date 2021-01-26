@@ -22,6 +22,7 @@ class Transliterator
     #[Pure] public function transliterate(string $s): string|false
     {
         foreach ($this->transliterators as $transliterator) {
+            /** @psalm-suppress ImpureMethodCall */
             $s = $transliterator->transliterate($s);
             if (false === $s) {
                 break;

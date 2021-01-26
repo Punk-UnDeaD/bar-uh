@@ -31,8 +31,8 @@ class ImageStyle
         $this->mainStorage = $imageMainStorage;
         $this->localCache = $cacheStorage;
     }
-
-    public function url(string $path): string
+    
+    #[Pure] public function url(string $path): string
     {
         return self::PREFIX.$path;
     }

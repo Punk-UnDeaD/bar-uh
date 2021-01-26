@@ -9,6 +9,7 @@ trait TagTrait
     use DataTrait;
 
     /**
+     * @psalm-suppress MixedInferredReturnType
      * @return list<string>
      */
     public function getTags(): array
@@ -17,9 +18,9 @@ trait TagTrait
     }
 
     /**
-     * @param list<string> $tags
+     * @param ?list<string> $tags
      */
-    public function setTags(array $tags = []): self
+    public function setTags(?array $tags = null): self
     {
         if ($tags) {
             $this->data['tags'] = $tags;

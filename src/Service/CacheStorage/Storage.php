@@ -48,7 +48,9 @@ class Storage extends Filesystem implements EventSubscriberInterface
     }
 
     /**
-     * @param array<string, mixed> $config
+     * @param string       $path
+     * @param resource     $resource
+     * @param array<mixed> $config
      */
     public function putStream($path, $resource, array $config = []): bool
     {
@@ -63,7 +65,9 @@ class Storage extends Filesystem implements EventSubscriberInterface
     }
 
     /**
-     * @param array<string, mixed> $config
+     * @param string       $path
+     * @param string       $contents
+     * @param array<mixed> $config
      */
     public function put($path, $contents, array $config = []): bool
     {
@@ -85,7 +89,9 @@ class Storage extends Filesystem implements EventSubscriberInterface
     }
 
     /**
-     * @param array<string, mixed> $config
+     * @param string       $path
+     * @param string       $contents
+     * @param array<mixed> $config
      */
     public function write($path, $contents, array $config = []): bool
     {
@@ -132,7 +138,9 @@ class Storage extends Filesystem implements EventSubscriberInterface
     }
 
     /**
-     * @param array<string, mixed> $config
+     * @param string       $path
+     * @param resource     $resource
+     * @param array<mixed> $config
      */
     public function writeStream($path, $resource, array $config = []): bool
     {

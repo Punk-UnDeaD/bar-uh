@@ -21,9 +21,13 @@ class ImageRow
         string $imageInfo,
         ?string $tags,
     ) {
-        $imageInfo = json_decode($imageInfo, true);
-        $this->imageInfo = new ImageInfo(...$imageInfo);
-        $this->tags = json_decode($tags ?? '[]');
+        /** @var array{width: int, height: int, alt?: string} $decodedImageInfo */
+        $decodedImageInfo = json_decode($imageInfo, true);
+        /** @psalm-suppress InvalidArgument false-positive */
+        $this->imageInfo = new ImageInfo(...$decodedImageInfo);
+        /** @var array<string> $tags */
+        $tags = json_decode($tags ?? '[]');
+        $this->tags = $tags;
     }
 
 }

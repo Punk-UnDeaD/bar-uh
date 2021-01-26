@@ -18,7 +18,7 @@ class IdType extends GuidType
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        return !empty($value) ? new Id($value) : null;
+        return !empty($value) ? new Id((string)$value) : null;
     }
 
     public function getName(): string

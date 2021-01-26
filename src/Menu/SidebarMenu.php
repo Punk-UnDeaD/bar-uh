@@ -20,8 +20,10 @@ class SidebarMenu implements ContainerAwareInterface
         $this->factory = $factory;
     }
 
-    /** @param array<mixed> $options
-     * @return \Knp\Menu\ItemInterface<?ItemInterface>
+    /**
+     * @param array<mixed> $options
+     * @phpstan-return \Knp\Menu\ItemInterface<?ItemInterface>
+     * @psalm-return \Knp\Menu\ItemInterface
      */
     public function build(array $options): ItemInterface
     {

@@ -33,5 +33,4 @@ class Handler implements MessageHandlerInterface
         $this->imageStyle->clean($path);
         $this->em->remove($image);
     }
-
 }

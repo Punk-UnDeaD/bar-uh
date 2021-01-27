@@ -6,9 +6,9 @@ namespace App\Service\Formatter;
 
 class ImageFormatter
 {
-    const PREFIX = '/storage/';
+    public const PREFIX = '/storage/';
 
-    const STYLE_PREFIX = '/assets/style/';
+    public const STYLE_PREFIX = '/assets/style/';
 
     public function uri(string $path): string
     {

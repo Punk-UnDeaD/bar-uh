@@ -19,6 +19,7 @@ class ImageRepository extends ServiceEntityRepository implements GetOneRepositor
 
     /**
      * @psalm-suppress MoreSpecificImplementedParamType
+     *
      * @param string $id
      */
     public function get($id): Image

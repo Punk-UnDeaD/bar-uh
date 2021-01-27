@@ -6,7 +6,6 @@ namespace App\Model\Media\Entity\DataType;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\JsonType;
-use JetBrains\PhpStorm\Pure;
 
 class ImageInfoType extends JsonType
 {
@@ -16,6 +15,7 @@ class ImageInfoType extends JsonType
      * @param string $value
      *
      * @psalm-suppress MoreSpecificImplementedParamType
+     *
      * @return ImageInfo
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
@@ -26,7 +26,6 @@ class ImageInfoType extends JsonType
         /** @psalm-suppress InvalidArgument false-positive */
         return new ImageInfo(...$value);
     }
-
 
     public function getName(): string
     {

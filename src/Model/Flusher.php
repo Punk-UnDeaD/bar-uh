@@ -9,7 +9,6 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class Flusher
 {
-
     #[Required] public EntityManagerInterface $em;
 
     #[Required] public EventDispatcher $dispatcher;

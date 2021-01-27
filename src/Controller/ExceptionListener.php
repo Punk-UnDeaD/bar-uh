@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\ReadModel\ReadModelNotFoundException;
 use App\Model\EntityNotFoundException;
-use http\Exception;
+use App\ReadModel\ReadModelNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Messenger\Exception\ValidationFailedException as MessengerValidationFailedException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ExceptionListener
 {
@@ -58,5 +57,4 @@ class ExceptionListener
             $event->setResponse(new JsonResponse($data, $code, $headers));
         }
     }
-
 }

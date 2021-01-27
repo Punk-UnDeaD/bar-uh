@@ -23,7 +23,6 @@ class Image
     use Field\IdTrait;
     use Field\DateTrait;
     use Field\FileInfoTrait;
-
     use TagTrait;
 
     /**

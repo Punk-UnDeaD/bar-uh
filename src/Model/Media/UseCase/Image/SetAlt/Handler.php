@@ -11,7 +11,6 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class Handler implements MessageHandlerInterface
 {
-
     #[Required]
     public ImageRepository $repository;
 
@@ -21,5 +20,4 @@ class Handler implements MessageHandlerInterface
 
         return $image->setImageInfo($image->getImageInfo()->setAlt($command->alt));
     }
-
 }

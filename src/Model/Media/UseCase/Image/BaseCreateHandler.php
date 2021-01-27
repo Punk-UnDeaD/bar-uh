@@ -29,8 +29,7 @@ abstract class BaseCreateHandler
         $size = $uploadedFile->getSize();
         $id = Id::next();
         $this->em->persist(
-            $image
-                = new Image(
+            $image = new Image(
                 $id,
                 new FileInfo(
                     $this->uploader->saveUploaded($id->getValue(), $uploadedFile),

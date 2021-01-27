@@ -29,5 +29,4 @@ class ImageRow
         $tags = json_decode($tags ?? '[]');
         $this->tags = $tags;
     }
-
 }

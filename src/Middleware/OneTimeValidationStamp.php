@@ -8,5 +8,4 @@ use Symfony\Component\Messenger\Stamp\StampInterface;
 
 class OneTimeValidationStamp implements StampInterface
 {
-
 }

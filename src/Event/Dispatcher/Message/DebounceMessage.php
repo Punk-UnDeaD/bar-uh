@@ -9,7 +9,9 @@ class DebounceMessage
     private object $event;
 
     private int $time;
+
     private string $id;
+
     private string $name;
 
     public function __construct(object $event, string $id, ?string $name = null)

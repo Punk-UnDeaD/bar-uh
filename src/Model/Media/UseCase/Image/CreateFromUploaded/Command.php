@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Command
 {
-
     public function __construct(public UploadedFile $file)
     {
     }

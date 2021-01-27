@@ -10,7 +10,6 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class Handler implements MessageHandlerInterface
 {
-
     private FilesystemInterface $styleStorage;
 
     public function __construct(

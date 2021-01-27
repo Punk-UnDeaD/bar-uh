@@ -7,5 +7,6 @@ namespace App\ReadModel\Media\Filter;
 class Filter
 {
     public ?string $mime = null;
+
     public ?string $tag = null;
 }

@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\File\File;
 
 class Adapter extends Local
 {
-
     /** @var array<array<int>> */
     protected static $permissions
         = [

@@ -8,7 +8,6 @@ use App\Attribute\RequiresCsrf;
 use App\Model\Media\UseCase\Image\DraftCreate;
 use App\Model\Media\UseCase\Image\DraftDelete;
 use App\Model\Media\UseCase\Image\ReplaceByDraft;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -45,5 +44,4 @@ class DraftController extends AbstractController
 
         return $this->json(['status' => 'ok', 'reload' => true]);
     }
-
 }

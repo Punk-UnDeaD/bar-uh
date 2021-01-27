@@ -27,7 +27,6 @@ class FileInfo
     private string $mime;
 
     /**
-     * @var int
      * @ORM\Column(type="integer")
      */
     private int $size;

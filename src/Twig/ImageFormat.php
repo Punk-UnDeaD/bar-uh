@@ -12,8 +12,6 @@ use Twig\TwigFilter;
 
 class ImageFormat extends AbstractExtension
 {
-
-
     public function __construct(private ImageFormatter $formatter, private ImageStyle $imageStyle)
     {
     }
@@ -26,10 +24,11 @@ class ImageFormat extends AbstractExtension
         ];
     }
 
-    #[Pure] public function imageMainUrl(string $path): string
-    {
-        return $this->imageStyle->url($path);
-    }
+    #[Pure]
+ public function imageMainUrl(string $path): string
+ {
+     return $this->imageStyle->url($path);
+ }
 
     public function imageStyleUrl(string $path, string $style, ?string $ext = null): string
     {

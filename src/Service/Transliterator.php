@@ -8,7 +8,6 @@ use JetBrains\PhpStorm\Pure;
 
 class Transliterator
 {
-
     /**
      * @var array<\Transliterator>
      */
@@ -19,16 +18,17 @@ class Transliterator
         $this->transliterators = $transliterators;
     }
 
-    #[Pure] public function transliterate(string $s): string|false
-    {
-        foreach ($this->transliterators as $transliterator) {
-            /** @psalm-suppress ImpureMethodCall */
-            $s = $transliterator->transliterate($s);
-            if (false === $s) {
-                break;
-            }
-        }
+    #[Pure]
+ public function transliterate(string $s): string | false
+ {
+     foreach ($this->transliterators as $transliterator) {
+         /** @psalm-suppress ImpureMethodCall */
+         $s = $transliterator->transliterate($s);
+         if (false === $s) {
+             break;
+         }
+     }
 
-        return $s;
-    }
+     return $s;
+ }
 }

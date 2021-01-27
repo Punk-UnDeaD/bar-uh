@@ -12,12 +12,12 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20201029200436 extends AbstractMigration
 {
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return '';
     }
 
-    public function up(Schema $schema) : void
+    public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE media_images (id UUID NOT NULL, image_info JSON NOT NULL, date TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, data JSONB DEFAULT \'{}\' NOT NULL, info_path VARCHAR(255) NOT NULL, info_name VARCHAR(255) NOT NULL, info_mime VARCHAR(255) NOT NULL, info_size INT NOT NULL, PRIMARY KEY(id))');
@@ -45,7 +45,7 @@ final class Version20201029200436 extends AbstractMigration
         $this->addSql('COMMIT;');
     }
 
-    public function down(Schema $schema) : void
+    public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');

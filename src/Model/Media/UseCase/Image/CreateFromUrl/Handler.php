@@ -6,7 +6,6 @@ namespace App\Model\Media\UseCase\Image\CreateFromUrl;
 
 use App\Model\Media\Entity\Image;
 use App\Model\Media\UseCase\Image\BaseCreateHandler;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -15,7 +14,6 @@ use Webmozart\Assert\Assert;
 
 class Handler extends BaseCreateHandler implements MessageHandlerInterface
 {
-
     #[Required] public HttpClientInterface $client;
 
     public function __invoke(Command $command): Image
@@ -31,10 +29,9 @@ class Handler extends BaseCreateHandler implements MessageHandlerInterface
         /** @var string $ext */
         $ext = $uploadedFile->guessExtension();
         $name = urldecode(
-                pathinfo(basename(parse_url($command->url, PHP_URL_PATH) ?: md5($command->url)), PATHINFO_FILENAME)
-            ).'.'.$ext;
+            pathinfo(basename(parse_url($command->url, PHP_URL_PATH) ?: md5($command->url)), PATHINFO_FILENAME)
+        ).'.'.$ext;
 
         return $this->persist($uploadedFile, $name, $mimeType);
     }
-
 }

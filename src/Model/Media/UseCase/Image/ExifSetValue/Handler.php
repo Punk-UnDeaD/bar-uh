@@ -23,5 +23,4 @@ class Handler implements MessageHandlerInterface
 
         $this->exifEditor->setExifProperty($image->getInfo()->getPath(), $command->key, $command->value);
     }
-
 }

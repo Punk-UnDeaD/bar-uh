@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\ReadModel;
 
+use Countable;
 use Doctrine\DBAL\Driver\Result;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Iterator;
 
 /**
  * @implements \Iterator<mixed>
  */
-class Paginator implements \Countable, \Iterator
+class Paginator implements Countable, Iterator
 {
     private QueryBuilder $query;
 
@@ -132,5 +134,4 @@ class Paginator implements \Countable, \Iterator
 
         return $this;
     }
-
 }

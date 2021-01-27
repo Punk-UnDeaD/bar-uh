@@ -80,7 +80,7 @@ class ExifEditor
                     if ('UserComment' !== $k) {
                         $v = $this->transliterator->transliterate($v);
                     }
-                    $v = '"'.addcslashes($v?:'', '"').'"';
+                    $v = '"'.addcslashes($v ?: '', '"').'"';
                 }
 
                 return "-{$k}={$v}";

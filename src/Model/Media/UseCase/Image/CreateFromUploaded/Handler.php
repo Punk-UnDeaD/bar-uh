@@ -14,10 +14,11 @@ class Handler extends BaseCreateHandler implements MessageHandlerInterface
     public function __invoke(Command $command): Image
     {
         $uploadedFile = $command->file;
-        $mimeType = $uploadedFile->getMimeType()?:'';
+        $mimeType = $uploadedFile->getMimeType() ?: '';
         Assert::regex($mimeType, '/^image/', "{$uploadedFile->getClientOriginalName()} not image");
         $name = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME).
-            '.'.($uploadedFile->guessExtension()??'');
+            '.'.($uploadedFile->guessExtension() ?? '');
+
         return $this->persist($uploadedFile, $name, $mimeType);
     }
 }

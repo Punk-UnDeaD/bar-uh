@@ -11,7 +11,6 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class ImageFetcher
 {
-
     #[Required]
     public Connection $connection;
 
@@ -57,9 +56,8 @@ class ImageFetcher
         }
 
         return (new Paginator($qb, $page, $size))->setCallback(
-        /** @param array<string, mixed> $row */
+        /* @param array<string, mixed> $row */
             fn (array $row): ImageRow => $this->denormalizer->denormalize($row, ImageRow::class)
         );
     }
-
 }

@@ -12,7 +12,6 @@ use Symfony\Component\Messenger\Stamp\DelayStamp;
 
 class MessengerEventDispatcher implements EventDispatcher
 {
-
     public function __construct(private MessageBusInterface $bus)
     {
     }
@@ -26,7 +25,7 @@ class MessengerEventDispatcher implements EventDispatcher
             $this->bus->dispatch(new Message($event));
         }
     }
-    
+
     /**
      * @param array<object> $events
      */

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Model\Media\Entity\DataType;
 
-use Ramsey\Uuid\Uuid;
+use JsonSerializable;
 use Webmozart\Assert\Assert;
 
-class Id implements \JsonSerializable
+class Id implements JsonSerializable
 {
     private string $value;
 

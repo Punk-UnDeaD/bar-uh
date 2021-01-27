@@ -11,9 +11,9 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class ImageStyle
 {
-    const PREFIX = 'https://bar-uh-dev.website.yandexcloud.net/assets/image/';
+    public const PREFIX = 'https://bar-uh-dev.website.yandexcloud.net/assets/image/';
 
-    const STYLE_PREFIX = 'https://bar-uh-dev.website.yandexcloud.net/assets/style/';
+    public const STYLE_PREFIX = 'https://bar-uh-dev.website.yandexcloud.net/assets/style/';
 
     private FilesystemInterface $styleStorage;
 
@@ -31,11 +31,12 @@ class ImageStyle
         $this->mainStorage = $imageMainStorage;
         $this->localCache = $cacheStorage;
     }
-    
-    #[Pure] public function url(string $path): string
-    {
-        return self::PREFIX.$path;
-    }
+
+    #[Pure]
+ public function url(string $path): string
+ {
+     return self::PREFIX.$path;
+ }
 
     public function styleUrl(string $path, string $style, ?string $ext = null): string
     {
@@ -50,7 +51,7 @@ class ImageStyle
         return "{$path['dirname']}/{$path['filename']}/$style.{$ext}";
     }
 
-    public function styleFile(string $path, string $style, string $ext, string|int ...$params): string
+    public function styleFile(string $path, string $style, string $ext, string | int ...$params): string
     {
         $style_path = match ($style) {
             'width' => $this->stylePath($path, (string)$params[0], $ext),
@@ -77,7 +78,7 @@ class ImageStyle
                         default => $local.'[0]'
                     },
                     match ($ext) {
-                        'jpg' => '-quality 85',
+                        'jpg'   => '-quality 85',
                         default => '-quality 95',
                     },
                     $this->{$style}($dimensions, ...$params),
@@ -100,10 +101,11 @@ class ImageStyle
         return $this->localCache->getLocalCopy($path, $this->mainStorage);
     }
 
-    #[Pure] private function canSkip(string $path, string $style, string $ext): bool
-    {
-        return 'self' === $style && 'jpeg' !== $ext && $ext === pathinfo($path, PATHINFO_EXTENSION);
-    }
+    #[Pure]
+ private function canSkip(string $path, string $style, string $ext): bool
+ {
+     return 'self' === $style && 'jpeg' !== $ext && $ext === pathinfo($path, PATHINFO_EXTENSION);
+ }
 
     public function clean(string $path): void
     {

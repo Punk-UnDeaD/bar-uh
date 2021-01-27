@@ -13,7 +13,7 @@ class Handler implements MessageHandlerInterface
 {
     #[Required]
     public ExifEditor $exifEditor;
-    
+
     #[Required]
     public ImageRepository $repository;
 
@@ -21,7 +21,6 @@ class Handler implements MessageHandlerInterface
     {
         $image = $this->repository->get($command->id);
 
-        $this->exifEditor->cleanExif($image->getInfo()->getPath(),  $command->tag);
+        $this->exifEditor->cleanExif($image->getInfo()->getPath(), $command->tag);
     }
-
 }

@@ -22,6 +22,7 @@ class SidebarMenu implements ContainerAwareInterface
 
     /**
      * @param array<mixed> $options
+     *
      * @phpstan-return \Knp\Menu\ItemInterface<?ItemInterface>
      * @psalm-return \Knp\Menu\ItemInterface
      */

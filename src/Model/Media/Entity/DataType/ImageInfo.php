@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Model\Media\Entity\DataType;
 
-class ImageInfo implements \JsonSerializable
+use JsonSerializable;
+
+class ImageInfo implements JsonSerializable
 {
     private int $width;
 
@@ -36,14 +38,14 @@ class ImageInfo implements \JsonSerializable
 
     public function setAlt(?string $alt): self
     {
-        if($this->alt === $alt)
+        if ($this->alt === $alt) {
             return $this;
+        }
         $clone = clone $this;
         $clone->alt = $alt;
-        
+
         return $clone;
     }
-
 
     /**
      * @return array<string, int|string>

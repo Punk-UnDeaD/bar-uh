@@ -1,18 +1,20 @@
 <?php
 
 $finder = PhpCsFixer\Finder::create()
-    ->in(__DIR__)
+    ->in(__DIR__.'/src')
     ->exclude('var')
 ;
 
 return PhpCsFixer\Config::create()
     ->setRules([
-        '@Symfony' => true,
-        'array_syntax' => ['syntax' => 'short'],
+        '@Symfony'                  => true,
+        '@PSR12'                    => true,
+        'array_syntax'              => ['syntax' => 'short'],
         'single_line_comment_style' => [],
-        'cast_spaces' => ['space' => 'none'],
-        'binary_operator_spaces' => [
-            'operators' => ['=>' => 'align_single_space']
+        'phpdoc_to_comment'         => false,
+        'cast_spaces'               => ['space' => 'none'],
+        'binary_operator_spaces'    => [
+            'operators' => ['=>' => 'align_single_space'],
         ],
     ])
     ->setFinder($finder)

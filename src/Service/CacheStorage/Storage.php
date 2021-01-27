@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service\CacheStorage;
 
 use App\Event\Dispatcher\MessengerEventDispatcher;
+use DomainException;
 use JetBrains\PhpStorm\ArrayShape;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
@@ -184,15 +185,15 @@ class Storage extends Filesystem implements EventSubscriberInterface
         return $this->delete($path.'-draft');
     }
 
-
     /**
      * @param string $path
      *
      * @return resource
+     *
      * @throws \League\Flysystem\FileNotFoundException
      */
     public function readStream($path)
     {
-        return parent::readStream($path) ?: throw new \DomainException("Can't open file.`{$path}`");
+        return parent::readStream($path) ?: throw new DomainException("Can't open file.`{$path}`");
     }
 }

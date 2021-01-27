@@ -6,14 +6,12 @@ namespace App\Model\Media\UseCase\Image\DraftCreate;
 
 use App\Model\Media\Entity\Repository\ImageRepository;
 use App\Service\CacheStorage\Storage;
-use App\Service\ExifEditor;
 use League\Flysystem\FilesystemInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class Handler implements MessageHandlerInterface
 {
-
     #[Required] public ImageRepository $repository;
 
     #[Required] public Storage $storage;
@@ -26,5 +24,4 @@ class Handler implements MessageHandlerInterface
 
         return $this->storage->getDraft($image->getInfo()->getPath(), $this->imageMainStorage);
     }
-
 }

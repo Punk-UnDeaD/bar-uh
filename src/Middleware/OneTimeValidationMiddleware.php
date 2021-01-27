@@ -10,7 +10,6 @@ use Symfony\Component\Messenger\Middleware\ValidationMiddleware;
 
 class OneTimeValidationMiddleware extends ValidationMiddleware
 {
-
     public function handle(Envelope $envelope, StackInterface $stack): Envelope
     {
         if ($envelope->all(OneTimeValidationStamp::class)) {

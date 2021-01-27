@@ -10,7 +10,6 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class RequiresCsrfSubscriber extends BaseAttributeChecker
 {
-
     private CsrfTokenManagerInterface $csrfTokenManager;
 
     public function __construct(
@@ -21,6 +20,7 @@ class RequiresCsrfSubscriber extends BaseAttributeChecker
 
     /**
      * @psalm-suppress MoreSpecificImplementedParamType
+     *
      * @param RequiresCsrf $annotation
      */
     protected function checkAttribute(ControllerArgumentsEvent $event, object $annotation): void

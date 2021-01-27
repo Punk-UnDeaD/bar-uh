@@ -25,5 +25,4 @@ class Handler implements MessageHandlerInterface
         $this->localCache->clean($path);
         $this->imageStyle->clean($path);
     }
-
 }

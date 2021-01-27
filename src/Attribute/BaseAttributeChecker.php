@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Attribute;
 
+use ReflectionClass;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -40,7 +41,7 @@ abstract class BaseAttributeChecker implements EventSubscriberInterface
      */
     private function getAttribute(object $controller, string $method): ?object
     {
-        $controllerReflection = new \ReflectionClass($controller);
+        $controllerReflection = new ReflectionClass($controller);
         $attributeClass = $this->getAttributeClass();
         if ($attributes = $controllerReflection->getMethod($method)->getAttributes($attributeClass)
             ?: $controllerReflection->getAttributes($attributeClass)

@@ -11,7 +11,6 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class Handler implements MessageHandlerInterface
 {
-
     #[Required]
     public ImageRepository $repository;
 

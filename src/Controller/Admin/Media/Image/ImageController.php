@@ -7,18 +7,19 @@ namespace App\Controller\Admin\Media\Image;
 use App\Attribute\Guid;
 use App\Attribute\RequiresCsrf;
 use App\Model\Media\Entity\Image;
+use App\Model\Media\UseCase\Image\CleanStyles;
 use App\Model\Media\UseCase\Image\CreateFromUploaded;
 use App\Model\Media\UseCase\Image\CreateFromUrl;
+use App\Model\Media\UseCase\Image\Delete;
 use App\Model\Media\UseCase\Image\ExifClean;
 use App\Model\Media\UseCase\Image\ExifSetValue;
-use App\Model\Media\UseCase\Image\Delete;
 use App\Model\Media\UseCase\Image\SetAlt;
 use App\Model\Media\UseCase\Image\SetTags;
-use App\Model\Media\UseCase\Image\CleanStyles;
 use App\ReadModel\Media\Filter;
 use App\ReadModel\Media\ImageFetcher;
 use App\Service\CacheStorage\Storage;
 use App\Service\ExifEditor;
+use Exception;
 use League\Flysystem\FilesystemInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -35,7 +36,7 @@ class ImageController extends AbstractController
     #[Route(path: '', name: '')]
     public function index(
         Request $request,
-        ImageFetcher $fetcher
+        ImageFetcher $fetcher,
     ): Response {
         $filter = new Filter\Filter();
         $form = $this->createForm(Filter\Form::class, $filter);
@@ -45,7 +46,7 @@ class ImageController extends AbstractController
             $request->query->getInt('page', 1),
             self::PER_PAGE,
             $request->query->get('order_by', ''),
-            $request->query->getAlpha('direction', 'ASC')
+            $request->query->getAlpha('direction', 'ASC'),
         );
 
         return $this->render(
@@ -60,7 +61,7 @@ class ImageController extends AbstractController
     #[Route(path: '/{image}', name: '.show', requirements: ['image' => Guid::PATTERN], methods: ['GET'])]
     public function show(
         Image $image,
-        Storage $storage
+        Storage $storage,
     ): Response {
         return $this->render(
             'admin/media/image/show.html.twig',
@@ -74,7 +75,7 @@ class ImageController extends AbstractController
     #[Route(path: '/{id}', name: '.delete', requirements: ['image' => Guid::PATTERN], methods: ['DELETE'])]
     #[RequiresCsrf()]
     public function delete(
-        Delete\Command $command
+        Delete\Command $command,
     ): JsonResponse {
         $this->dispatchMessage($command);
 
@@ -91,7 +92,7 @@ class ImageController extends AbstractController
             try {
                 $this->dispatchMessage(new CreateFromUploaded\Command($file));
                 $this->addFlash('success', "File {$file->getClientOriginalName()} saved.");
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->addFlash('warning', $e->getMessage());
             }
         } elseif ($url = $request->request->get('url')) {
@@ -111,7 +112,7 @@ class ImageController extends AbstractController
     #[Route(path: '/{image}/setTags', name: '.setTags', format: 'json')]
     #[RequiresCsrf]
     public function setTags(
-        SetTags\Command $command
+        SetTags\Command $command,
     ): JsonResponse {
         $this->dispatchMessage($command);
 
@@ -121,7 +122,7 @@ class ImageController extends AbstractController
     #[Route(path: '/{image}/setAlt', name: '.setAlt', format: 'json')]
     #[RequiresCsrf()]
     public function setAlt(
-        SetAlt\Command $command
+        SetAlt\Command $command,
     ): JsonResponse {
         $this->dispatchMessage($command);
 
@@ -131,19 +132,18 @@ class ImageController extends AbstractController
     #[Route(path: '/{id}/cleanStyles', name: '.cleanStyles', format: 'json')]
     #[RequiresCsrf()]
     public function cleanStyles(
-        CleanStyles\Command $command
+        CleanStyles\Command $command,
     ): JsonResponse {
         $this->dispatchMessage($command);
 
         return $this->json(['status' => 'ok']);
     }
 
-
     #[Route(path: '/{image}/exif', name: '.exif')]
     public function exif(
         Image $image,
         Storage $storage,
-        ExifEditor $exifEditor
+        ExifEditor $exifEditor,
     ): Response {
         return $this->render(
             'admin/media/image/exif.html.twig',
@@ -155,12 +155,11 @@ class ImageController extends AbstractController
         );
     }
 
-
     #[Route(path: '/{image}/draft', name: '.draft')]
     public function draft(
         Image $image,
         Storage $storage,
-        FilesystemInterface $imageMainStorage
+        FilesystemInterface $imageMainStorage,
     ): Response {
         $draft = $storage->getDraft($image->getInfo()->getPath(), $imageMainStorage);
 
@@ -179,7 +178,7 @@ class ImageController extends AbstractController
     public function draftDelete(
         Image $image,
         Storage $storage,
-        FilesystemInterface $imageMainStorage
+        FilesystemInterface $imageMainStorage,
     ): Response {
         $draft = $storage->getDraft($image->getInfo()->getPath(), $imageMainStorage);
 
@@ -196,7 +195,7 @@ class ImageController extends AbstractController
     #[Route(path: '/{id}/exif/clean', name: '.exif.clean', format: 'json')]
     #[RequiresCsrf()]
     public function exifClean(
-        ExifClean\Command $command
+        ExifClean\Command $command,
     ): Response {
         $this->dispatchMessage($command);
 
@@ -206,7 +205,7 @@ class ImageController extends AbstractController
     #[Route(path: '/{id}/exif/setValue', name: '.exif.setValue', format: 'json')]
     #[RequiresCsrf()]
     public function exifSetValue(
-        ExifSetValue\Command $command
+        ExifSetValue\Command $command,
     ): Response {
         $this->dispatchMessage($command);
 

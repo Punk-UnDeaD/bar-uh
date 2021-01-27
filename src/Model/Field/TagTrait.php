@@ -10,6 +10,7 @@ trait TagTrait
 
     /**
      * @psalm-suppress MixedInferredReturnType
+     *
      * @return list<string>
      */
     public function getTags(): array
@@ -30,5 +31,4 @@ trait TagTrait
 
         return $this;
     }
-
 }

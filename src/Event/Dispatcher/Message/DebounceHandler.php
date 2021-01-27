@@ -21,7 +21,7 @@ class DebounceHandler implements MessageHandlerInterface
         $this->dispatcher = $dispatcher;
     }
 
-    public function __invoke(DebounceMessage $message):void
+    public function __invoke(DebounceMessage $message): void
     {
         $id = "{$message->getName()}:{$message->getId()}";
         $last = $this->log[$id] ?? 0;

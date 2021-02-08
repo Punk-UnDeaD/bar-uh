@@ -27,6 +27,10 @@ Encore
     .addEntry('app', './assets/app/index.js')
     .addEntry('admin', './assets/app/admin.js')
     .addEntry('x-auto-password', './assets/components/x-auto-password.js')
+    .addEntry('x-auto-save-button', './assets/components/x-auto-save-button.js')
+    .addEntry('x-js-button', './assets/components/x-js-button.js')
+    .addEntry('x-picture', './assets/components/x-picture.js')
+    .addEntry('x-file-drop', './assets/components/x-file-drop.js')
 
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')

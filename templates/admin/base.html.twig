@@ -1,4 +1,5 @@
 {% import 'admin/_partials/breadcrumb.html.twig' as breadcrumb %}
+{{- addEntry('admin') -}}
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,9 +7,17 @@
   {% set title %}{% block title %}Dashboard{% endblock %}{% endset %}
   <title>{% block head_title %}{{ title }} | Admin | Bar-Uh{% endblock %}</title>
   <meta content="initial-scale=1, width=device-width" name="viewport"/>
-  {% block stylesheets %}
-    {{ encore_entry_link_tags('admin') }}
-  {% endblock %}
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    {{- addGoogleFontLink('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;1,400;1,600&display=swap') -}}
+    {%- block entries deferred -%}
+    {%- set entries = flushEntries() -%}
+    {%- for entry in entries -%}
+        {{- encore_entry_link_tags(entry) -}}
+    {%- endfor -%}
+    {%- for entry in entries -%}
+        {{- encore_entry_script_tags(entry) -}}
+    {%- endfor -%}
+    {% endblock -%}
 </head>
 <body>
 {% block header %}
@@ -51,6 +60,5 @@
   {% endblock %}
 </footer>
 
-{% block javascripts %}{{ encore_entry_script_tags('admin') }}{% endblock %}
 </body>
 </html>

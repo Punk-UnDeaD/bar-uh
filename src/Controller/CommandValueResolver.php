@@ -74,7 +74,7 @@ class CommandValueResolver implements ArgumentValueResolverInterface
      */
     private function extractData(Request $request): array | bool | int | float | string | null
     {
-        /* @psalm-suppress MixedReturnStatement */
+        /** @psalm-suppress MixedReturnStatement */
         return match (true) {
             ('json' === $request->getContentType()) => json_decode($request->getContent(), true),
             str_starts_with(

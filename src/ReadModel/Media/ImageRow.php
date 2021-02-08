@@ -26,7 +26,7 @@ class ImageRow
         /** @psalm-suppress InvalidArgument false-positive */
         $this->imageInfo = new ImageInfo(...$decodedImageInfo);
         /** @var array<string> $tags */
-        $tags = json_decode($tags ?? '[]');
+        $tags = json_decode($tags ?? '[]', true);
         $this->tags = $tags;
     }
 }

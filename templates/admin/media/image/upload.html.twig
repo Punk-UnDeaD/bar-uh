@@ -7,6 +7,7 @@
 {%- endblock -%}
 
 {% block content %}
+  {{ addEntry('x-file-drop') }}
   <x-file-drop class="theme--success" for="form_files" clipboard data-csrf="{{ csrf_token("admin.media.image.upload") }}">
     <input type="file" multiple>
   </x-file-drop>

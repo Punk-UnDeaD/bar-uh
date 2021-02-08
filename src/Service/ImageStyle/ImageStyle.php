@@ -33,10 +33,10 @@ class ImageStyle
     }
 
     #[Pure]
- public function url(string $path): string
- {
-     return self::PREFIX.$path;
- }
+     public function url(string $path): string
+     {
+         return self::PREFIX.$path;
+     }
 
     public function styleUrl(string $path, string $style, ?string $ext = null): string
     {

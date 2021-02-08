@@ -17,7 +17,7 @@ class Command
         if (is_string($value)) {
             $value = array_filter(array_map('trim', explode(',', $value)));
         }
-        /* @var list<string> $value */
+        /** @var list<string> $value */
         $this->tags = $value;
     }
 }

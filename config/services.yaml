@@ -73,3 +73,18 @@ services:
 
     App\Service\Transliterator:
         arguments: ['@transliterator.any_to_latin', '@transliterator.latin_to_ascii']
+
+    Twig\DeferredExtension\DeferredExtension:
+        tags:
+            - { name: twig.extension }
+
+    App\Twig\WebLinkExtension:
+        tags:
+            - { name: twig.extension }
+            - { name: kernel.reset, method: reset }
+        arguments: [ '@twig.extension.weblink' ]
+
+    App\Twig\HoarderExtension:
+        tags:
+            - { name: twig.extension }
+            - { name: kernel.reset, method: reset }

@@ -1,4 +1,5 @@
 {% macro picture(image) %}
+  {{ addEntry('x-picture') }}
   <picture is="x-picture" data-pixel=1 data-adaptive=1 data-typography-height=1
            data-width="{{ image.imageInfo.width }}"
            data-height="{{ image.imageInfo.height }}"
@@ -11,6 +12,7 @@
         width="{{ image.imageInfo.width }}" height="{{ image.imageInfo.height }}"
         src="{{ image.info.path|image_main_url }}" alt="{{ image.imageInfo.alt }}" loading=lazy>
   </picture>
+  {{ addPreconnect('https://bar-uh-dev.website.yandexcloud.net/') }}
 {% endmacro %}
 
 

@@ -56,7 +56,7 @@ class ImageFetcher
         }
 
         return (new Paginator($qb, $page, $size))->setCallback(
-        /* @param array<string, mixed> $row */
+            /** @param array<string, mixed> $row */
             fn (array $row): ImageRow => $this->denormalizer->denormalize($row, ImageRow::class)
         );
     }

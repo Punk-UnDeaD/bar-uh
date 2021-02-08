@@ -1,10 +1,6 @@
 import '../components/x-class-toggler'
 import '../components/x-auto-toggler'
-import '../components/x-js-button'
-import '../components/x-auto-save-button'
 import '../components/x-icon/x-icon'
-import '../components/x-picture'
-import '../components/x-file-drop'
 import '../components/x-messages/x-messages'
 
 require('./reset.scss')

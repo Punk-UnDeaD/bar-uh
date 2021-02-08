@@ -34,10 +34,8 @@ class ImageController extends AbstractController
     private const PER_PAGE = 30;
 
     #[Route(path: '', name: '')]
-    public function index(
-        Request $request,
-        ImageFetcher $fetcher,
-    ): Response {
+    public function index(Request $request, ImageFetcher $fetcher): Response
+    {
         $filter = new Filter\Filter();
         $form = $this->createForm(Filter\Form::class, $filter);
         $form->handleRequest($request);

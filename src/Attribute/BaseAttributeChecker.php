@@ -9,6 +9,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
+/** @template T of object */
 abstract class BaseAttributeChecker implements EventSubscriberInterface
 {
     public static function getSubscribedEvents(): array
@@ -24,38 +25,40 @@ abstract class BaseAttributeChecker implements EventSubscriberInterface
             return;
         }
 
-        /** @var array{object, string}|callable $target */
-        $target = $event->getController();
+        /** @var array{object, string}|callable $controller */
+        $controller = $event->getController();
 
-        if (!is_array($target) || !is_object($target[0])) {
+        if (!is_array($controller) || !is_object($controller[0])) {
             return;
         }
-        /** @psalm-suppress MixedArgument */
-        if ($attribute = $this->getAttribute(...$target)) {
+        if ($attribute = $this->getAttribute($controller[0], $controller[1])) {
             $this->checkAttribute($event, $attribute);
         }
     }
 
     /**
+     * @return ?T
+     *
      * @throws \ReflectionException
      */
     private function getAttribute(object $controller, string $method): ?object
     {
         $controllerReflection = new ReflectionClass($controller);
         $attributeClass = $this->getAttributeClass();
-        if ($attributes = $controllerReflection->getMethod($method)->getAttributes($attributeClass)
-            ?: $controllerReflection->getAttributes($attributeClass)
-        ) {
-            return $attributes[0]->newInstance();
+        $attributes = $controllerReflection->getMethod($method)->getAttributes($attributeClass)
+            ?: $controllerReflection->getAttributes($attributeClass);
+        if (empty($attributes)) {
+            return null;
         }
+        /** @var T $attribute */
+        $attribute = $attributes[0]->newInstance();
 
-        return null;
+        return $attribute;
     }
 
-    /**
-     * @return class-string
-     */
+    /** @return class-string<T> */
     abstract protected function getAttributeClass(): string;
 
-    abstract protected function checkAttribute(ControllerArgumentsEvent $event, object $annotation): void;
+    /** @param T $attribute */
+    abstract protected function checkAttribute(ControllerArgumentsEvent $event, object $attribute): void;
 }

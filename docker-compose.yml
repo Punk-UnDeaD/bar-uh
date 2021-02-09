@@ -1,29 +1,46 @@
 version: "3"
 services:
-  nginx:
-    image: wodby/nginx:$NGINX_TAG
-    container_name: "${PROJECT_NAME}_nginx"
+#  nginx:
+#    image: wodby/nginx:$NGINX_TAG
+#    container_name: "${PROJECT_NAME}_nginx"
+#    depends_on:
+#      - php
+#    environment:
+#      NGINX_BACKEND_HOST: php
+#      NGINX_SERVER_ROOT: /var/www/html/public
+#      NGINX_VHOST_PRESET: php
+#    volumes:
+#      - .:/var/www/html
+#      - ./etc/nginx/gotpl/presets/php.conf.tmpl:/etc/gotpl/presets/php.conf.tmpl
+#      - ./etc/nginx/gotpl/nginx.conf.tmpl:/etc/gotpl/nginx.conf.tmpl
+#    labels:
+#      - 'traefik.frontend.rule=Host:${PROJECT_BASE_URL}'
+
+  php:
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+
     depends_on:
-      - php
-    environment:
-      NGINX_BACKEND_HOST: php
-      NGINX_SERVER_ROOT: /var/www/html/public
-      NGINX_VHOST_PRESET: php
+      - rabbitmq
+      - postgres
+      - redis
     volumes:
       - .:/var/www/html
-      - ./etc/nginx/gotpl/presets/php.conf.tmpl:/etc/gotpl/presets/php.conf.tmpl
-      - ./etc/nginx/gotpl/nginx.conf.tmpl:/etc/gotpl/nginx.conf.tmpl
+      - ./etc/php/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./etc/php/docker-php-ext-opcache.ini:/usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
+      - ./etc/php/php.ini:/usr/local/etc/php/php.ini
     labels:
       - 'traefik.frontend.rule=Host:${PROJECT_BASE_URL}'
 
   php-workers:
     build:
-      context: ./docker/php-workers
-      dockerfile: Docker
+      context: ./docker/php
     container_name: "${PROJECT_NAME}_php_workers"
     depends_on:
       - rabbitmq
       - postgres
+      - redis
     environment:
       COLUMNS: 160 # Set 80 columns for docker exec -it.
     volumes:
@@ -31,18 +48,8 @@ services:
       - ./etc/php/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
       - ./etc/php/docker-php-ext-opcache.ini:/usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
       - ./etc/php/php.ini:/usr/local/etc/php/php.ini
+    command: sh -c /worker.sh
 
-  php:
-    build:
-      context: ./docker/php
-      dockerfile: Docker
-    environment:
-      COLUMNS: 160 # Set 80 columns for docker exec -it.
-    volumes:
-      - .:/var/www/html
-      - ./etc/php/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-      - ./etc/php/docker-php-ext-opcache.ini:/usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
-#      - ./etc/php/php.ini:/usr/local/etc/php/php.ini
   node:
     image: wodby/node:$NODE_TAG
     volumes:

@@ -14,11 +14,8 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 class CommandValueResolver implements ArgumentValueResolverInterface
 {
     #[Pure]
-    public function supports(
-        Request $request,
-        ArgumentMetadata $argument
-    ): bool {
-        /** @psalm-suppress ImpureMethodCall */
+    public function supports(Request $request, ArgumentMetadata $argument): bool
+    {
         return 'command' === $argument->getName();
     }
 
@@ -37,6 +34,8 @@ class CommandValueResolver implements ArgumentValueResolverInterface
             fn ($parameter) => $parameter->getName(),
             ($reflection->getConstructor()?->getParameters() ?: [])
         );
+
+        /** @psalm-var mixed $data */
         $data = $this->extractData($request);
 
         if (in_array('key', $parameters) && in_array('value', $parameters) && is_array($data) && 1 === count($data)) {
@@ -46,11 +45,12 @@ class CommandValueResolver implements ArgumentValueResolverInterface
             ];
         }
 
+        /** @psalm-var array<string, mixed> $commandArguments */
         $commandArguments = [];
         $lastArgument = null;
+        /** @var string $parameter */
         foreach ($parameters as $parameter) {
             if ($request->attributes->has($parameter)) {
-                /** @psalm-suppress MixedAssignment */
                 $commandArguments[$parameter] = $request->attributes->get($parameter);
             } else {
                 $lastArgument = $parameter;
@@ -63,18 +63,11 @@ class CommandValueResolver implements ArgumentValueResolverInterface
             $commandArguments = array_merge($commandArguments, array_intersect_key($data, array_flip($parameters)));
         }
 
-        /** @psalm-suppress MixedMethodCall */
         yield new $class(...$commandArguments);
     }
 
-    /**
-     * @psalm-suppress MixedInferredReturnType
-     *
-     * @return array<array-key, mixed>|null|scalar
-     */
-    private function extractData(Request $request): array | bool | int | float | string | null
+    private function extractData(Request $request): mixed
     {
-        /** @psalm-suppress MixedReturnStatement */
         return match (true) {
             ('json' === $request->getContentType()) => json_decode($request->getContent(), true),
             str_starts_with(

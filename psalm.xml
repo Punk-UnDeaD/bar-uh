@@ -12,22 +12,40 @@
         <ignoreFiles>
             <directory name="vendor"/>
             <directory name="tests"/>
+            <file name="src/Model/Media/Entity/Repository/.phpstorm.meta.php"/>
         </ignoreFiles>
     </projectFiles>
     <plugins>
         <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin"/>
+        <pluginClass class="App\Psalm\Plugin"/>
         <pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin"/>
     </plugins>
     <issueHandlers>
-        <MissingConstructor errorLevel="suppress" />
-        <PropertyNotSetInConstructor errorLevel="suppress" />
-        <UnresolvableInclude>
+        <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
-                <file name="src/Kernel.php" />
+<!--                vendor-->
+                <referencedProperty name="League\Flysystem\ConfigAwareTrait::$config"/>
+                <referencedProperty name="Doctrine\ORM\EntityRepository::$_entityName"/>
+                <referencedProperty name="Doctrine\ORM\EntityRepository::$_em"/>
+                <referencedProperty name="Doctrine\ORM\EntityRepository::$_class"/>
             </errorLevel>
-        </UnresolvableInclude>
+        </PropertyNotSetInConstructor>
+        <MixedMethodCall>
+            <errorLevel type="info">
+                <file name="src/ReadModel/Denormalizer.php"/>
+                <file name="src/Controller/CommandValueResolver.php"/>
+            </errorLevel>
+        </MixedMethodCall>
+        <MixedAssignment>
+            <errorLevel type="info">
+                <file name="src/Controller/CommandValueResolver.php"/>
+            </errorLevel>
+        </MixedAssignment>
+        <ImpureMethodCall errorLevel="info"/>
+<!--        <UnresolvableInclude>-->
+<!--            <errorLevel type="suppress">-->
+<!--                <file name="src/Kernel.php" />-->
+<!--            </errorLevel>-->
+<!--        </UnresolvableInclude>-->
     </issueHandlers>
-    <stubs>
-        <file name="stubs/ServiceEntityRepository.phpstub" />
-    </stubs>
 </psalm>

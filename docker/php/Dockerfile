@@ -1,9 +1,19 @@
-FROM php:8.0-fpm-alpine
+ARG PHP_VER=8.0.3
 
-USER root
+FROM php:${PHP_VER}-cli-alpine as builder
+COPY composer.json /
+RUN apk add curl
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet;
+RUN docker-php-ext-install sockets
+ENV ROADRUNNER_VERSION v2.0.1
+RUN mkdir /tmp/rr \
+  ; cd /tmp/rr \
+  ; cp /composer.json composer.json \
+  ; composer require spiral/roadrunner:${ROADRUNNER_VERSION} nyholm/psr7
+RUN (cd /tmp/rr; vendor/bin/rr get-binary)
 
-RUN apk add --update --no-cache exiftool pngquant imagemagick
 
+FROM php:${PHP_VER}-cli-alpine
 RUN apk update ;\
     apk add -t .run-deps \
         bash \
@@ -32,6 +42,7 @@ RUN apk update ;\
         opcache \
         pdo_pgsql \
         pgsql \
+        sockets \
         zip ;\
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet;\
     curl -L https://github.com/FriendsOfPHP/pickle/releases/latest/download/pickle.phar -o /usr/local/bin/pickle;\
@@ -46,11 +57,11 @@ RUN apk update ;\
         make;\
         make install; \
     pickle install apcu ;\
-    pickle install igbinary-3.1.5 ;\
+    pickle install igbinary-3.2.1 ;\
     pickle install redis ;\
     pickle install uuid-1.2.0 ;\
     pickle install yaml ;\
-    pickle install xdebug-3.0.2 ;\
+    pickle install xdebug-3.0.3 ;\
     echo "extension=apcu.so" > /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini ; \
     echo "extension=amqp.so" > /usr/local/etc/php/conf.d/docker-php-ext-amqp.ini ; \
     echo "extension=igbinary.so" > /usr/local/etc/php/conf.d/docker-php-ext-igbinary.ini ; \
@@ -63,3 +74,24 @@ RUN apk update ;\
     rm -rf /var/cache/apk/* ;\
     docker-php-source delete;\
     apk del --purge .build-deps
+
+RUN apk add --update --no-cache git
+RUN apk add --update --no-cache exiftool pngquant imagemagick
+
+COPY --from=builder /tmp/rr/rr /usr/local/bin/rr
+RUN chmod 755 /usr/local/bin/rr
+WORKDIR /var/www/html
+EXPOSE 8080
+
+COPY ./worker.sh ./stop.sh /
+
+RUN apk add --no-cache shadow
+
+ARG UID=1000
+ARG GID=1000
+RUN usermod -u ${UID} www-data \
+  && groupmod -g ${UID} www-data
+
+USER www-data
+ENV PATH="./vendor/bin:./bin:${PATH}"
+CMD ["/usr/local/bin/rr", "serve", "-c", ".rr.yaml"]

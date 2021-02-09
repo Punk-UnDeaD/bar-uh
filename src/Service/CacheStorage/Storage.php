@@ -17,9 +17,12 @@ use Symfony\Component\Lock\LockInterface;
 class Storage extends Filesystem implements EventSubscriberInterface
 {
     /**
-     * @var Adapter
+     * @var \League\Flysystem\AdapterInterface
      */
     protected $adapter;
+
+    /** @var Adapter */
+    protected $adapterIpm;
 
     private int $lifeTime;
 
@@ -29,7 +32,9 @@ class Storage extends Filesystem implements EventSubscriberInterface
         private MessengerEventDispatcher $dispatcher,
         int $cacheStorageLifeTime = 900
     ) {
-        parent::__construct(new Adapter($cacheStorageFolder));
+        $this->adapterIpm = new Adapter($cacheStorageFolder);
+
+        parent::__construct($this->adapterIpm, null);
         $this->lifeTime = $cacheStorageLifeTime;
     }
 
@@ -45,7 +50,7 @@ class Storage extends Filesystem implements EventSubscriberInterface
     {
         $this->dispatcher->dispatchDelay([new Event($path)], $this->lifeTime);
 
-        return $this->adapter->moveUploaded($file, $path);
+        return $this->adapterIpm->moveUploaded($file, $path);
     }
 
     /**
@@ -62,7 +67,7 @@ class Storage extends Filesystem implements EventSubscriberInterface
 
     public function prepareDir(string $dir): void
     {
-        $this->adapter->prepareDir($dir);
+        $this->adapterIpm->prepareDir($dir);
     }
 
     /**
@@ -86,7 +91,7 @@ class Storage extends Filesystem implements EventSubscriberInterface
 
     public function getRealPath(string $path): string
     {
-        return $this->adapter->applyPathPrefix($path);
+        return $this->adapterIpm->applyPathPrefix($path);
     }
 
     /**

@@ -8,14 +8,13 @@ trait TagTrait
 {
     use DataTrait;
 
-    /**
-     * @psalm-suppress MixedInferredReturnType
-     *
-     * @return list<string>
-     */
+    /** @return list<string> */
     public function getTags(): array
     {
-        return $this->data['tags'] ?? [];
+        /** @var list<string> $tags */
+        $tags = $this->data['tags'] ?? [];
+
+        return $tags;
     }
 
     /**

@@ -13,7 +13,6 @@ use Twig\TwigFilter;
 
 class ImageFormat extends AbstractExtension
 {
-
     #[Required]
     public ImageFormatter $formatter;
 

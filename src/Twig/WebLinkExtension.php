@@ -36,24 +36,23 @@ class WebLinkExtension extends AbstractExtension implements ResetInterface
 
     public function addGoogleFontLink(string $href): string
     {
-        if (!$this->fonts) {
-            $this->addPreconnect('https://fonts.gstatic.com/');
-        }
-        if (!in_array($href, $this->fonts)) {
-            $this->fonts[] = $href;
-
-            return "<link rel=\"preload\" href=\"{$href}\" as=\"style\" onload=\"this.rel='stylesheet'\">";
+        if (in_array($href, $this->fonts)) {
+            return '';
         }
 
-        return '';
+        $this->addPreconnect('https://fonts.gstatic.com/');
+        $this->fonts[] = $href;
+
+        return "<link rel=\"preload\" href=\"{$href}\" as=\"style\" onload=\"this.rel='stylesheet'\">";
     }
 
     public function addPreconnect(string $href): void
     {
-        if (!in_array($href, $this->preconnects)) {
-            $this->twigExtensionWeblink->preconnect($href, ['crossorigin' => true]);
-            $this->preconnects[] = $href;
+        if (in_array($href, $this->preconnects)) {
+            return;
         }
+        $this->twigExtensionWeblink->preconnect($href, ['crossorigin' => true]);
+        $this->preconnects[] = $href;
     }
 
     public function reset(): void

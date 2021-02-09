@@ -93,7 +93,7 @@ class ImageController extends AbstractController
             } catch (Exception $e) {
                 $this->addFlash('warning', $e->getMessage());
             }
-        } elseif ($url = $request->request->get('url')) {
+        } elseif ($url = (string)$request->request->get('url')) {
             $this->dispatchMessage(new CreateFromUrl\Command($url));
             $this->addFlash('success', "File {$url} saved.");
         }

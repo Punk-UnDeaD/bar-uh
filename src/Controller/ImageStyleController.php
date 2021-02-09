@@ -10,15 +10,20 @@ use App\Service\ImageStyle\ImageStyle;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Service\Attribute\Required;
 
-#[Route(path: '/assets/style/{date}/{image}', name: 'image.style', requirements: ['date'  => "\d{4}/\d{2}/\d{2}",
-                                                                                  'image' => Guid::PATTERN,
-])]
+#[Route(
+    path: '/assets/style/{date}/{image}',
+    name: 'image.style',
+    requirements: [
+        'date'  => "\d{4}/\d{2}/\d{2}",
+        'image' => Guid::PATTERN,
+    ]
+)]
 class ImageStyleController extends AbstractController
 {
-    public function __construct(private ImageStyle $imageStyle)
-    {
-    }
+    #[Required]
+    public ImageStyle $imageStyle;
 
     #[Route(path: '/pixel.{ext}', name: '.pixel')]
     public function pixel(

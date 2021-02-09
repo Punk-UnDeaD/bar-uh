@@ -40,7 +40,7 @@ class ExceptionListener
                             'message'      => $violation->getMessageTemplate(),
                             'parameters'   => $violation->getParameters(),
                         ],
-                        iterator_to_array($exception->getViolations())
+                        [...$exception->getViolations()]
                     );
                     break;
                 case $exception instanceof AccessDeniedException:

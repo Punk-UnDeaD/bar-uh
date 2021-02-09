@@ -14,15 +14,20 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class Handler implements MessageHandlerInterface
 {
-    #[Required] public ImageRepository $repository;
+    #[Required]
+    public ImageRepository $repository;
 
-    #[Required] public EntityManagerInterface $em;
+    #[Required]
+    public EntityManagerInterface $em;
 
-    #[Required] public CacheStorage\Storage $localCache;
+    #[Required]
+    public CacheStorage\Storage $localCache;
 
-    #[Required] public ImageStyle $imageStyle;
+    #[Required]
+    public ImageStyle $imageStyle;
 
-    #[Required] public FilesystemInterface $imageMainStorage;
+    #[Required]
+    public FilesystemInterface $imageMainStorage;
 
     public function __invoke(Command $command): void
     {

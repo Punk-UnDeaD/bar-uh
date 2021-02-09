@@ -12,18 +12,13 @@ class ImageInfoType extends JsonType
     public const NAME = 'media_image_info';
 
     /**
-     * @param string $value
-     *
-     * @psalm-suppress MoreSpecificImplementedParamType
-     *
-     * @return ImageInfo
+     * @param mixed $value
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): ImageInfo
     {
-        /** @var array{height: int, width: int, alt?: ?string} $value */
+        /** @var array{height: int, width: int, alt: ?string} $value */
         $value = parent::convertToPHPValue($value, $platform);
 
-        /** @psalm-suppress InvalidArgument false-positive */
         return new ImageInfo(...$value);
     }
 

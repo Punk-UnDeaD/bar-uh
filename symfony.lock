@@ -8,6 +8,18 @@
     "aws/aws-sdk-php": {
         "version": "3.154.4"
     },
+    "baldinof/roadrunner-bundle": {
+        "version": "1.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.2",
+            "ref": "47c159c44eb9e6902828da4acbb4199757dd378f"
+        },
+        "files": [
+            "config/packages/baldinof_road_runner.yaml"
+        ]
+    },
     "composer/package-versions-deprecated": {
         "version": "1.11.99"
     },
@@ -16,6 +28,9 @@
     },
     "composer/xdebug-handler": {
         "version": "1.4.3"
+    },
+    "dflydev/fig-cookies": {
+        "version": "v3.0.0"
     },
     "dnoegel/php-xdg-base-dir": {
         "version": "v0.1.1"
@@ -53,7 +68,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "2.0",
-            "ref": "a9f2463b9f73efe74482f831f03a204a41328555"
+            "ref": "40631978d2c4adc9b11220b13eba539b727c36a8"
         },
         "files": [
             "config/packages/doctrine.yaml",
@@ -121,12 +136,12 @@
         "version": "v1.5.0"
     },
     "friendsofphp/php-cs-fixer": {
-        "version": "2.2",
+        "version": "2.16",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "master",
-            "version": "2.2",
-            "ref": "cc05ab6abf6894bddb9bbd6a252459010ebe040b"
+            "version": "2.16",
+            "ref": "c1947bad147704aeaf0285745f0baae927a58959"
         },
         "files": [
             ".php_cs.dist"
@@ -193,6 +208,18 @@
     "nikic/php-parser": {
         "version": "v4.9.1"
     },
+    "nyholm/psr7": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "7c0a9352a57376f04f5444e74565102c3a23d0c7"
+        },
+        "files": [
+            "config/packages/nyholm_psr7.yaml"
+        ]
+    },
     "openlss/lib-array2xml": {
         "version": "1.0.0"
     },
@@ -201,6 +228,12 @@
     },
     "php-cs-fixer/diff": {
         "version": "v1.3.0"
+    },
+    "php-http/discovery": {
+        "version": "1.13.0"
+    },
+    "php-http/message-factory": {
+        "version": "v1.0.2"
     },
     "phpdocumentor/reflection-common": {
         "version": "2.2.0"
@@ -232,7 +265,16 @@
     "psr/http-client": {
         "version": "1.0.1"
     },
+    "psr/http-factory": {
+        "version": "1.0.1"
+    },
     "psr/http-message": {
+        "version": "1.0.1"
+    },
+    "psr/http-server-handler": {
+        "version": "1.0.1"
+    },
+    "psr/http-server-middleware": {
         "version": "1.0.1"
     },
     "psr/link": {
@@ -261,6 +303,21 @@
         "files": [
             "config/packages/sensio_framework_extra.yaml"
         ]
+    },
+    "spiral/goridge": {
+        "version": "v3.0.0"
+    },
+    "spiral/roadrunner": {
+        "version": "v2.0.1"
+    },
+    "spiral/roadrunner-cli": {
+        "version": "v2.0.2"
+    },
+    "spiral/roadrunner-http": {
+        "version": "v2.0.0"
+    },
+    "spiral/roadrunner-worker": {
+        "version": "v2.0.3"
     },
     "symfony/amqp-messenger": {
         "version": "v5.1.5"
@@ -347,12 +404,12 @@
         "version": "v5.1.5"
     },
     "symfony/framework-bundle": {
-        "version": "5.1",
+        "version": "5.2",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "master",
-            "version": "5.1",
-            "ref": "6ee1194b036378b21884e7f57b6a2ac721167f16"
+            "version": "5.2",
+            "ref": "6ec87563dcc85cd0c48856dcfbfc29610506d250"
         },
         "files": [
             "config/packages/cache.yaml",
@@ -382,7 +439,16 @@
         "version": "v5.1.5"
     },
     "symfony/lock": {
-        "version": "v5.1.6"
+        "version": "5.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.2",
+            "ref": "13350583a83fa636bf45a5fb62da3bdc73be52a1"
+        },
+        "files": [
+            "config/packages/lock.yaml"
+        ]
     },
     "symfony/maker-bundle": {
         "version": "1.0",
@@ -399,7 +465,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "4.3",
-            "ref": "8a2675c061737658bed85102e9241c752620e575"
+            "ref": "e9a414b113ceadbf4e52abe37bf8f1b443f06ccb"
         },
         "files": [
             "config/packages/messenger.yaml"
@@ -415,12 +481,12 @@
         "version": "v1.1.0"
     },
     "symfony/phpunit-bridge": {
-        "version": "4.3",
+        "version": "5.1",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "master",
-            "version": "4.3",
-            "ref": "6d0e35f749d5f4bfe1f011762875275cd3f9874f"
+            "version": "5.1",
+            "ref": "bf16921ef8309a81d9f046e9b6369c46bcbd031f"
         },
         "files": [
             ".env.test",
@@ -464,6 +530,21 @@
     },
     "symfony/property-info": {
         "version": "v5.1.5"
+    },
+    "symfony/proxy-manager-bridge": {
+        "version": "v5.2.3"
+    },
+    "symfony/psr-http-message-bridge": {
+        "version": "2.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.1",
+            "ref": "df8ec1e90aec60d301ec59a22093fc3febedb795"
+        },
+        "files": [
+            "config/packages/psr_http_message_bridge.yaml"
+        ]
     },
     "symfony/redis-messenger": {
         "version": "v5.1.5"
@@ -584,16 +665,19 @@
         ]
     },
     "symfony/webpack-encore-bundle": {
-        "version": "1.6",
+        "version": "1.9",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "master",
-            "version": "1.6",
-            "ref": "69e1d805ad95964088bd510c05995e87dc391564"
+            "version": "1.9",
+            "ref": "9399a0bfc6ee7a0c019f952bca46d6a6045dd451"
         },
         "files": [
-            "assets/css/app.css",
-            "assets/js/app.js",
+            "assets/app.js",
+            "assets/bootstrap.js",
+            "assets/controllers.json",
+            "assets/controllers/hello_controller.js",
+            "assets/styles/app.css",
             "config/packages/assets.yaml",
             "config/packages/prod/webpack_encore.yaml",
             "config/packages/test/webpack_encore.yaml",

@@ -2,6 +2,7 @@
   "name": "bar/uh",
   "type": "project",
   "license": "MIT",
+  "description": "",
   "require": {
     "php": "^8.0",
     "ext-ctype": "*",
@@ -9,27 +10,35 @@
     "ext-intl": "*",
     "ext-pdo": "*",
     "ext-redis": "*",
+    "ext-simplexml": "*",
     "ext-uuid": "*",
+    "baldinof/roadrunner-bundle": "dev-rr-v2-support",
     "composer/package-versions-deprecated": "^1.11",
     "doctrine/annotations": "^1.0",
     "knplabs/knp-menu-bundle": "^3.1",
     "league/flysystem-aws-s3-v3": "^1.0",
     "league/flysystem-bundle": "^1.5",
     "league/mime-type-detection": "^1.5",
+    "nyholm/psr7": "^1.4",
     "phpdocumentor/reflection-docblock": "^5.2",
     "rybakit/twig-deferred-extension": "^3.0",
     "sensio/framework-extra-bundle": "^5.6",
+    "spiral/goridge": "^3.0",
+    "spiral/roadrunner": "^2.0",
+    "symfony/browser-kit": "5.2.*",
     "symfony/console": "*",
+    "symfony/css-selector": "5.2.*",
     "symfony/dotenv": "*",
     "symfony/expression-language": "*",
     "symfony/flex": "^1.10",
     "symfony/form": "*",
     "symfony/framework-bundle": "*",
     "symfony/http-client": "*",
-    "symfony/lock": "*",
+    "symfony/lock": "5.2.*",
     "symfony/messenger": "*",
     "symfony/mime": "*",
     "symfony/orm-pack": "^2.0",
+    "symfony/phpunit-bridge": "^5.2",
     "symfony/property-access": "5.2.*",
     "symfony/property-info": "5.2.*",
     "symfony/security-bundle": "*",
@@ -54,7 +63,6 @@
     "psalm/plugin-symfony": "^2.1",
     "symfony/maker-bundle": "*",
     "symfony/profiler-pack": "*",
-    "symfony/test-pack": "*",
     "vimeo/psalm": "^4.4",
     "weirdan/doctrine-psalm-plugin": "^1.0"
   },
@@ -97,7 +105,8 @@
       "assets:install %PUBLIC_DIR%": "symfony-cmd"
     },
     "post-install-cmd": [
-      "@auto-scripts"
+      "@auto-scripts",
+      "cp git-hooks/pre-commit .git/hooks"
     ],
     "post-update-cmd": [
       "@auto-scripts"

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\ReadModel\Media;
 
 use App\ReadModel\Paginator;
-use App\Service\Denormalizer;
+use App\ReadModel\Denormalizer;
 use Doctrine\DBAL\Connection;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -35,14 +35,16 @@ class ImageFetcher
 
         $qb = $this->connection->createQueryBuilder()
             ->select(
-                'id',
-                'date',
-                'info_name',
-                'info_path',
-                'info_mime',
-                'info_size',
-                'image_info',
-                "data->'tags' as tags"
+                [
+                    'id',
+                    'date',
+                    'info_name',
+                    'info_path',
+                    'info_mime',
+                    'info_size',
+                    'image_info',
+                    "data->'tags' as tags",
+                ]
             )
             ->from('media_images')
             ->orderBy($sort, $direction);

@@ -1,0 +1,37 @@
+http:
+    address: 0.0.0.0:65467
+    workers:
+        command: "php bin/console baldinof:roadrunner:worker"
+        relay: "unix://var/roadrunner.sock"
+static:
+    # root directory for static file (HTTP would not serve .php and .htaccess files).
+    dir: "/var/www/html/public"
+
+    # list of extensions for forbid for serving.
+    forbid: [ ".php", ".htaccess" ]
+
+    # Automatically add headers to every request.
+    request:
+        "Example-Request-Header": "Value"
+
+    # Automatically add headers to every response.
+    response:
+        "X-Powered-By": "RoadRunner"
+
+#logs:
+#    # default
+#    mode: debug
+#    encoding: json
+#    output: stdout
+#    err_output: stderr
+#    channels:
+#        http:
+#            mode: debug
+#            level: info
+#            encoding: console
+#            output: stdout
+#        server:
+#            mode: debug
+#            level: info
+#            encoding: json
+#            output: stdout

@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Service\CacheStorage;
 
 use League\Flysystem\Adapter\Local;
+use League\Flysystem\AdapterInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
-class Adapter extends Local
+class Adapter extends Local implements AdapterInterface
 {
-    /** @var array<array<int>> */
+    /** @var array<array-key, mixed> */
     protected static $permissions
         = [
             'file' => [

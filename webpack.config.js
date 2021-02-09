@@ -7,6 +7,7 @@ const BrotliPlugin = require('brotli-webpack-plugin');
 if (!Encore.isRuntimeEnvironmentConfigured()) {
   Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
 }
+
 Encore
     // directory where compiled assets will be stored
     .setOutputPath('public/build/')
@@ -18,12 +19,10 @@ Encore
     /*
      * ENTRY CONFIG
      *
-     * Add 1 entry for each "page" of your app
-     * (including one that's included on every page - e.g. "app")
-     *
      * Each entry will result in one JavaScript file (e.g. app.js)
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
+    // .addEntry('app', './assets/app.js')
     .addEntry('app', './assets/app/index.js')
     .addEntry('admin', './assets/app/admin.js')
     .addEntry('x-auto-password', './assets/components/x-auto-password.js')
@@ -32,8 +31,8 @@ Encore
     .addEntry('x-picture', './assets/components/x-picture.js')
     .addEntry('x-file-drop', './assets/components/x-file-drop.js')
 
-    //.addEntry('page1', './assets/js/page1.js')
-    //.addEntry('page2', './assets/js/page2.js')
+    // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
+    .enableStimulusBridge('./assets/controllers.json')
 
     // When enabled, Webpack "splits" your files into smaller pieces for
     // greater optimization.
@@ -59,10 +58,14 @@ Encore
     // enables hashed filenames (e.g. app.abc123.css)
     .enableVersioning(Encore.isProduction())
 
+    .configureBabel((config) => {
+      config.plugins.push('@babel/plugin-proposal-class-properties');
+    })
+
     // enables @babel/preset-env polyfills
     // .configureBabelPresetEnv((config) => {
-    //   config.useBuiltIns = 'usage';
-    //   config.corejs = 3;
+    //     config.useBuiltIns = 'usage';
+    //     config.corejs = 3;
     // })
 
     // enables Sass/SCSS support
@@ -71,28 +74,41 @@ Encore
     // uncomment if you use TypeScript
     .enableTypeScriptLoader()
 
-    // uncomment to get integrity="..." attributes on your script & link tags
-    // requires WebpackEncoreBundle 1.4 or higher
-    //.enableIntegrityHashes(Encore.isProduction())
+// uncomment if you use React
+//.enableReactPreset()
 
-    // uncomment if you're having problems with a jQuery plugin
-    //.autoProvidejQuery()
+// uncomment to get integrity="..." attributes on your script & link tags
+// requires WebpackEncoreBundle 1.4 or higher
+//.enableIntegrityHashes(Encore.isProduction())
 
-    // uncomment if you use API Platform Admin (composer req api-admin)
-    //.enableReactPreset()
-    //.addEntry('admin', './assets/js/admin.js')
+// uncomment if you're having problems with a jQuery plugin
+//.autoProvidejQuery()
+;
 
 Encore
     .addRule({
       test: /\.inline\.s?css$/i,
-      use: ['to-string-loader', 'css-loader', 'sass-loader'],
+      use: [
+        "sass-to-string",
+        {
+          loader: "sass-loader",
+          options: {
+            sassOptions: {
+              outputStyle: "compressed",
+            },
+          },
+        },
+      ],
+    })
+    .addRule({
+      test: /\.inline\.svg$/,
+      loader: 'raw-loader'
     });
 
 if (Encore.isProduction()) {
   Encore.addPlugin(new BrotliPlugin());
 }
 module.exports = Encore.getWebpackConfig();
-module.exports.module.rules[1].exclude = /\.inline\.css$/;
-module.exports.module.rules[4].exclude = /\.inline\.scss$/;
-
-// console.log(module.exports.module.rules)
+module.exports.module.rules[1].exclude = [/\.inline\.css$/];
+module.exports.module.rules[4].exclude = [/\.inline\.scss$/];
+module.exports.module.rules[2].exclude = [/\.inline\.svg$/];

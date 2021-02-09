@@ -1,4 +1,4 @@
-const style = require('./x-upload-progress.inline.scss')
+import style from './x-upload-progress.inline.scss'
 import {readFileAsDataURL} from "../../helpers/file-reader"
 import filesize from 'filesize.js'
 

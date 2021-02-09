@@ -27,9 +27,7 @@
             </errorLevel>
         </UnresolvableInclude>
     </issueHandlers>
-
-
-<!--    <stubs>-->
-<!--        <file name="stubs/EntityRepository.phpstub" />-->
-<!--    </stubs>-->
+    <stubs>
+        <file name="stubs/ServiceEntityRepository.phpstub" />
+    </stubs>
 </psalm>

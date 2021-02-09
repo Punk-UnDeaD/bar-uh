@@ -1,0 +1,33 @@
+<?php
+
+namespace Doctrine\Bundle\DoctrineBundle\Repository {
+
+    use Doctrine\Persistence\ManagerRegistry;
+
+    /**
+     * @template T of object
+     */
+    class ServiceEntityRepository
+    {
+        /**
+         * @psalm-param class-string<T> $class
+         */
+        public function __construct(ManagerRegistry $registry, $class)
+        {
+        }
+
+        /**
+         * @return ?T
+         */
+        public function find(): ?object
+        {
+        }
+    }
+}
+
+namespace Doctrine\Persistence {
+
+    class ManagerRegistry
+    {
+    }
+}

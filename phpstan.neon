@@ -4,3 +4,6 @@ includes:
 parameters:
     excludePaths:
         - tests/**/*
+        - stubs/**/*
+    stubFiles:
+        - stubs/ServiceEntityRepository.phpstub

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\DataFixtures\Media;
 
-use App\Model\Media\Entity\DataType\FileInfo;
-use App\Model\Media\Entity\DataType\Id;
-use App\Model\Media\Entity\DataType\ImageInfo;
-use App\Model\Media\Entity\Image;
+use App\Infrastructure\Entity\Guid;
+use App\Media\Entity\DataType\FileInfo;
+use App\Media\Entity\DataType\ImageInfo;
+use App\Media\Entity\Image;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -22,7 +22,7 @@ class ImageFixtures extends Fixture
             /** @var string $ext */
             $ext = $faker->randomElement(['jpeg', 'png', 'gif']);
             $image = new Image(
-                Id::next(),
+                Guid::next(),
                 new FileInfo(
                     "public://img-{$i}.{$ext}",
                     "img-{$i}.{$ext}",

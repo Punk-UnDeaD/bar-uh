@@ -10,5 +10,3 @@ parameters:
         - tests/**/*
         - stubs/**/*
         - **/.phpstorm.meta.php
-    stubFiles:
-        - stubs/ServiceEntityRepository.phpstub

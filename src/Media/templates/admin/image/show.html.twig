@@ -1,0 +1,108 @@
+{% extends '@Media/admin/image/index.html.twig' %}
+{% import '@Main/admin/_partials/breadcrumb.html.twig' as breadcrumb %}
+{% import '@Media/_partials/image.html.twig' as image_formatter %}
+{% block title %}{{ image.info.name }}{% endblock %}
+{%- block breadcrumb -%}
+  {{- parent() -}}
+  {{- breadcrumb.item(image.info.name, 'admin.media.image.show', { image: image.id }) -}}
+{%- endblock -%}
+{% block local_menu %}
+  {{ addEntry('x-js-button') }}
+  <ul class="actions">
+    <li><a class="button theme--primary" href="{{ path('admin.media.image.show', {image:image.id}) }}">Show</a></li>
+    <li><a class="button theme--info" href="{{ path('admin.media.image.exif', {image:image.id}) }}">Exif</a></li>
+    {% if localStorage.hasDraft(image.info.path) %}
+      <li><a class="button theme--info" href="{{ path('admin.media.image.draft', {image:image.id}) }}">Draft</a></li>
+    {% endif %}
+    <li><button class="theme--warning"
+           is="x-js-button"
+                data-csrf="{{ csrf_token('admin.media.image.cleanStyles') }}"
+                data-url="{{ path('admin.media.image.cleanStyles', {id: image.id}) }}"
+      >Clean styles</button></li>
+    <li><button class="theme--danger" is="x-js-button" data-method="DELETE"
+                data-csrf="{{ csrf_token('admin.media.image.delete') }}"
+                data-url="{{ path('admin.media.image.delete', {id: image.id}) }}"
+                data-goto="{{ path('admin.media.image') }}"
+      >Delete</button></li>
+
+  </ul>
+{%- endblock %}
+{% block content %}
+  {{ addEntry('x-auto-save-button') }}
+  <table class="bordered">
+    <tr>
+      <th>Name</th>
+      <td>{{ image.info.name }}</td>
+    <tr>
+      <th>Draft
+      <td>{% if localStorage.hasDraft(image.info.path) %}
+          <button class="theme--danger compact" is="x-js-button"
+                  data-csrf="{{ csrf_token('admin.media.image.draftUpload') }}"
+                  data-url="{{ path('admin.media.image.draftUpload', {id: image.id}) }}"
+          >Upload</button>
+          <button class="theme--warning compact" is="x-js-button" data-method="DELETE"
+                  data-csrf="{{ csrf_token('admin.media.image.draftDelete') }}"
+                  data-url="{{ path('admin.media.image.draftDelete', {id: image.id}) }}">Delete</button>
+        {% else %}
+          <button class="theme--primary compact" is="x-js-button" data-method="CREATE"
+                  data-csrf="{{ csrf_token('admin.media.image.draftCreate') }}"
+                  data-url="{{ path('admin.media.image.draftCreate', {id: image.id}) }}">Create
+            draft</button>
+        {% endif %}
+    <tr>
+      <th>Path</th>
+      <td>{{ image.info.path }}</td>
+    <tr>
+      <th>Mime</th>
+      <td>{{ image.info.mime }}</td>
+    <tr>
+      <th>Size</th>
+      <td>{{ image.info.size }}</td>
+    <tr>
+      <th>Dimensions</th>
+      <td>{{ image.imageInfo.width }}*{{ image.imageInfo.height }}</td>
+    <tr>
+      <th><label for="tags">Tags</label></th>
+      <td>
+        <input id="tags" type="text" value="{{ image.tags|join(', ') }}" size="60">
+        <button class="theme--dark narrow" data-for="tags" is="x-auto-save-button"
+                data-save="{{ path('admin.media.image.setTags', { image: image.id }) }}"
+                data-csrf="{{ csrf_token("admin.media.image.setTags") }}">
+          <x-icon icon="save"></x-icon>
+        </button>
+      </td>
+    <tr>
+      <th><label for="alt">Alt</label></th>
+      <td><input id="alt" type="text" value="{{ image.imageInfo.alt|default('') }}" size="60">
+        <button class="theme--dark narrow" data-for="alt" is="x-auto-save-button"
+                data-save="{{ path('admin.media.image.setAlt', { image: image.id }) }}"
+                data-csrf="{{ csrf_token("admin.media.image.setAlt") }}">
+          <x-icon icon="save"></x-icon>
+        </button>
+    <tr>
+      <th>Full</th>
+      <td><a href="{{ image.info.path|image_main_url }}">{{ image.info.path|image_main_url }}</a></td>
+    </tr>
+
+    <tr>
+      <th>Pixel</th>
+      <td>
+        <a href="{{ image.info.path|image_style_url('pixel', 'png') }}">png</a>
+        <a href="{{ image.info.path|image_style_url('pixel', 'gif') }}">gif</a>
+        <a href="{{ image.info.path|image_style_url('pixel', 'bmp') }}">bmp</a>
+      </td>
+    </tr>
+
+    <tr>
+      <th>Sizes</th>
+      <td>
+        <a href="{{ image.info.path|image_style_url('500', 'jpeg') }}">500.jpeg</a>
+        <a href="{{ image.info.path|image_style_url('300', 'webp') }}">300.webp</a>
+        <a href="{{ image.info.path|image_style_url('100') }}">100._self</a>
+      </td>
+    </tr>
+  </table>
+
+  {{ image_formatter.picture(image) }}
+
+{% endblock %}

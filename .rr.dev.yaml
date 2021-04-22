@@ -1,11 +1,36 @@
-include:
-  - .rr.yaml
+server:
+  command: "php bin/console baldinof:roadrunner:worker"
+
+http:
+  address: 0.0.0.0:8080
+  pool:
+    num_workers: 1
+    debug: true
+  middleware: [ "static", "gzip" ]
+  uploads:
+    forbid: [ ".php", ".exe", ".bat" ]
+  static:
+    dir: "public"
+    forbid: [ ".php", ".htaccess" ]
+
+logs:
+  mode: development
+  channels:
+    http:
+      level: debug # Log all http requests, set to info to disable
+    server:
+      level: info # Everything written to worker stderr is logged
+      mode: raw
+    metrics:
+      level: debug
 
 reload:
   enabled: true
   interval: 1s
-  patterns: [".php"]
+  patterns: [".php", ".yaml", ".env", ".ini"]
+  ignore: [".php-cs-fixer.cache"]
   services:
     http:
       dirs: ["."]
+      ignore: [".php-cs-fixer.cache"]
       recursive: true

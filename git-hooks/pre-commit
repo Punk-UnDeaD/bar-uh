@@ -1,28 +1,29 @@
 #!/usr/bin/env bash
 
-PHP_CS_FIXER="docker-compose exec -T php vendor/bin/php-cs-fixer fix --config=.php_cs.dist"
-PHPSTAN="docker-compose exec -T php vendor/bin/phpstan analyse"
-PSALM="docker-compose exec -T php ./vendor/bin/psalm --show-info=true"
-PHPUNIT="docker-compose exec -T php ./bin/phpunit"
+PHP="docker-compose run -T php php -d memory_limit=-1"
+PHP_CS_FIXER="./vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php"
+PHPSTAN="./vendor/bin/phpstan analyse"
+PSALM="./vendor/bin/psalm"
+PHPUNIT="./bin/phpunit"
 FILES=` git status --porcelain | grep -e '^[AM]\(.*\).php$' | cut -c 3- | tr '\n' ' '`
 if [ "$FILES" ]
 then
   echo "php pre commit hook start"
-  $PHP_CS_FIXER ${FILES}
+  $PHP $PHP_CS_FIXER ${FILES}
   git add ${FILES}
-  $PHPSTAN ${FILES}
+  $PHP $PHPSTAN ${FILES}
   if [ $? -ne 0 ];
   then
     echo "phpstan analyse failed"
     exit 1;
   fi
-  $PSALM ${FILES}
+  $PHP $PSALM ${FILES}
   if [ $? -ne 0 ];
   then
     echo "psalm analyse failed"
     exit 1;
   fi
-  $PHPUNIT
+  $PHP $PHPUNIT
   if [ $? -ne 0 ];
   then
     echo "unit test failed"

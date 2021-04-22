@@ -1,17 +1,14 @@
-ARG PHP_VER=8.0.3
+ARG PHP_VER=8.0.6
 
 FROM php:${PHP_VER}-cli-alpine as builder
-COPY composer.json /
-RUN apk add curl
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet;
-RUN docker-php-ext-install sockets
-ENV ROADRUNNER_VERSION v2.0.1
-RUN mkdir /tmp/rr \
-  ; cd /tmp/rr \
-  ; cp /composer.json composer.json \
-  ; composer require spiral/roadrunner:${ROADRUNNER_VERSION} nyholm/psr7
-RUN (cd /tmp/rr; vendor/bin/rr get-binary)
-
+ARG ROADRUNNER_VERSION=v2.2.1
+RUN apk add curl \
+  ; curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet \
+  ; echo "{}" > composer.json \
+  ; composer require --ignore-platform-reqs spiral/roadrunner:${ROADRUNNER_VERSION} \
+  ; vendor/bin/rr get-binary -f ${ROADRUNNER_VERSION} -s \
+  ; rm -rf vendor \
+  ; rm composer.* ; rm .rr.yaml
 
 FROM php:${PHP_VER}-cli-alpine
 RUN apk update ;\
@@ -21,7 +18,6 @@ RUN apk update ;\
         gzip \
         icu-libs \
         libzip \
-        libuuid \
         nano \
         patch \
         postgresql-client \
@@ -57,17 +53,15 @@ RUN apk update ;\
         make;\
         make install; \
     pickle install apcu ;\
-    pickle install igbinary-3.2.1 ;\
+    pickle install igbinary-3.2.2 ;\
     pickle install redis ;\
-    pickle install uuid-1.2.0 ;\
     pickle install yaml ;\
-    pickle install xdebug-3.0.3 ;\
+    pickle install xdebug-3.0.4 ;\
     echo "extension=apcu.so" > /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini ; \
     echo "extension=amqp.so" > /usr/local/etc/php/conf.d/docker-php-ext-amqp.ini ; \
     echo "extension=igbinary.so" > /usr/local/etc/php/conf.d/docker-php-ext-igbinary.ini ; \
     echo "extension=redis.so" > /usr/local/etc/php/conf.d/docker-php-ext-redis.ini ; \
     echo "zend_extension=xdebug.so" > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini ;\
-    echo "extension=uuid.so" > /usr/local/etc/php/conf.d/docker-php-ext-uuid.ini ; \
     echo "extension=yaml.so" > /usr/local/etc/php/conf.d/docker-php-ext-yaml.ini ; \
     cd / ;\
     rm -rf /tmp/* ;\
@@ -78,7 +72,7 @@ RUN apk update ;\
 RUN apk add --update --no-cache git
 RUN apk add --update --no-cache exiftool pngquant imagemagick
 
-COPY --from=builder /tmp/rr/rr /usr/local/bin/rr
+COPY --from=builder /rr /usr/local/bin/rr
 RUN chmod 755 /usr/local/bin/rr
 WORKDIR /var/www/html
 EXPOSE 8080

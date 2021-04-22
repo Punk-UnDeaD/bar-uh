@@ -1,0 +1,15 @@
+{% extends '@Media/admin/image/index.html.twig' %}
+{% import '@Main/admin/_partials/breadcrumb.html.twig' as breadcrumb %}
+{% block title %}Upload image{% endblock %}
+{%- block breadcrumb -%}
+  {{- parent() -}}
+  {{- breadcrumb.item('Upload', 'admin.media.image.uploadPage') -}}
+{%- endblock -%}
+
+{% block local_menu %}{% endblock %}
+{% block content %}
+  {{ addEntry('x-file-drop') }}
+  <x-file-drop class="theme--success" for="form_files" clipboard data-csrf="{{ csrf_token("admin.media.image.upload") }}">
+    <input type="file" multiple>
+  </x-file-drop>
+{% endblock %}

@@ -26,10 +26,11 @@ npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 /.idea
-/bin/
+/bin/.phpunit
 /docker-compose.override.yml
 /public/storage/
 
 ###> baldinof/roadrunner-bundle ###
 /bin/rr
 ###< baldinof/roadrunner-bundle ###
+/.php-cs-fixer.cache

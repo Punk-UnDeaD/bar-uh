@@ -11,41 +11,34 @@
         <directory name="src"/>
         <ignoreFiles>
             <directory name="vendor"/>
-            <directory name="tests"/>
-            <file name="src/Model/Media/Entity/Repository/.phpstorm.meta.php"/>
+            <directory name="public"/>
+<!--            <directory name="tests"/>-->
+            <file name="src/Media/.phpstorm.meta.php"/>
         </ignoreFiles>
     </projectFiles>
     <plugins>
         <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin"/>
-        <pluginClass class="App\Psalm\Plugin"/>
-        <pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin"/>
+        <pluginClass class="App\Infrastructure\Psalm\Plugin"/>
     </plugins>
     <issueHandlers>
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
 <!--                vendor-->
                 <referencedProperty name="League\Flysystem\ConfigAwareTrait::$config"/>
-                <referencedProperty name="Doctrine\ORM\EntityRepository::$_entityName"/>
-                <referencedProperty name="Doctrine\ORM\EntityRepository::$_em"/>
-                <referencedProperty name="Doctrine\ORM\EntityRepository::$_class"/>
             </errorLevel>
         </PropertyNotSetInConstructor>
         <MixedMethodCall>
             <errorLevel type="info">
-                <file name="src/ReadModel/Denormalizer.php"/>
-                <file name="src/Controller/CommandValueResolver.php"/>
+                <file name="src/Infrastructure/Denormalizer.php"/>
+                <file name="src/Infrastructure/Controller/CommandValueResolver.php"/>
             </errorLevel>
         </MixedMethodCall>
         <MixedAssignment>
             <errorLevel type="info">
-                <file name="src/Controller/CommandValueResolver.php"/>
+                <file name="src/Infrastructure/Controller/CommandValueResolver.php"/>
             </errorLevel>
         </MixedAssignment>
         <ImpureMethodCall errorLevel="info"/>
-<!--        <UnresolvableInclude>-->
-<!--            <errorLevel type="suppress">-->
-<!--                <file name="src/Kernel.php" />-->
-<!--            </errorLevel>-->
-<!--        </UnresolvableInclude>-->
+        <RedundantCastGivenDocblockType errorLevel="info"/>
     </issueHandlers>
 </psalm>

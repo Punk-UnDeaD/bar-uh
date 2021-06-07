@@ -54,7 +54,6 @@ return static function(ContainerConfigurator $di): void {
                         'middleware' => [
                             Middleware\OneTimeValidationMiddleware::class,
                             Middleware\AsyncWrapper\WrapperMiddleware::class,
-                            Middleware\FlushMiddleware::class,
                             'messenger.middleware.doctrine_transaction',
                         ],
                     ],

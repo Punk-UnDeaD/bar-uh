@@ -37,7 +37,7 @@
     "symfony/property-access": "*",
     "symfony/property-info": "*",
     "symfony/runtime": "*",
-    "symfony/security-bundle": "5.3.*",
+    "symfony/security-bundle": "*",
     "symfony/serializer": "*",
     "symfony/twig-bundle": "*",
     "symfony/uid": "*",

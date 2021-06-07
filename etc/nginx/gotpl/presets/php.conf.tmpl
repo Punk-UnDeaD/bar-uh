@@ -2,8 +2,6 @@
 
 index index.php;
 
-include fastcgi.conf;
-
 add_header  X-XSS-Protection '1; mode=block';
 
 location / {
@@ -27,34 +25,16 @@ location / {
         }
 
         location ~* /assets/style/ {
-            try_files $uri @symfony;
+            proxy_set_header Host $host;
+            proxy_pass http://php;
         }
 
         {{ if getenv "NGINX_STATIC_404_TRY_INDEX" }}
-        try_files $uri @symfony;
+            proxy_set_header Host $host;
+            proxy_pass http://php;
         {{ end }}
     }
 
-    try_files $uri @symfony;
-}
-
-location @symfony {
-    include fastcgi.conf;
-    fastcgi_param QUERY_STRING $query_string;
-    fastcgi_param SCRIPT_NAME /index.php;
-    fastcgi_param SCRIPT_FILENAME $document_root/index.php;
-    fastcgi_pass php;
-    track_uploads {{ getenv "NGINX_TRACK_UPLOADS" "uploads 60s" }};
-}
-
-location @symfony-no-args {
-    include fastcgi.conf;
-    fastcgi_param QUERY_STRING q=$uri;
-    fastcgi_param SCRIPT_NAME /index.php;
-    fastcgi_param SCRIPT_FILENAME $document_root/index.php;
-    fastcgi_pass php;
-}
-
-location = /index.php {
-    fastcgi_pass php;
+    proxy_set_header Host $host;
+    proxy_pass http://php;
 }

@@ -1,7 +1,7 @@
-ARG PHP_VER=8.0.6
+ARG PHP_VER=8.0.7
 
 FROM php:${PHP_VER}-cli-alpine as builder
-ARG ROADRUNNER_VERSION=v2.2.1
+ARG ROADRUNNER_VERSION=v2.3.0
 RUN apk add curl \
   ; curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet \
   ; echo "{}" > composer.json \

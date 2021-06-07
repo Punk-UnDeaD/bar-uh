@@ -8,17 +8,8 @@ use JsonSerializable;
 
 class ImageInfo implements JsonSerializable
 {
-    private int $width;
-
-    private int $height;
-
-    private ?string $alt;
-
-    public function __construct(int $width, int $height, ?string $alt = null)
+    public function __construct(private int $width, private int $height, private ?string $alt = null)
     {
-        $this->width = $width;
-        $this->height = $height;
-        $this->alt = $alt;
     }
 
     public function getHeight(): int
@@ -48,10 +39,10 @@ class ImageInfo implements JsonSerializable
     }
 
     /**
-     * @return array<string, int|string>
+     * @return array<mixed>
      */
     public function jsonSerialize(): array
     {
-        return ['width' => $this->width, 'height' => $this->height] + ($this->alt ? ['alt' => $this->alt] : []);
+        return array_filter((array)$this);
     }
 }

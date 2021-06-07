@@ -24,17 +24,19 @@ return static function(ContainerConfigurator $di): void {
                 ],
             ],
             'orm'  => [
-                'mapping' => [
-                    'name'      => __DIR__,
-                    'alias'     => basename(__DIR__),
-                    'is_bundle' => false,
-                    'type'      => 'attribute',
-                    'dir'       => __DIR__.'/Entity',
-                    'prefix'    => __NAMESPACE__.'\Entity',
+                'mappings' => [
+                    __NAMESPACE__ => [
+                        'is_bundle' => false,
+                        'type'      => 'attribute',
+                        'dir'       => __DIR__.'/Entity',
+                        'prefix'    => __NAMESPACE__.'\Entity',
+                        'alias'     => basename(__DIR__),
+                    ],
                 ],
             ],
         ]
     );
+
     $di->extension(
         'twig',
         [

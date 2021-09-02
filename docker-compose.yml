@@ -25,6 +25,7 @@ services:
     volumes:
       - .:/var/www/html
       - ./etc/php/php.ini:/usr/local/etc/php/php.ini
+      - ./etc/php/docker-php-ext-opcache.ini:/usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
     labels:
       - 'traefik.frontend.rule=Host:${PROJECT_BASE_URL}'
   php-workers:
@@ -35,7 +36,6 @@ services:
       COLUMNS: 160 # Set 80 columns for docker exec -it.
     volumes:
       - .:/var/www/html
-      - ./etc/php/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
       - ./etc/php/docker-php-ext-opcache.ini:/usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
       - ./etc/php/php.ini:/usr/local/etc/php/php.ini
     command: sh -c /worker.sh

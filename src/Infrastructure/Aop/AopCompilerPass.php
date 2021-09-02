@@ -53,6 +53,7 @@ class AopCompilerPass implements CompilerPassInterface
                     $traverser->addVisitor(new CacheResultVisitor($reflection));
                     $traverser->addVisitor(new LogClassVisitor($reflection, $parser));
                     $traverser->addVisitor(new LogBeforeVisitor($reflection, $parser));
+                    $traverser->addVisitor(new LogAfterVisitor($reflection, $parser));
                     $printer = new PrettyPrinter\Standard();
                     $newStmts = $traverser->traverse($smtps);
 

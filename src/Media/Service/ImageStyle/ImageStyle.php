@@ -6,6 +6,7 @@ namespace App\Media\Service\ImageStyle;
 
 use App\Infrastructure\Aop\Attribute\Aop;
 use App\Infrastructure\Aop\Attribute\AopLog;
+use App\Infrastructure\Aop\Attribute\AopLogAfter;
 use App\Infrastructure\Aop\Attribute\AopLogBefore;
 use App\Media\Service\CacheStorage;
 use JetBrains\PhpStorm\Pure;
@@ -14,7 +15,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Process\Process;
 
 #[Aop]
-//#[AopLog('ImageStyle::')]
+#[AopLog('ImageStyle::')]
 class ImageStyle
 {
     public const PREFIX = 'https://bar-uh-dev.website.yandexcloud.net/assets/image/';
@@ -39,7 +40,8 @@ class ImageStyle
     }
 
     #[Pure]
-    #[AopLogBefore('url {path}')]
+    #[AopLogBefore('url:before {path}')]
+    #[AopLogAfter('url:after {return}')]
     public function url(string $path): string
     {
         return self::PREFIX.$path;

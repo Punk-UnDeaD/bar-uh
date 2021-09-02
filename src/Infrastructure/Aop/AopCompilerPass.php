@@ -45,7 +45,7 @@ class AopCompilerPass implements CompilerPassInterface
                     $smtps = $parser->parse($code ?: '');
                     $oldTokens = $lexer->getTokens();
                     $traverser = new NodeTraverser();
-                    $traverser->addVisitor(new ClassVisitor($className = 'Aop'.md5($file)));
+                    $traverser->addVisitor(new ClassVisitor($className = 'Aop'.md5($file.time())));
                     $traverser->addVisitor(new ConstVisitor());
                     $traverser->addVisitor(new PropertyVisitor());
                     $traverser->addVisitor(new ConstructorVisitor());

@@ -1,37 +1,31 @@
-http:
-    address: 0.0.0.0:65467
-    workers:
-        command: "php bin/console baldinof:roadrunner:worker"
-        relay: "unix://var/roadrunner.sock"
-static:
-    # root directory for static file (HTTP would not serve .php and .htaccess files).
-    dir: "/var/www/html/public"
+server:
+  command: "php bin/console baldinof:roadrunner:worker"
 
-    # list of extensions for forbid for serving.
+http:
+  address: 0.0.0.0:8080
+  middleware: [ "static", "gzip" ]
+  uploads:
+    forbid: [ ".php", ".exe", ".bat" ]
+  static:
+    dir: "public"
     forbid: [ ".php", ".htaccess" ]
 
-    # Automatically add headers to every request.
-    request:
-        "Example-Request-Header": "Value"
+logs:
+  mode: production
+  channels:
+    http:
+      level: debug # Log all http requests, set to info to disable
+    server:
+      level: info # Everything written to worker stderr is logged
+      mode: raw
+    metrics:
+      level: error
 
-    # Automatically add headers to every response.
-    response:
-        "X-Powered-By": "RoadRunner"
+# Uncomment to use metrics integration
+# rpc:
+#   listen: tcp://127.0.0.1:6001
 
-#logs:
-#    # default
-#    mode: debug
-#    encoding: json
-#    output: stdout
-#    err_output: stderr
-#    channels:
-#        http:
-#            mode: debug
-#            level: info
-#            encoding: console
-#            output: stdout
-#        server:
-#            mode: debug
-#            level: info
-#            encoding: json
-#            output: stdout
+# Uncomment to use metrics integration
+# metrics:
+#   # prometheus client address (path /metrics added automatically)
+#   address: "0.0.0.0:9180"

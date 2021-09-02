@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 trait DateTrait
 {
     #[ORM\Column(type: 'datetime_immutable')]
-    private DateTimeImmutable $date;
+    protected DateTimeImmutable $date;
 
     public function getDate(): DateTimeImmutable
     {

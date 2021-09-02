@@ -19,7 +19,7 @@ class ImageRow
         public string $infoMime,
         public int $infoSize,
         string $imageInfo,
-        ?string $tags,
+        ?string $tags
     ) {
         /** @var array{width: int, height: int, alt: ?string} $decodedImageInfo */
         $decodedImageInfo = json_decode($imageInfo, true);

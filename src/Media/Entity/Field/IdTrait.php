@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 trait IdTrait
 {
     #[ORM\Id, ORM\Column(type: 'guid')]
-    private string $id;
+    protected string $id;
 
     public function getId(): string
     {

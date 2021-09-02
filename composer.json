@@ -1,8 +1,8 @@
 {
   "name": "bar/uh",
   "type": "project",
-  "license": "MIT",
   "description": "",
+  "license": "MIT",
   "require": {
     "php": "^8.0",
     "ext-ctype": "*",
@@ -13,9 +13,13 @@
     "ext-simplexml": "*",
     "baldinof/roadrunner-bundle": "^2.1",
     "composer/package-versions-deprecated": "^1.11",
+    "doctrine/doctrine-bundle": "^2.4",
+    "doctrine/doctrine-migrations-bundle": "^3.1",
+    "doctrine/orm": "^2.9",
     "knplabs/knp-menu-bundle": "^3.1",
     "league/flysystem-aws-s3-v3": "^1.0",
     "league/flysystem-bundle": "^1.5",
+    "nikic/php-parser": "^4.12",
     "nyholm/psr7": "^1.4",
     "phpdocumentor/reflection-docblock": "^5.2",
     "rybakit/twig-deferred-extension": "^3.0",
@@ -32,10 +36,10 @@
     "symfony/lock": "*",
     "symfony/messenger": "*",
     "symfony/mime": "*",
-    "symfony/orm-pack": "^2.1",
     "symfony/process": "*",
     "symfony/property-access": "*",
     "symfony/property-info": "*",
+    "symfony/proxy-manager-bridge": "*",
     "symfony/runtime": "*",
     "symfony/security-bundle": "*",
     "symfony/serializer": "*",
@@ -47,18 +51,38 @@
     "symfony/yaml": "*",
     "webmozart/assert": "^1.10"
   },
-  "minimum-stability": "rc",
+  "replace": {
+    "paragonie/random_compat": "2.*",
+    "symfony/polyfill-ctype": "*",
+    "symfony/polyfill-iconv": "*",
+    "symfony/polyfill-intl-grapheme": "*",
+    "symfony/polyfill-intl-icu": "*",
+    "symfony/polyfill-intl-idn": "*",
+    "symfony/polyfill-intl-messageformatter": "*",
+    "symfony/polyfill-intl-normalizer": "*",
+    "symfony/polyfill-mbstring": "*",
+    "symfony/polyfill-php70": "*",
+    "symfony/polyfill-php72": "*",
+    "symfony/polyfill-php73": "*",
+    "symfony/polyfill-php80": "*",
+    "symfony/polyfill-uuid": "*"
+  },
+  "conflict": {
+    "symfony/symfony": "*"
+  },
   "require-dev": {
     "doctrine/doctrine-fixtures-bundle": "^3.4",
+    "ergebnis/composer-normalize": "^2.15",
     "fakerphp/faker": "^1.14",
     "friendsofphp/php-cs-fixer": "^3.0",
     "jetbrains/phpstorm-attributes": "^1.0",
     "phpstan/phpstan": "^0.12.67",
-    "symfony/phpunit-bridge": "5.3.*",
     "phpstan/phpstan-symfony": "^0.12.14",
     "psalm/plugin-symfony": "^2.3",
     "symfony/maker-bundle": "*",
-    "symfony/profiler-pack": "*",
+    "symfony/phpunit-bridge": "*",
+    "symfony/stopwatch": "*",
+    "symfony/web-profiler-bundle": "*",
     "vimeo/psalm": "^4.7"
   },
   "config": {
@@ -67,6 +91,12 @@
       "*": "dist"
     },
     "sort-packages": true
+  },
+  "extra": {
+    "symfony": {
+      "allow-contrib": true,
+      "require": "5.3.*"
+    }
   },
   "autoload": {
     "psr-4": {
@@ -78,42 +108,18 @@
       "App\\Tests\\": "tests/"
     }
   },
-  "replace": {
-    "paragonie/random_compat": "2.*",
-    "symfony/polyfill-ctype": "*",
-    "symfony/polyfill-iconv": "*",
-    "symfony/polyfill-intl-grapheme": "*",
-    "symfony/polyfill-intl-icu": "*",
-    "symfony/polyfill-intl-idn": "*",
-    "symfony/polyfill-intl-messageformatter": "*",
-    "symfony/polyfill-intl-normalizer": "*",
-    "symfony/polyfill-mbstring": "*",
-    "symfony/polyfill-uuid": "*",
-    "symfony/polyfill-php70": "*",
-    "symfony/polyfill-php72": "*",
-    "symfony/polyfill-php73": "*",
-    "symfony/polyfill-php80": "*"
-  },
+  "minimum-stability": "rc",
   "scripts": {
-    "auto-scripts": {
-      "cache:clear": "symfony-cmd",
-      "assets:install %PUBLIC_DIR%": "symfony-cmd"
-    },
     "post-install-cmd": [
       "@auto-scripts",
-      "cp git-hooks/pre-commit .git/hooks"
+      "if [ -d .git ]; then (cp git-hooks/pre-commit .git/hooks) fi"
     ],
     "post-update-cmd": [
       "@auto-scripts"
-    ]
-  },
-  "conflict": {
-    "symfony/symfony": "*"
-  },
-  "extra": {
-    "symfony": {
-      "allow-contrib": true,
-      "require": "5.3.*"
+    ],
+    "auto-scripts": {
+      "cache:clear": "symfony-cmd",
+      "assets:install %PUBLIC_DIR%": "symfony-cmd"
     }
   }
 }

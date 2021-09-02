@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace App\Media\Service\ImageStyle;
 
+use App\Infrastructure\Aop\Attribute\Aop;
+use App\Infrastructure\Aop\Attribute\AopLog;
+use App\Infrastructure\Aop\Attribute\AopLogBefore;
 use App\Media\Service\CacheStorage;
 use JetBrains\PhpStorm\Pure;
 use League\Flysystem\FilesystemInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Process\Process;
 
+#[Aop]
+//#[AopLog('ImageStyle::')]
 class ImageStyle
 {
     public const PREFIX = 'https://bar-uh-dev.website.yandexcloud.net/assets/image/';
@@ -34,6 +39,7 @@ class ImageStyle
     }
 
     #[Pure]
+    #[AopLogBefore('url {path}')]
     public function url(string $path): string
     {
         return self::PREFIX.$path;
@@ -44,16 +50,18 @@ class ImageStyle
         return self::STYLE_PREFIX.$this->stylePath($path, $style, $ext);
     }
 
+    #[AopLogBefore('stylePath {path} {style} {ext}')]
     public function stylePath(string $path, string $style, ?string $ext = null): string
     {
-        /** @var array{dirname: string, filename:string, extension: string} $path */
-        $path = pathinfo($path);
-        $ext ??= $path['extension'];
+        /** @var array{dirname: string, filename:string, extension: string} $pathInfo */
+        $pathInfo = pathinfo($path);
+        $ext ??= $pathInfo['extension'];
 
-        return "{$path['dirname']}/{$path['filename']}/$style.{$ext}";
+        return "{$pathInfo['dirname']}/{$pathInfo['filename']}/$style.{$ext}";
     }
 
-    public function styleFile(string $path, string $style, string $ext, string | int ...$params): string
+    #[AopLogBefore('styleFile {path} {style} {ext}')]
+    public function styleFile(string $path, string $style, string $ext, string|int ...$params): string
     {
         $style_path = match ($style) {
             'width' => $this->stylePath($path, (string)$params[0], $ext),
@@ -103,11 +111,8 @@ class ImageStyle
     }
 
     #[Pure]
-    private function canSkip(
-        string $path,
-        string $style,
-        string $ext,
-    ): bool {
+    private function canSkip(string $path, string $style, string $ext): bool
+    {
         return 'self' === $style && 'jpeg' !== $ext && $ext === pathinfo($path, PATHINFO_EXTENSION);
     }
 

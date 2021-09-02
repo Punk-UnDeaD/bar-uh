@@ -27,7 +27,6 @@ services:
       - ./etc/php/php.ini:/usr/local/etc/php/php.ini
     labels:
       - 'traefik.frontend.rule=Host:${PROJECT_BASE_URL}'
-
   php-workers:
     build:
       context: ./docker/php

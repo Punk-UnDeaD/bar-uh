@@ -1,7 +1,8 @@
-ARG PHP_VER=8.0.7
+ARG PHP_VER=8.0.10
+ARG ALPINE_VER=3.13
 
-FROM php:${PHP_VER}-cli-alpine as builder
-ARG ROADRUNNER_VERSION=v2.3.0
+FROM php:${PHP_VER}-cli-alpine${ALPINE_VER} as rr
+ARG ROADRUNNER_VERSION=v2.3.1
 RUN apk add curl \
   ; curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet \
   ; echo "{}" > composer.json \
@@ -10,7 +11,9 @@ RUN apk add curl \
   ; rm -rf vendor \
   ; rm composer.* ; rm .rr.yaml
 
-FROM php:${PHP_VER}-cli-alpine
+FROM php:${PHP_VER}-cli-alpine${ALPINE_VER}
+RUN apk add --update --no-cache git
+RUN apk add --update --no-cache exiftool pngquant imagemagick
 RUN apk update ;\
     apk add -t .run-deps \
         bash \
@@ -18,16 +21,17 @@ RUN apk update ;\
         gzip \
         icu-libs \
         libzip \
+        libuuid \
         nano \
         patch \
         postgresql-client \
         rabbitmq-c \
         tar \
         unzip \
-        yaml \
         ;\
     apk add -t .build-deps \
         autoconf build-base pkgconfig m4 perl autoconf dpkg-dev dpkg re2c util-linux-dev \
+        make \
         icu-dev \
         libzip-dev \
         postgresql-dev \
@@ -55,24 +59,20 @@ RUN apk update ;\
     pickle install apcu ;\
     pickle install igbinary-3.2.2 ;\
     pickle install redis ;\
-    pickle install yaml ;\
+    pickle install uuid-1.2.0 ;\
     pickle install xdebug-3.0.4 ;\
     echo "extension=apcu.so" > /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini ; \
     echo "extension=amqp.so" > /usr/local/etc/php/conf.d/docker-php-ext-amqp.ini ; \
     echo "extension=igbinary.so" > /usr/local/etc/php/conf.d/docker-php-ext-igbinary.ini ; \
     echo "extension=redis.so" > /usr/local/etc/php/conf.d/docker-php-ext-redis.ini ; \
-    echo "zend_extension=xdebug.so" > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini ;\
-    echo "extension=yaml.so" > /usr/local/etc/php/conf.d/docker-php-ext-yaml.ini ; \
+    echo "extension=uuid.so" > /usr/local/etc/php/conf.d/docker-php-ext-uuid.ini ; \
     cd / ;\
     rm -rf /tmp/* ;\
     rm -rf /var/cache/apk/* ;\
     docker-php-source delete;\
     apk del --purge .build-deps
 
-RUN apk add --update --no-cache git
-RUN apk add --update --no-cache exiftool pngquant imagemagick
-
-COPY --from=builder /rr /usr/local/bin/rr
+COPY --from=rr /rr /usr/local/bin/rr
 RUN chmod 755 /usr/local/bin/rr
 WORKDIR /var/www/html
 EXPOSE 8080

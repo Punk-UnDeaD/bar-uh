@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace App\Media\Service\Formatter;
 
+use App\Infrastructure\Aop\Attribute\Aop;
+use App\Infrastructure\Aop\Attribute\AopCacheResult;
+use App\Infrastructure\Aop\Attribute\AopLog;
+
+//#[Aop]
+//#[AopLog]
 class ImageFormatter
 {
     public const PREFIX = '/storage/';
@@ -15,6 +21,7 @@ class ImageFormatter
         return str_replace('public://', self::PREFIX, $path);
     }
 
+    #[AopCacheResult]
     public function style(string $path, string $style): string
     {
         $path = str_replace('public://', '', $path);

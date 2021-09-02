@@ -3,7 +3,6 @@
 namespace App\Media\UseCase\Image;
 
 use App\Infrastructure\Entity\Guid;
-use App\Infrastructure\Flusher;
 use App\Media\Entity\DataType\FileInfo;
 use App\Media\Entity\DataType\ImageInfo;
 use App\Media\Entity\Image;
@@ -16,8 +15,6 @@ use Webmozart\Assert\Assert;
 abstract class BaseCreateHandler
 {
     #[Required] public EntityManagerInterface $em;
-
-    #[Required] public Flusher $flusher;
 
     #[Required] public Uploader $uploader;
 

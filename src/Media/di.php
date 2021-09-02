@@ -13,7 +13,7 @@ return static function(ContainerConfigurator $di): void {
         ->autoconfigure()
         ->bind('$cacheStorageLifeTime', 900)
         ->load(__NAMESPACE__.'\\', '.')
-        ->exclude('./{Entity,Command.php,di.php,routing.php}');
+        ->exclude(['./{Entity,di.php,routing.php}', './**/{Command,Filter,Message}.php']);
 
     $di->extension(
         'doctrine',

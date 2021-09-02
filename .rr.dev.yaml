@@ -6,12 +6,12 @@ http:
   pool:
     num_workers: 1
     debug: true
-  middleware: [ "static", "gzip" ]
+#  middleware: [ "static", "gzip" ]
   uploads:
     forbid: [ ".php", ".exe", ".bat" ]
-  static:
-    dir: "public"
-    forbid: [ ".php", ".htaccess" ]
+#  static:
+#    dir: "public"
+#    forbid: [ ".php", ".htaccess" ]
 
 logs:
   mode: development
@@ -31,6 +31,6 @@ reload:
   ignore: [".php-cs-fixer.cache"]
   services:
     http:
-      dirs: ["."]
+      dirs: ["./src", "./config"]
       ignore: [".php-cs-fixer.cache"]
       recursive: true

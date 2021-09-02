@@ -43,6 +43,6 @@ class ImageInfo implements JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        return array_filter((array)$this);
+        return ['width' => $this->width, 'height' => $this->height] + ($this->alt ? ['alt' => $this->alt] : []);
     }
 }

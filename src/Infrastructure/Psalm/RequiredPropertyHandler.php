@@ -37,6 +37,9 @@ class RequiredPropertyHandler implements AfterClassLikeVisitInterface
             }
             /** @phpstan-var class-string $class */
             $class = $storage->name;
+            if (!class_exists($class)) {
+                return;
+            }
             $reflection = $reflection ?? new \ReflectionClass($class);
             if ($reflection->hasProperty($name)) {
                 $reflectionProperty = $reflection->getProperty($name);

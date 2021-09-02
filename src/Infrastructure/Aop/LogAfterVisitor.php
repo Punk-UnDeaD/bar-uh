@@ -54,14 +54,14 @@ class LogAfterVisitor extends NodeVisitorAbstract
         $message = var_export($classAttr->prefix.$attr->message, true);
 
         if ($return) {
-            $r = $this->parser->parse("<?php \$return = md5('');");
+            $r = $this->parser->parse('<?php $return = md5(\'\');');
             $r[0]->expr->expr = $return->expr;
             $context = '[\'return\'=> $return] + '.$context;
         } else {
             $r = [];
         }
 
-        $code = '<?php $this->aopLogger->'.$logLevel.'('.$message.', '.$context.');';
+        $code = "<?php \$this->aopLogger->{$logLevel}({$message}, {$context});";
         if ($return) {
             $code .= 'return $return;';
         }

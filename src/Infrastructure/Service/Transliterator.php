@@ -19,7 +19,7 @@ class Transliterator
     }
 
     #[Pure]
- public function transliterate(string $s): string | false
+ public function transliterate(string $s): string|false
  {
      foreach ($this->transliterators as $transliterator) {
          $s = $transliterator->transliterate($s);

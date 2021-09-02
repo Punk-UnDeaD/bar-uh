@@ -12,7 +12,7 @@ class Command
     /**
      * @param list<string>|string $value
      */
-    public function __construct(public string $image, array | string $value)
+    public function __construct(public string $image, array|string $value)
     {
         if (is_string($value)) {
             $value = array_filter(array_map('trim', explode(',', $value)));

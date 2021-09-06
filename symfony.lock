@@ -5,6 +5,9 @@
     "amphp/byte-stream": {
         "version": "v1.8.0"
     },
+    "aws/aws-crt-php": {
+        "version": "v1.0.2"
+    },
     "aws/aws-sdk-php": {
         "version": "3.154.4"
     },
@@ -28,6 +31,9 @@
     },
     "composer/xdebug-handler": {
         "version": "1.4.3"
+    },
+    "dg/bypass-finals": {
+        "version": "v1.3.1"
     },
     "dnoegel/php-xdg-base-dir": {
         "version": "v0.1.1"

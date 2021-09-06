@@ -2,6 +2,7 @@
 
 namespace App;
 
+\DG\BypassFinals::enable();
 use App\Infrastructure\Aop\AopCompilerPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;

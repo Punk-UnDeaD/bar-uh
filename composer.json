@@ -13,6 +13,7 @@
     "ext-simplexml": "*",
     "baldinof/roadrunner-bundle": "^2.1",
     "composer/package-versions-deprecated": "^1.11",
+    "dg/bypass-finals": "^1.3",
     "doctrine/doctrine-bundle": "^2.4",
     "doctrine/doctrine-migrations-bundle": "^3.1",
     "doctrine/orm": "^2.9",

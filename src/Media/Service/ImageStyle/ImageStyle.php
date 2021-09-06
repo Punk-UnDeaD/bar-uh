@@ -8,6 +8,7 @@ use App\Infrastructure\Aop\Attribute\Aop;
 use App\Infrastructure\Aop\Attribute\AopLog;
 use App\Infrastructure\Aop\Attribute\AopLogAfter;
 use App\Infrastructure\Aop\Attribute\AopLogBefore;
+use App\Infrastructure\Aop\Attribute\AopRetry;
 use App\Media\Service\CacheStorage;
 use JetBrains\PhpStorm\Pure;
 use League\Flysystem\FilesystemInterface;
@@ -16,7 +17,7 @@ use Symfony\Component\Process\Process;
 
 #[Aop]
 #[AopLog('ImageStyle::')]
-class ImageStyle
+final class ImageStyle
 {
     public const PREFIX = 'https://bar-uh-dev.website.yandexcloud.net/assets/image/';
 
@@ -42,7 +43,8 @@ class ImageStyle
     #[Pure]
     #[AopLogBefore('url:before {path}')]
     #[AopLogAfter('url:after {return}')]
-    public function url(string $path): string
+    #[AopRetry]
+    final public function url(string $path): string
     {
         return self::PREFIX.$path;
     }

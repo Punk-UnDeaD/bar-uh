@@ -58,11 +58,7 @@ class MethodVisitor extends NodeVisitorAbstract
         );
         $return = $noReturn ? '' : 'return';
 
-        return $this->getParser()->parse(
-            <<<PHP
-<?php $return parent::$method($args); 
-PHP
-        );
+        return $this->getParser()->parse("<?php $return parent::$method($args);");
     }
 
     public function getParser(): ParserAbstract

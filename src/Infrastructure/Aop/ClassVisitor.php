@@ -9,7 +9,9 @@ use PhpParser\NodeVisitorAbstract;
 
 class ClassVisitor extends NodeVisitorAbstract
 {
-    public function __construct(private $class)
+    public function __construct(
+        private string $class
+    )
     {
     }
 

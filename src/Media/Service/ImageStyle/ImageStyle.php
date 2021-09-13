@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Media\Service\ImageStyle;
 
 use App\Infrastructure\Aop\Attribute\Aop;
-use App\Infrastructure\Aop\Attribute\AopLog;
+use App\Infrastructure\Aop\Attribute\AopLogClass;
 use App\Infrastructure\Aop\Attribute\AopLogAfter;
 use App\Infrastructure\Aop\Attribute\AopLogBefore;
 use App\Infrastructure\Aop\Attribute\AopRetry;
+use App\Infrastructure\Aop\Attribute\AopRetryLog;
 use App\Media\Service\CacheStorage;
 use JetBrains\PhpStorm\Pure;
 use League\Flysystem\FilesystemInterface;
@@ -16,7 +17,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Process\Process;
 
 #[Aop]
-#[AopLog('ImageStyle::')]
+#[AopLogClass('ImageStyle::', channel: 'media')]
 final class ImageStyle
 {
     public const PREFIX = 'https://bar-uh-dev.website.yandexcloud.net/assets/image/';
@@ -43,7 +44,7 @@ final class ImageStyle
     #[Pure]
     #[AopLogBefore('url:before {path}')]
     #[AopLogAfter('url:after {return}')]
-    #[AopRetry]
+    #[AopRetryLog('url failed try again({attempt})')]
     final public function url(string $path): string
     {
         return self::PREFIX.$path;

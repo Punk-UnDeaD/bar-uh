@@ -7,12 +7,12 @@ namespace App\Infrastructure\Aop\Attribute;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_METHOD)]
-class AopRetry
+class AopRetry extends Aop
 {
     public int $count;
 
-    public function __construct(int $count = 3, public int $usleep = 1000)
+    public function __construct(int $count = 3, public int $msleep = 1000)
     {
-        $this->count = min(1, $count);
+        $this->count = max(1, $count);
     }
 }

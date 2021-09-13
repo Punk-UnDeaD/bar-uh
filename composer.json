@@ -37,6 +37,7 @@
     "symfony/lock": "*",
     "symfony/messenger": "*",
     "symfony/mime": "*",
+    "symfony/monolog-bundle": "^3.7",
     "symfony/process": "*",
     "symfony/property-access": "*",
     "symfony/property-info": "*",

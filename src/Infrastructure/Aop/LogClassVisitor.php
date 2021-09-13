@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Infrastructure\Aop;
 
 use App\Infrastructure\Aop\Attribute\AopLog;
-use App\Infrastructure\Aop\Attribute\AopLogMethod;
+use App\Infrastructure\Aop\Attribute\AopLogClass;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\ParserAbstract;
 
+/** @psalm-suppress all */
 class LogClassVisitor extends NodeVisitorAbstract
 {
     public function __construct(
@@ -22,13 +23,13 @@ class LogClassVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node): int|null
     {
         if ($node instanceof Class_) {
-            if ($attr = $this->reflection->getAttributes(AopLog::class)) {
+            if ($attr = $this->reflection->getAttributes(AopLogClass::class)) {
                 $attr = $attr[0];
                 $attr = $attr->newInstance();
             } else {
                 foreach ($this->reflection->getMethods() as $method) {
-                    if ($method->getAttributes(AopLogMethod::class, 2)) {
-                        $attr = new AopLog();
+                    if ($method->getAttributes(AopLog::class, 2)) {
+                        $attr = new AopLogClass();
                         break;
                     }
                 }
@@ -42,12 +43,12 @@ class LogClassVisitor extends NodeVisitorAbstract
         return null;
     }
 
-    private function getStmps(AopLog $attr): array
+    private function getStmps(AopLogClass $attr): array
     {
         return $this->parser->parse(
             <<<PHP
 <?php class tmpClass {
-    #[\Symfony\Contracts\Service\Attribute\Required] public \Psr\Log\LoggerInterface \$aopLogger;
+    #[\Symfony\Contracts\Service\Attribute\Required] public \Psr\Log\LoggerInterface \${$attr->channel}Logger;
 }
 PHP
         );

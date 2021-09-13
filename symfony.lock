@@ -215,6 +215,9 @@
     "localheinz/diff": {
         "version": "1.1.1"
     },
+    "monolog/monolog": {
+        "version": "2.3.2"
+    },
     "mtdowling/jmespath.php": {
         "version": "2.6.0"
     },
@@ -476,6 +479,24 @@
     },
     "symfony/mime": {
         "version": "v5.1.5"
+    },
+    "symfony/monolog-bridge": {
+        "version": "v5.3.7"
+    },
+    "symfony/monolog-bundle": {
+        "version": "3.7",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.7",
+            "ref": "a7bace7dbc5a7ed5608dbe2165e0774c87175fe6"
+        },
+        "files": [
+            "config/packages/dev/monolog.yaml",
+            "config/packages/prod/deprecations.yaml",
+            "config/packages/prod/monolog.yaml",
+            "config/packages/test/monolog.yaml"
+        ]
     },
     "symfony/options-resolver": {
         "version": "v5.1.3"

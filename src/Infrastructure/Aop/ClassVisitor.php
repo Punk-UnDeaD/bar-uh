@@ -7,12 +7,12 @@ namespace App\Infrastructure\Aop;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
+/** @psalm-suppress all */
 class ClassVisitor extends NodeVisitorAbstract
 {
     public function __construct(
         private string $class
-    )
-    {
+    ) {
     }
 
     public function leaveNode(Node $node): Node|int|null

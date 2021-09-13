@@ -7,37 +7,41 @@ namespace App\Infrastructure\Aop;
 use App\Infrastructure\Aop\Attribute\AopRetry;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\NodeVisitorAbstract;
-use PhpParser\ParserAbstract;
 
-class RetryVisitor extends NodeVisitorAbstract
+/**
+ * @psalm-suppress all
+ * @extends BaseMethodVisitor<AopRetry>
+ */
+class RetryVisitor extends BaseMethodVisitor
 {
-    public function __construct(
-        private \ReflectionClass $reflection,
-        private ParserAbstract $parser,
-    ) {
-    }
+    public const ATTR = AopRetry::class;
 
-    public function leaveNode(Node $node): int|null
+    protected function processNode(ClassMethod $node, $attr): void
     {
-        if ($node instanceof ClassMethod) {
-            if (!$attr = $this->reflection->getMethod($node->name->name)->getAttributes(AopRetry::class)) {
-                return null;
-            }
-            $attr = $attr[0]->newInstance();
-            $stmts = $this->getStmps($attr);
-            $hasReturn = end($node->stmts) instanceof Node\Stmt\Return_;
-            $stmts[1]->stmts[0]->stmts = array_merge($node->stmts, $hasReturn ? [] : $stmts[1]->stmts[0]->stmts);
-            $node->stmts = $stmts;
-        }
-
-        return null;
+        $stmts = $this->getStmps($attr);
+        $hasReturn = end($node->stmts) instanceof Node\Stmt\Return_;
+        $stmts[0]->stmts[0]->stmts = array_merge($node->stmts, $hasReturn ? [] : $stmts[0]->stmts[0]->stmts);
+        $node->stmts = $stmts;
     }
 
+    /**
+     * @return Node\Stmt[]
+     */
     private function getStmps(AopRetry $attr): array
     {
+        $usleep = $attr->msleep * 1000;
+
         return $this->parser->parse(
-            "<?php \$count = {$attr->count};while(\$count--){try {return;}catch(\Throwable \$e){ }usleep({$attr->usleep});}throw \$e;"
+            <<<PHP
+<?php 
+    for(\$attempt = 0;;\$attempt++){
+        try {return;}
+        catch(\Throwable \$e) {
+            if(\$attempt === {$attr->count}) throw \$e;
+        }
+        usleep($usleep + mt_rand(-100, 100));
+    }
+PHP
         );
     }
 }

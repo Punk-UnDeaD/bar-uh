@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Media\Service\ImageStyle\Optimizer;
 
 use App\Infrastructure\Aop\Attribute\Aop;
-use App\Infrastructure\Aop\Attribute\AopLog;
+use App\Infrastructure\Aop\Attribute\AopLogClass;
 use App\Media\Service\CacheStorage;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Process\Process;

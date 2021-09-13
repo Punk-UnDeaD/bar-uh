@@ -6,7 +6,7 @@ namespace App\Media\Service\Formatter;
 
 use App\Infrastructure\Aop\Attribute\Aop;
 use App\Infrastructure\Aop\Attribute\AopCacheResult;
-use App\Infrastructure\Aop\Attribute\AopLog;
+use App\Infrastructure\Aop\Attribute\AopLogClass;
 
 //#[Aop]
 //#[AopLog]

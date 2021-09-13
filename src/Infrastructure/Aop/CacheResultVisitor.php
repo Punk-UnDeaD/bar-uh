@@ -5,42 +5,56 @@ declare(strict_types=1);
 namespace App\Infrastructure\Aop;
 
 use App\Infrastructure\Aop\Attribute\AopCacheResult;
-use PhpParser\NodeVisitorAbstract;
-use PhpParser\ParserAbstract;
 use PhpParser\Node;
 use PhpParser\Node\Param;
-use PhpParser\Lexer;
-use PhpParser\Parser;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\ParserAbstract;
+use Symfony\Component\DependencyInjection\Definition;
 
-class CacheResultVisitor extends NodeVisitorAbstract
+/**
+ * @psalm-suppress all
+ * @extends BaseMethodVisitor<AopCacheResult>
+ */
+class CacheResultVisitor extends BaseMethodVisitor
 {
-    public function __construct(private \ReflectionClass $reflection)
+    public const ATTR = AopCacheResult::class;
+
+    private Definition $resetter;
+
+    private Definition $definition;
+
+    public function __construct(
+        \ReflectionClass $reflection,
+        ParserAbstract $parser,
+        Definition $resetter
+    )
     {
+        $this->reflection = $reflection;
+        $this->parser = $parser;
+        $this->resetter = $resetter;
     }
 
-    public function leaveNode(Node $node): Node|int|null
+    public function leaveNode(Node $node): void
     {
         if ($node instanceof Node\Stmt\Class_) {
             foreach ($this->reflection->getMethods() as $method) {
                 if ($method->getAttributes(AopCacheResult::class)) {
-                    $node->stmts = array_merge($this->getProperty()[0]->stmts, $node->stmts);
+                    $node->stmts = array_merge(
+                        $this->getProperty()[0]->stmts,
+                        $node->stmts,
+                        $this->getMethod()[0]->stmts
+                    );
+                    $args = $this->resetter->getArguments();
+                    $args[1][$this->reflection->getName()][] = 'aopReset';
+                    $args[1][$this->reflection->getName()] = array_unique($args[1][$this->reflection->getName()]);
+                    $this->resetter->setArguments($args);
 
-                    return $node;
+                    return;
                 }
             }
-
-            return $node;
-        } elseif ($node instanceof Node\Stmt\ClassMethod) {
-            if (!$this->reflection->getMethod($node->name->name)->getAttributes(AopCacheResult::class)) {
-                return null;
-            }
-            $return = $node->stmts[0];
-            $newReturn = $this->getReturn($node->name->name, $node->params);
-            $newReturn[0]->expr->right->expr = $return->expr;
-            $node->stmts = $newReturn;
+        } else {
+            parent::leaveNode($node);
         }
-
-        return null;
     }
 
     /**
@@ -48,29 +62,35 @@ class CacheResultVisitor extends NodeVisitorAbstract
      */
     protected function getProperty(): array
     {
-        return $this->getParser()->parse('<?php class tmpClass {private $aopCache = [];}');
+        return $this->parser->parse('<?php class tmpClass {private $aopCache = [];}');
     }
 
-    public function getParser(): ParserAbstract
+    protected function getMethod()
     {
-        $lexer = new Lexer\Emulative(
-            [
-                'usedAttributes' => [
-                    'comments',
-                    'startLine', 'endLine',
-                    'startTokenPos', 'endTokenPos',
-                ],
-            ]
+        return $this->parser->parse(
+            '<?php 
+         class tmpClass {
+            public function aopReset()
+            {
+                $this->aopCache=[];
+            }
+         }'
         );
+    }
 
-        return new Parser\Php7($lexer);
+    protected function processNode(ClassMethod $node, $attr): void
+    {
+        $return = $node->stmts[0];
+        $newReturn = $this->getReturn($node->name->name, $node->params);
+        $newReturn[0]->expr->right->expr = $return->expr;
+        $node->stmts = $newReturn;
     }
 
     protected function getReturn($method, $params): array
     {
         $params = join(array_map(fn(Param $param) => '[$'.$param->var->name.']', $params));
 
-        return $this->getParser()->parse(
+        return $this->parser->parse(
             "<?php return \$this->aopCache['{$method}']$params ??
             (\$this->aopCache['{$method}']$params = parent::$method());"
         );

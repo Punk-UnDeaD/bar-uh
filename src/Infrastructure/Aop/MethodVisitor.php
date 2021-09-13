@@ -6,21 +6,23 @@ namespace App\Infrastructure\Aop;
 
 use App\Infrastructure\Aop\Attribute\Aop;
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
-use PhpParser\Lexer;
-use PhpParser\Parser;
 use PhpParser\ParserAbstract;
 
+/** @psalm-suppress all */
 class MethodVisitor extends NodeVisitorAbstract
 {
-    public function __construct(private \ReflectionClass $reflection)
-    {
+    public function __construct(
+        private \ReflectionClass $reflection,
+        private ParserAbstract $parser,
+    ) {
     }
 
-    public function leaveNode(Node $node): Node|int|null
+    public function leaveNode(Node $node): int|null
     {
         if ($node instanceof ClassMethod) {
             if ($node->isPrivate() || $node->isFinal()) {
@@ -32,10 +34,10 @@ class MethodVisitor extends NodeVisitorAbstract
             $node->stmts = $this->getSmtps(
                 $node->name->name,
                 $node->params,
-                noReturn: 'void' === $node->returnType->name
+                noReturn: $node->returnType instanceof Identifier && 'void' === $node->returnType->name
             );
 
-            return $node;
+            return null;
         }
 
         return null;
@@ -45,7 +47,7 @@ class MethodVisitor extends NodeVisitorAbstract
      * @param         $method
      * @param Param[] $args
      *
-     * @return \PhpParser\Node\Stmt[]|null
+     * @return Node\Stmt[]
      */
     public function getSmtps(string $method, array $args, bool $noReturn = true): ?array
     {
@@ -58,21 +60,6 @@ class MethodVisitor extends NodeVisitorAbstract
         );
         $return = $noReturn ? '' : 'return';
 
-        return $this->getParser()->parse("<?php $return parent::$method($args);");
-    }
-
-    public function getParser(): ParserAbstract
-    {
-        $lexer = new Lexer\Emulative(
-            [
-                'usedAttributes' => [
-                    'comments',
-                    'startLine', 'endLine',
-                    'startTokenPos', 'endTokenPos',
-                ],
-            ]
-        );
-
-        return new Parser\Php7($lexer);
+        return $this->parser->parse("<?php $return parent::$method($args);");
     }
 }

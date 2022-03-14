@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Media\Service;
 
 use App\Infrastructure\Service\Transliterator;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\FilesystemOperator;
 
 class ExifEditor
 {
@@ -18,10 +18,10 @@ class ExifEditor
             'OwnerName',
         ];
 
-    private FilesystemInterface $mainStorage;
+    private FilesystemOperator $mainStorage;
 
     public function __construct(
-        FilesystemInterface $imageMainStorage,
+        FilesystemOperator $imageMainStorage,
         private CacheStorage\Storage $localCache,
         private Transliterator $transliterator
     ) {

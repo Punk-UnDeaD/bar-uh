@@ -14,7 +14,7 @@ return static function(ContainerConfigurator $di): void {
         ->autowire()
         ->autoconfigure()
         ->load(__NAMESPACE__.'\\', '.')
-        ->exclude('./{Aop,Entity,di.php}');
+        ->exclude('./{Psalm,Aop,Entity,di.php}');
 
     $services->set('redis', \Redis::class)
         ->call('connect', ['redis']);

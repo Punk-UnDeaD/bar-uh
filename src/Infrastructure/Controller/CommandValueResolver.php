@@ -22,13 +22,11 @@ class CommandValueResolver implements ArgumentValueResolverInterface
     }
 
     /**
-     * @template T
-     *
-     * @return \Generator<T>
+     * @return \Generator<object>
      */
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
-        /** @var class-string<T> $class */
+        /** @var class-string $class */
         $class = $argument->getType();
 
         $reflection = new ReflectionClass($class);

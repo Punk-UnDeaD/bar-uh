@@ -23,7 +23,7 @@ services:
       context: ./docker/php
       dockerfile: Dockerfile
     environment:
-      ROADRUNNER_VERSION: v2.4.0
+      ROADRUNNER_VERSION: v2.8.0
     volumes:
       - .:/var/www/html
       - ./etc/php/php.ini:/usr/local/etc/php/php.ini

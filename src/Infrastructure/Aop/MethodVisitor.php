@@ -8,6 +8,7 @@ use App\Infrastructure\Aop\Attribute\Aop;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
@@ -22,12 +23,19 @@ class MethodVisitor extends NodeVisitorAbstract
     ) {
     }
 
+    public function beforeTraverse(array $nodes)
+    {
+    }
+
     public function leaveNode(Node $node): int|null
     {
         if ($node instanceof ClassMethod) {
-            if ($node->isPrivate() || $node->isFinal()) {
+            if ($node->isFinal()) {
                 return NodeTraverser::REMOVE_NODE;
             }
+//            if($node->isPrivate()){
+//                $node->flags = $node->flags ^ Class_::MODIFIER_PRIVATE ^ Class_::MODIFIER_PROTECTED;
+//            }
             if (!$this->reflection->getMethod($node->name->name)->getAttributes(Aop::class, 2)) {
                 return NodeTraverser::REMOVE_NODE;
             }
@@ -61,5 +69,12 @@ class MethodVisitor extends NodeVisitorAbstract
         $return = $noReturn ? '' : 'return';
 
         return $this->parser->parse("<?php $return parent::$method($args);");
+    }
+
+    protected function getPrivateFix(string $method)
+    {
+        (new \ReflectionClass($this->reflection->getName()))->getMethod($method)->setAccessible(true);
+
+        return $this->parser->parse('<?php ;');
     }
 }

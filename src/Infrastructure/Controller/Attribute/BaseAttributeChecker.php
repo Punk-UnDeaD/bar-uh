@@ -51,7 +51,7 @@ abstract class BaseAttributeChecker implements EventSubscriberInterface
             return null;
         }
 
-        return $attributes[0]->newInstance(); // @phpstan-ignore-line
+        return $attributes[0]->newInstance();
     }
 
     /** @return class-string<T> */

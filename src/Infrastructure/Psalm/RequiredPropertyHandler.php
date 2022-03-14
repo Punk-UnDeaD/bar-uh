@@ -5,22 +5,18 @@ declare(strict_types=1);
 namespace App\Infrastructure\Psalm;
 
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
-use Psalm\Codebase;
-use Psalm\FileSource;
-use Psalm\Plugin\Hook\AfterClassLikeVisitInterface;
-use Psalm\Storage\ClassLikeStorage;
+use Psalm\Plugin\EventHandler\AfterClassLikeVisitInterface;
+use Psalm\Plugin\EventHandler\Event\AfterClassLikeVisitEvent;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class RequiredPropertyHandler implements AfterClassLikeVisitInterface
 {
     public static function afterClassLikeVisit(
-        ClassLike $stmt,
-        ClassLikeStorage $storage,
-        FileSource $statements_source,
-        Codebase $codebase,
-        array &$file_replacements = []
+        AfterClassLikeVisitEvent $event
     ) {
+        $stmt = $event->getStmt();
+        $storage = $event->getStorage();
+
         if (!$stmt instanceof Class_) {
             return;
         }
@@ -44,7 +40,7 @@ class RequiredPropertyHandler implements AfterClassLikeVisitInterface
             if ($reflection->hasProperty($name)) {
                 $reflectionProperty = $reflection->getProperty($name);
                 $docCommend = $reflectionProperty->getDocComment();
-                if ($docCommend && false !== strpos(strtoupper($docCommend), '@REQUIRED')) {
+                if ($docCommend && str_contains(strtoupper($docCommend), '@REQUIRED')) {
                     $storage->initialized_properties[$name] = true;
                 }
             }

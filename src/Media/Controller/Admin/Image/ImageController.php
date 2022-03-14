@@ -20,18 +20,22 @@ use App\Media\ReadModel\ImageFetcher;
 use App\Media\Service\CacheStorage\Storage;
 use App\Media\Service\ExifEditor;
 use Exception;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Service\Attribute\Required;
 
 #[AsController, Route(path: '/admin/media/image', name: 'admin.media.image')]
 class ImageController extends AbstractController
 {
+    #[Required] public MessageBusInterface $bus;
+
     private const PER_PAGE = 30;
 
     #[Route(path: '', name: '')]
@@ -73,7 +77,7 @@ class ImageController extends AbstractController
     #[RequiresCsrf]
     public function delete(Delete\Command $command): JsonResponse
     {
-        $this->dispatchMessage($command);
+        $this->bus->dispatch($command);
 
         return $this->json(['status' => 'ok']);
     }
@@ -85,13 +89,13 @@ class ImageController extends AbstractController
         $file = $request->files->get('file');
         try {
             if ($file instanceof UploadedFile) {
-                $this->dispatchMessage(
+                $this->bus->dispatch(
                 // @phpstan-ignore-next-line
                     new CreateFromUploaded\Command($file->getRealPath(), $file->getClientOriginalName())
                 );
                 $this->addFlash('success', "File {$file->getClientOriginalName()} saved.");
             } elseif ($url = (string)$request->request->get('url')) {
-                $this->dispatchMessage(new CreateFromUrl\Command($url));
+                $this->bus->dispatch(new CreateFromUrl\Command($url));
                 $this->addFlash('success', "File {$url} saved.");
             }
         } catch (Exception $e) {
@@ -111,7 +115,7 @@ class ImageController extends AbstractController
     #[RequiresCsrf]
     public function setTags(SetTags\Command $command): JsonResponse
     {
-        $this->dispatchMessage($command);
+        $this->bus->dispatch($command);
 
         return $this->json(['status' => 'ok', 'value' => join(', ', $command->tags)]);
     }
@@ -121,7 +125,7 @@ class ImageController extends AbstractController
     public function setAlt(
         SetAlt\Command $command,
     ): JsonResponse {
-        $this->dispatchMessage($command);
+        $this->bus->dispatch($command);
 
         return $this->json(['status' => 'ok', 'value' => $command->alt]);
     }
@@ -130,7 +134,7 @@ class ImageController extends AbstractController
     #[RequiresCsrf()]
     public function cleanStyles(CleanStyles\Command $command): JsonResponse
     {
-        $this->dispatchMessage($command);
+        $this->bus->dispatch($command);
 
         return $this->json(['status' => 'ok']);
     }
@@ -149,7 +153,7 @@ class ImageController extends AbstractController
     }
 
     #[Route(path: '/{image}/draft', name: '.draft')]
-    public function draft(Image $image, Storage $storage, FilesystemInterface $imageMainStorage): Response
+    public function draft(Image $image, Storage $storage, FilesystemOperator $imageMainStorage): Response
     {
         $draft = $storage->getDraft($image->getInfo()->getPath(), $imageMainStorage);
 
@@ -165,7 +169,7 @@ class ImageController extends AbstractController
 
     #[Route(path: '/{image}/draft-delete', name: '.draft-delete', format: 'json')]
     #[RequiresCsrf()]
-    public function draftDelete(Image $image, Storage $storage, FilesystemInterface $imageMainStorage): Response
+    public function draftDelete(Image $image, Storage $storage, FilesystemOperator $imageMainStorage): Response
     {
         $draft = $storage->getDraft($image->getInfo()->getPath(), $imageMainStorage);
 
@@ -183,7 +187,7 @@ class ImageController extends AbstractController
     #[RequiresCsrf()]
     public function exifClean(ExifClean\Command $command): Response
     {
-        $this->dispatchMessage($command);
+        $this->bus->dispatch($command);
 
         return $this->json(['status' => 'ok', 'reload' => 1]);
     }
@@ -193,7 +197,7 @@ class ImageController extends AbstractController
     public function exifSetValue(
         ExifSetValue\Command $command,
     ): Response {
-        $this->dispatchMessage($command);
+        $this->bus->dispatch($command);
 
         return $this->json(['status' => 'ok']);
     }

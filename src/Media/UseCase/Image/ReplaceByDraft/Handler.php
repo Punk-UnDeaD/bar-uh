@@ -7,7 +7,7 @@ namespace App\Media\UseCase\Image\ReplaceByDraft;
 use App\Infrastructure\Middleware\AsyncWrapper\Async;
 use App\Media\Repository\ImageRepository;
 use App\Media\Service\CacheStorage\Storage;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -18,7 +18,7 @@ class Handler implements MessageHandlerInterface
 
     #[Required] public Storage $storage;
 
-    #[Required] public FilesystemInterface $imageMainStorage;
+    #[Required] public FilesystemOperator $imageMainStorage;
 
     public function __invoke(Command $command): void
     {
@@ -28,7 +28,7 @@ class Handler implements MessageHandlerInterface
         $image->setInfo($image->getInfo()->setSize(filesize($draft) ?: 0));
         /** @var resource $stream */
         $stream = fopen($draft, 'rb+');
-        $this->imageMainStorage->updateStream($path, $stream);
+        $this->imageMainStorage->writeStream($path, $stream);
         $this->storage->deleteDraft($path);
         $this->storage->delete($path);
     }

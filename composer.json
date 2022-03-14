@@ -4,7 +4,7 @@
   "description": "",
   "license": "MIT",
   "require": {
-    "php": "^8.0",
+    "php": "^8.1",
     "ext-ctype": "*",
     "ext-iconv": "*",
     "ext-intl": "*",
@@ -18,19 +18,21 @@
     "doctrine/doctrine-migrations-bundle": "^3.1",
     "doctrine/orm": "^2.9",
     "knplabs/knp-menu-bundle": "^3.1",
-    "league/flysystem-aws-s3-v3": "^1.0",
-    "league/flysystem-bundle": "^1.5",
+    "league/flysystem-aws-s3-v3": "^3.0.2",
+    "league/flysystem-bundle": "^2.2.0",
     "nikic/php-parser": "^4.12",
-    "nyholm/psr7": "^1.4",
+    "nyholm/psr7": "^1.5",
     "phpdocumentor/reflection-docblock": "^5.2",
     "rybakit/twig-deferred-extension": "^3.0",
-    "sensio/framework-extra-bundle": "^5.6",
+    "sensio/framework-extra-bundle": "*",
+    "spiral/roadrunner": "v2.8.2",
+    "symfony/amqp-messenger": "*",
     "symfony/browser-kit": "*",
     "symfony/console": "*",
     "symfony/css-selector": "*",
     "symfony/dotenv": "*",
     "symfony/expression-language": "*",
-    "symfony/flex": "^1.13",
+    "symfony/flex": "^2.1",
     "symfony/form": "*",
     "symfony/framework-bundle": "*",
     "symfony/http-client": "*",
@@ -78,9 +80,9 @@
     "fakerphp/faker": "^1.14",
     "friendsofphp/php-cs-fixer": "^3.0",
     "jetbrains/phpstorm-attributes": "^1.0",
-    "phpstan/phpstan": "^0.12.67",
-    "phpstan/phpstan-symfony": "^0.12.14",
-    "psalm/plugin-symfony": "^2.3",
+    "phpstan/phpstan": "^1.4",
+    "phpstan/phpstan-symfony": "*",
+    "psalm/plugin-symfony": "^3.1",
     "symfony/maker-bundle": "*",
     "symfony/phpunit-bridge": "*",
     "symfony/stopwatch": "*",
@@ -92,12 +94,17 @@
     "preferred-install": {
       "*": "dist"
     },
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "ergebnis/composer-normalize": true,
+      "symfony/runtime": true,
+      "symfony/flex": true
+    }
   },
   "extra": {
     "symfony": {
       "allow-contrib": true,
-      "require": "5.3.*"
+      "require": "6.0.*"
     }
   },
   "autoload": {

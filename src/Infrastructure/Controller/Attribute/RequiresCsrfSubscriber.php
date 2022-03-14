@@ -25,9 +25,9 @@ class RequiresCsrfSubscriber extends BaseAttributeChecker
     {
         $request = $event->getRequest();
         /** @var ?string $token */
-        $token = $request->headers->get('csrf-token') ?? $request->get('_csrf_token');
+        $token = $request->headers->get('csrf-token') ?? $request->request->get('_csrf_token');
         /** @var string $tokenId */
-        $tokenId = $attribute->tokenId ?? $request->get('_route');
+        $tokenId = $attribute->tokenId ?? $request->attributes->get('_route');
         if (!$this->csrfTokenManager->isTokenValid(new CsrfToken($tokenId, $token))) {
             throw new AccessDeniedException('Invalid CSRF token.');
         }

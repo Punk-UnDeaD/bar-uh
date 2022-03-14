@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace App\Media\Service\ImageStyle\StyleUploader;
 
 use App\Media\Service\CacheStorage;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class Handler implements MessageHandlerInterface
 {
-    private FilesystemInterface $styleStorage;
+    private FilesystemOperator $styleStorage;
 
     public function __construct(
         private CacheStorage\Storage $cacheStorage,
-        FilesystemInterface $imageStyleStorage
+        FilesystemOperator $imageStyleStorage
     ) {
         $this->styleStorage = $imageStyleStorage;
     }
@@ -22,7 +22,7 @@ class Handler implements MessageHandlerInterface
     public function __invoke(Message $message): void
     {
         if ($this->cacheStorage->has($path = $message->path)) {
-            $this->styleStorage->putStream(
+            $this->styleStorage->writeStream(
                 $path,
                 $this->cacheStorage->readStream($path)
             );

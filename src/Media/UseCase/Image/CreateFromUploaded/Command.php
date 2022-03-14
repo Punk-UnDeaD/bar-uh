@@ -8,6 +8,8 @@ class Command
 {
     public string $name;
 
+    public ?string $uuid;
+
     public function __construct(public string $path, string $name)
     {
         $this->name = pathinfo($name, PATHINFO_FILENAME);

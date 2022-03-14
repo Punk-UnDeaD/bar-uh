@@ -8,7 +8,7 @@ use App\Media\Repository\ImageRepository;
 use App\Media\Service\CacheStorage;
 use App\Media\Service\ImageStyle\ImageStyle;
 use Doctrine\ORM\EntityManagerInterface;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -27,7 +27,7 @@ class Handler implements MessageHandlerInterface
     public ImageStyle $imageStyle;
 
     #[Required]
-    public FilesystemInterface $imageMainStorage;
+    public FilesystemOperator $imageMainStorage;
 
     public function __invoke(Command $command): void
     {

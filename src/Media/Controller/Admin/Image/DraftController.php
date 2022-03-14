@@ -11,16 +11,20 @@ use App\Media\UseCase\Image\ReplaceByDraft;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Service\Attribute\Required;
 
 #[AsController, Route(path: '/admin/media/image/{id}/draft', name: 'admin.media.image.draft')]
 class DraftController extends AbstractController
 {
+    #[Required] public MessageBusInterface $bus;
+
     #[Route(path: '', name: 'Create', methods: ['CREATE'])]
     #[RequiresCsrf]
     public function draftCreate(DraftCreate\Command $command): JsonResponse
     {
-        $this->dispatchMessage($command);
+        $this->bus->dispatch($command);
 
         return $this->json(['status' => 'ok', 'reload' => true]);
     }
@@ -30,7 +34,7 @@ class DraftController extends AbstractController
     public function draftDelete(
         DraftDelete\Command $command
     ): JsonResponse {
-        $this->dispatchMessage($command);
+        $this->bus->dispatch($command);
 
         return $this->json(['status' => 'ok', 'reload' => true]);
     }
@@ -39,7 +43,7 @@ class DraftController extends AbstractController
     #[RequiresCsrf]
     public function draftUpload(ReplaceByDraft\Command $command): JsonResponse
     {
-        $this->dispatchMessage($command);
+        $this->bus->dispatch($command);
 
         return $this->json(['status' => 'ok', 'reload' => true]);
     }

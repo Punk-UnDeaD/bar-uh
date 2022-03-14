@@ -31,10 +31,11 @@ class CreateFromUrl extends CliCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @phpstan-var string $url */
         $url = $input->getArgument('url');
-        $env = $this->bus->dispatch(new Command($url)); //@phpstan-ignore-line
+        $env = $this->bus->dispatch(new Command($url));
         /** @var mixed $res */
-        $res = $env->last(HandledStamp::class)?->getResult(); //@phpstan-ignore-line
+        $res = $env->last(HandledStamp::class)?->getResult();
         if (!$res instanceof Image) {
             $output->write('something wrong');
 

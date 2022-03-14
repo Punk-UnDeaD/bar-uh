@@ -7,14 +7,10 @@ namespace App\Infrastructure\Menu;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 #[AutoconfigureTag('knp_menu.menu_builder', ['method' => 'build', 'alias' => 'sidebar'])]
-class SidebarMenu implements ContainerAwareInterface
+class SidebarMenu
 {
-    use ContainerAwareTrait;
-
     private FactoryInterface $factory;
 
     public function __construct(FactoryInterface $factory)

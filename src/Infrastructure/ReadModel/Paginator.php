@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Infrastructure\ReadModel;
 
 use Countable;
-use Doctrine\DBAL\Driver\Result;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Iterator;
 
@@ -54,15 +53,12 @@ class Paginator implements Countable, Iterator
 
     public function count(): int
     {
-        return $this->count ?? $this->count = (int)$this->queryExecute($this->countQuery)->fetchOne();
+        return $this->count ?? $this->count = intval($this->executeQuery($this->countQuery)->fetchOne());
     }
 
-    private function queryExecute(QueryBuilder $query): Result
+    private function executeQuery(QueryBuilder $query): \Doctrine\DBAL\Result
     {
-        /** @var Result $result */
-        $result = $query->execute();
-
-        return $result;
+        return $query->executeQuery();
     }
 
     public function getPageSize(): int
@@ -86,7 +82,7 @@ class Paginator implements Countable, Iterator
     private function getData(): array
     {
         return $this->data ??
-            $this->data = $this->getProcessedData($this->queryExecute($this->query)->fetchAllAssociative());
+            $this->data = $this->getProcessedData($this->executeQuery($this->query)->fetchAllAssociative());
     }
 
     /**

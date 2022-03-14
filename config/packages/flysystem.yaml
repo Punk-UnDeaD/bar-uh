@@ -16,8 +16,6 @@ services:
                   key: '9BqPSkFfEPxjHG_vz9VM'
                   secret: 'Fin55qEQHeofheuV5naggZ7QK9rcyr17Tl5tOSjQ'
 
-
-
 # Read the documentation at https://github.com/thephpleague/flysystem-bundle/blob/master/docs/1-getting-started.md
 flysystem:
     storages:
@@ -29,11 +27,11 @@ flysystem:
                 skip_links: false
                 permissions:
                     file:
-                        public: 0744
-                        private: 0700
+                        public: 0o744
+                        private: 0o700
                     dir:
-                        public: 0755
-                        private: 0700
+                        public: 0o755
+                        private: 0o700
 
         image.main.storage:
             adapter: 'aws'
@@ -50,11 +48,11 @@ flysystem:
                 skip_links: false
                 permissions:
                     file:
-                        public: 0777
-                        private: 0700
+                        public: 0o777
+                        private: 0o700
                     dir:
-                        public: 0777
-                        private: 0700
+                        public: 0o777
+                        private: 0o700
 
         image.style.storage:
             adapter: 'aws'
@@ -71,8 +69,8 @@ flysystem:
                 skip_links: false
                 permissions:
                     file:
-                        public: 0744
-                        private: 0700
+                        public: 0o744
+                        private: 0o700
                     dir:
-                        public: 0755
-                        private: 0700
+                        public: 0o755
+                        private: 0o700

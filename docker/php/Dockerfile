@@ -1,13 +1,15 @@
-ARG PHP_VER=8.0.10
-ARG ALPINE_VER=3.13
+ARG PHP_VER=8.1.3
+ARG ALPINE_VER=3.15
 
 FROM php:${PHP_VER}-cli-alpine${ALPINE_VER} as rr
-ARG ROADRUNNER_VERSION=v2.3.1
+ARG ROADRUNNER_VERSION=v2.8.2
 RUN apk add curl \
   ; curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet \
   ; echo "{}" > composer.json \
   ; composer require --ignore-platform-reqs spiral/roadrunner:${ROADRUNNER_VERSION} \
   ; vendor/bin/rr get-binary -f ${ROADRUNNER_VERSION} -s \
+  ; mv rr /usr/local/bin/rr \
+  ; chmod 755 /usr/local/bin/rr \
   ; rm -rf vendor \
   ; rm composer.* ; rm .rr.yaml
 
@@ -27,9 +29,9 @@ RUN apk update ;\
         postgresql-client \
         rabbitmq-c \
         tar \
-        unzip \
-        ;\
-    apk add -t .build-deps \
+        unzip
+
+RUN apk add -t .build-deps \
         autoconf build-base pkgconfig m4 perl autoconf dpkg-dev dpkg re2c util-linux-dev \
         make \
         icu-dev \
@@ -46,23 +48,15 @@ RUN apk update ;\
         zip ;\
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet;\
     curl -L https://github.com/FriendsOfPHP/pickle/releases/latest/download/pickle.phar -o /usr/local/bin/pickle;\
-        chmod +x /usr/local/bin/pickle ;\
-    mkdir /tmp/amqp ;\
-        curl -L https://github.com/php-amqp/php-amqp/archive/master.tar.gz | tar -xzC /tmp/amqp --strip-components=1 ;\
-        unzip /tmp/amqp.zip -d /tmp/amqp;\
-        cd /tmp/amqp; \
-        phpize --clean ;\
-        phpize;\
-        ./configure;\
-        make;\
-        make install; \
-    pickle install apcu ;\
-    pickle install igbinary-3.2.2 ;\
-    pickle install redis ;\
+    chmod +x /usr/local/bin/pickle ;\
+    pickle install amqp-1.11.0 ;\
+    pickle install apcu-5.1.21  ;\
+    pickle install igbinary-3.2.7 ;\
+    pickle install redis-5.3.6  ;\
     pickle install uuid-1.2.0 ;\
-    pickle install xdebug-3.0.4 ;\
-    echo "extension=apcu.so" > /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini ; \
+    pickle install xdebug-3.1.3 ;\
     echo "extension=amqp.so" > /usr/local/etc/php/conf.d/docker-php-ext-amqp.ini ; \
+    echo "extension=apcu.so" > /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini ; \
     echo "extension=igbinary.so" > /usr/local/etc/php/conf.d/docker-php-ext-igbinary.ini ; \
     echo "extension=redis.so" > /usr/local/etc/php/conf.d/docker-php-ext-redis.ini ; \
     echo "extension=uuid.so" > /usr/local/etc/php/conf.d/docker-php-ext-uuid.ini ; \
@@ -72,8 +66,7 @@ RUN apk update ;\
     docker-php-source delete;\
     apk del --purge .build-deps
 
-COPY --from=rr /rr /usr/local/bin/rr
-RUN chmod 755 /usr/local/bin/rr
+COPY --from=rr /usr/local/bin/rr /usr/local/bin/rr
 WORKDIR /var/www/html
 EXPOSE 8080
 

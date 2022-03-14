@@ -1,3 +1,4 @@
+version: "2.7"
 server:
   command: "php bin/console baldinof:roadrunner:worker"
 
@@ -6,12 +7,12 @@ http:
   pool:
     num_workers: 1
     debug: true
-#  middleware: [ "static", "gzip" ]
+  middleware: [ "static", "gzip" ]
   uploads:
     forbid: [ ".php", ".exe", ".bat" ]
-#  static:
-#    dir: "public"
-#    forbid: [ ".php", ".htaccess" ]
+  static:
+    dir: "public"
+    forbid: [ ".php", ".htaccess" ]
 
 logs:
   mode: development
@@ -26,7 +27,7 @@ logs:
 
 reload:
   enabled: true
-  interval: 1s
+  interval: 10s
   patterns: [".php", ".yaml", ".env", ".ini"]
   ignore: [".php-cs-fixer.cache"]
   services:

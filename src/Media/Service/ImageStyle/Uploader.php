@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Media\Service\ImageStyle;
 
 use App\Media\Service\CacheStorage;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\HttpFoundation\File\File;
 
 class Uploader
 {
     public function __construct(
-        private FilesystemInterface $imageMainStorage,
+        private FilesystemOperator $imageMainStorage,
         private CacheStorage\Storage $cacheStorage
     ) {
     }

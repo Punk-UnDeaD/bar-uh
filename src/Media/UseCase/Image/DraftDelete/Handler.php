@@ -7,7 +7,7 @@ namespace App\Media\UseCase\Image\DraftDelete;
 use App\Infrastructure\Middleware\AsyncWrapper\Async;
 use App\Media\Repository\ImageRepository;
 use App\Media\Service\CacheStorage\Storage;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -18,7 +18,7 @@ class Handler implements MessageHandlerInterface
 
     #[Required] public Storage $storage;
 
-    #[Required] public FilesystemInterface $imageMainStorage;
+    #[Required] public FilesystemOperator $imageMainStorage;
 
     public function __invoke(Command $command): void
     {

@@ -19,19 +19,16 @@ class CacheResultVisitor extends BaseMethodVisitor
 {
     public const ATTR = AopCacheResult::class;
 
-    private Definition $resetter;
-
     private Definition $definition;
 
     public function __construct(
         \ReflectionClass $reflection,
         ParserAbstract $parser,
-        Definition $resetter
-    )
-    {
+        Definition $definition
+    ) {
         $this->reflection = $reflection;
         $this->parser = $parser;
-        $this->resetter = $resetter;
+        $this->definition = $definition;
     }
 
     public function leaveNode(Node $node): void
@@ -44,10 +41,9 @@ class CacheResultVisitor extends BaseMethodVisitor
                         $node->stmts,
                         $this->getMethod()[0]->stmts
                     );
-                    $args = $this->resetter->getArguments();
-                    $args[1][$this->reflection->getName()][] = 'aopReset';
-                    $args[1][$this->reflection->getName()] = array_unique($args[1][$this->reflection->getName()]);
-                    $this->resetter->setArguments($args);
+                    if (!$this->definition->isAbstract()) {
+                        $this->definition->addTag('kernel.reset', ['method' => 'aopReset']);
+                    }
 
                     return;
                 }

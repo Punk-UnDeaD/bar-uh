@@ -8,11 +8,10 @@ use App\Infrastructure\Aop\Attribute\Aop;
 use App\Infrastructure\Aop\Attribute\AopLogClass;
 use App\Infrastructure\Aop\Attribute\AopLogAfter;
 use App\Infrastructure\Aop\Attribute\AopLogBefore;
-use App\Infrastructure\Aop\Attribute\AopRetry;
 use App\Infrastructure\Aop\Attribute\AopRetryLog;
 use App\Media\Service\CacheStorage;
 use JetBrains\PhpStorm\Pure;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Process\Process;
 
@@ -24,15 +23,15 @@ final class ImageStyle
 
     public const STYLE_PREFIX = 'https://bar-uh-dev.website.yandexcloud.net/assets/style/';
 
-    private FilesystemInterface $styleStorage;
+    private FilesystemOperator $styleStorage;
 
-    private FilesystemInterface $mainStorage;
+    private FilesystemOperator $mainStorage;
 
     private CacheStorage\Storage $localCache;
 
     public function __construct(
-        FilesystemInterface $imageStyleStorage,
-        FilesystemInterface $imageMainStorage,
+        FilesystemOperator $imageStyleStorage,
+        FilesystemOperator $imageMainStorage,
         CacheStorage\Storage $cacheStorage,
         private MessageBusInterface $bus
     ) {
@@ -78,13 +77,14 @@ final class ImageStyle
             $dimensions = getimagesize($local);
 
             if ($this->canSkip($path, $style, $ext)) {
-                $this->localCache->putStream(
+                $this->localCache->writeStream(
                     $style_path,
                     $this->localCache->readStream($path)
                 );
             } else {
                 $this->localCache->prepareDir(dirname($style_path));
 
+                /** @var string[] $command */
                 $command = [
                     'magick',
                     'convert',
@@ -125,8 +125,8 @@ final class ImageStyle
     {
         $path = pathinfo($path);
         $path = "{$path['dirname']}/{$path['filename']}";
-        $this->localCache->deleteDir($path);
-        $this->styleStorage->deleteDir($path);
+        $this->localCache->deleteDirectory($path);
+        $this->styleStorage->deleteDirectory($path);
     }
 
     private function self(): string

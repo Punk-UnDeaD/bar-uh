@@ -14,7 +14,5 @@ class Plugin implements PluginEntryPointInterface
     {
         require_once __DIR__.'/RequiredPropertyHandler.php';
         $registration->registerHooksFromClass(RequiredPropertyHandler::class);
-        require_once __DIR__.'/ContainerAwareTraitHandler.php';
-        $registration->registerHooksFromClass(ContainerAwareTraitHandler::class);
     }
 }

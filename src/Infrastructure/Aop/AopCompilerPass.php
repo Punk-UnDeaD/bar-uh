@@ -54,7 +54,7 @@ class AopCompilerPass implements CompilerPassInterface
                         $traverser->addVisitor(new PropertyVisitor());
                         $traverser->addVisitor(new ConstructorVisitor());
                         $traverser->addVisitor(new MethodVisitor($reflection, $parser));
-                        $traverser->addVisitor(new CacheResultVisitor($reflection, $parser, $container->getDefinition('services_resetter')));
+                        $traverser->addVisitor(new CacheResultVisitor($reflection, $parser, $definition));
                         $traverser->addVisitor(new LogClassVisitor($reflection, $parser));
                         $traverser->addVisitor(new LogAfterVisitor($reflection, $parser));
                         $traverser->addVisitor(new RetryVisitor($reflection, $parser));
@@ -73,7 +73,7 @@ class AopCompilerPass implements CompilerPassInterface
                     }
                 }
             } catch (\Throwable $e) {
-//                echo $class.' '.$e->getMessage()."\n";
+                echo $class.' '.$e->getMessage()."\n";
             }
         }
     }

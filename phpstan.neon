@@ -9,4 +9,6 @@ parameters:
     excludePaths:
         - tests/**/*
         - stubs/**/*
+        - src/Infrastructure/Aop/**/*
+        - src/Infrastructure/Aop/*
         - **/.phpstorm.meta.php

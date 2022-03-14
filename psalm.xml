@@ -11,10 +11,10 @@
         <directory name="src"/>
         <ignoreFiles>
             <directory name="vendor"/>
+            <directory name="src/Infrastructure/Aop"/>
             <directory name="var"/>
             <directory name="public"/>
 <!--            <directory name="tests"/>-->
-            <file name="src/Media/.phpstorm.meta.php"/>
         </ignoreFiles>
     </projectFiles>
     <plugins>
@@ -22,12 +22,6 @@
         <pluginClass class="App\Infrastructure\Psalm\Plugin"/>
     </plugins>
     <issueHandlers>
-        <PropertyNotSetInConstructor>
-            <errorLevel type="suppress">
-<!--                vendor-->
-                <referencedProperty name="League\Flysystem\ConfigAwareTrait::$config"/>
-            </errorLevel>
-        </PropertyNotSetInConstructor>
         <MixedMethodCall>
             <errorLevel type="info">
                 <file name="src/Infrastructure/Denormalizer.php"/>
@@ -41,5 +35,6 @@
         </MixedAssignment>
         <ImpureMethodCall errorLevel="info"/>
         <RedundantCastGivenDocblockType errorLevel="info"/>
+        <UnnecessaryVarAnnotation errorLevel="info"/>
     </issueHandlers>
 </psalm>
